@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Fasthand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: 0.5s;
+  font-family: 'Ysabeau SC', sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +47,30 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #d9b4e3; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #624F82; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7DB9B6; 
+}
+
+::selection{
+  color: #fff;
+  background-color: #7DB9B6;
 }

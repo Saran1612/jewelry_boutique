@@ -1,0 +1,136 @@
+.contact_us-box {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: center;
+    align-items: center;
+    background-color: #F0F0F0;
+    padding: 35px 20px 35px 20px !important;
+    margin: 10px auto !important;
+    border-radius: 5px;
+}
+
+.contact_us-box:hover .contact_box-icon {
+    color: #9F73AB;
+    transition: 0.2s !important;
+}
+
+.contact_subText {
+    font-weight: 400;
+    color: #707070;
+}
+
+.contact_mainText {
+    text-transform: capitalize;
+    margin: 8px 0px;
+    font-weight: 700;
+}
+
+.contact_box-icon {
+    font-size: 2rem !important;
+}
+
+.send_msg-text {
+    font-size: 28px;
+    line-height: 38px;
+    font-weight: 700;
+    color: #000;
+}
+
+.send_msg-subText {
+    margin-top: 10px;
+    color: #707070;
+}
+
+.label_text {
+    width: 100%;
+    text-align: start;
+    margin-bottom: 4px;
+}
+
+.contact_form {
+    margin-top: 3rem;
+}
+
+.send_button-container {
+    margin-top: 30px;
+}
+
+.send_button {
+    background-color: #D8D8D8 !important;
+    color: #000 !important;
+    padding: 8px 60px !important;
+    text-transform: capitalize !important;
+    font-size: 1rem !important;
+    border: none !important;
+}
+
+.send_button:hover {
+    background-color: #9F73AB !important;
+    color: #fff !important;
+    transition: 0.8s;
+}
+
+.content_box {
+    margin-top: 50px;
+}
+
+.contact_input-fields fieldset {
+    border: 1.4px solid #9F73AB !important;
+    border-radius: 6px !important;
+}
+
+
+
+.top-to-btm {
+    position: relative;
+}
+
+.icon-position {
+    position: fixed;
+    bottom: 40px;
+    right: 25px;
+    z-index: 20;
+}
+
+.icon-style {
+    padding: 10px;
+    background-color: #9F73AB;
+    border: none;
+    border-radius: 50%;
+    height: 40px !important;
+    width: 40px !important;
+    color: #fff;
+    cursor: pointer;
+    animation: movebtn 3s ease-in-out infinite;
+    transition: all .5s ease-in-out !important;
+    box-shadow: 0 10px 8px 0 rgba(0,0,0,0.1) !important;
+}
+
+.icon-style:hover {
+    animation: none;
+    background: #fff;
+    color: #9F73AB;
+    border: 2px solid #9F73AB;
+}
+
+@keyframes movebtn {
+    0% {
+        transform: translateY(0px);
+    }
+
+    25% {
+        transform: translateY(20px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    75% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
