@@ -1,11 +1,20 @@
 import React from 'react';
 import Header from '../header/header';
+import { Box } from '@mui/material';
+import Footer from '../footer/footer';
 
 const Shop = () => {
     return (
         <div>
-            <Header />
-            <h1>Shop</h1>
+            <Box>
+                <Header />
+            </Box>
+            <Box>
+                dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m  dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffkcxmcx,mcxzlkdss,mxz,m
+            </Box>
+            <Box>
+                <Footer />
+            </Box>
         </div>
     )
 }

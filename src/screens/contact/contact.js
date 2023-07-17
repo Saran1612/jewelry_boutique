@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../header/header';
-import { CarouselBanner } from '../carousel/carousel';
+import { ContactCarousel, SliderCorousel } from '../../components/carousel/carousel';
 import { Box, Grid } from '@mui/material';
 import CallIcon from '@mui/icons-material/Call';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -9,6 +9,7 @@ import './contact.css';
 import { ReusableInputfield } from '../../components/input/input';
 import ReusableButton from '../../components/button/button';
 import NavigationIcon from '@mui/icons-material/Navigation';
+import Footer from '../footer/footer';
 
 const Contact = () => {
 
@@ -44,7 +45,7 @@ const Contact = () => {
             </Box>
 
             <Box>
-                <CarouselBanner />
+                <ContactCarousel />
             </Box>
 
             <Box sx={{ margin: "30px" }}>
@@ -150,20 +151,24 @@ const Contact = () => {
                         <Grid item xs={0} md={2} lg={2}></Grid>
                     </Grid>
                 </Box>
+            </Box>
 
-                <Box>
+            <Box className="Slider">
+                <SliderCorousel />
+            </Box>
 
-                </Box>
+            <Box>
+                <Footer/>
             </Box>
 
             <Box className="top-to-btm">
-                {" "}
+                
                 {showTopBtn && (
                     <NavigationIcon
                         className="icon-position icon-style"
                         onClick={goToTop}
                     />
-                )}{" "}
+                )}
             </Box>
         </div>
     )

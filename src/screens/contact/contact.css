@@ -45,6 +45,7 @@
     width: 100%;
     text-align: start;
     margin-bottom: 4px;
+    font-weight: 700;
 }
 
 .contact_form {
@@ -133,4 +134,8 @@
     100% {
         transform: translateY(0px);
     }
+}
+
+.Slider{
+    margin: 80px 0px;
 }

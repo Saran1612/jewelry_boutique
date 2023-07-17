@@ -1,0 +1,23 @@
+.explore_list{
+    text-align: start;
+    margin: 8px 0px 0px 0px;
+    cursor: pointer;
+}
+
+.explore_list:hover{
+    color: #74959A;
+}
+
+.footer_icon{
+    font-size: 1.3rem !important;
+    margin-right: 0.6rem;
+}
+
+.footer_icon-points{
+    font-size: 1rem !important;
+    margin-right: 0.6rem;
+}
+
+/* .explore_list-text{
+
+} */
