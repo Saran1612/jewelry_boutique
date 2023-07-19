@@ -104,6 +104,12 @@
     width: 45%;
 }
 
+.email{
+    color: #9F73AB;
+    font-weight: 700;
+    
+}
+
 .shop_now-button {
     font-size: 0.8rem !important;
     line-height: 45px !important;
@@ -124,9 +130,6 @@
     margin: 30px;
 }
 
-/* .card-div-home-new-product {
-    margin: 15px;
-} */
 
 .slider_img {
     object-fit: contain;
@@ -160,8 +163,9 @@
 .card {
     /* box-shadow: none; */
     border: none !important;
-     /* Adjust the box shadow values */
-    transition: box-shadow 0.3s ease; /* Adds a smooth transition effect */
+    /* Adjust the box shadow values */
+    transition: box-shadow 0.3s ease;
+    /* Adds a smooth transition effect */
 }
 
 .card:hover .card_content {
@@ -185,6 +189,7 @@
 
 .card_content {
     transition: transform 0.3s ease;
+    background: #9e9e9e2b;
 }
 
 .card_content:hover {
@@ -209,4 +214,25 @@
 .left:hover,
 .right:hover {
     color: #74959A
+}
+
+
+.card-img-featured {
+    transform: scale(0.6);
+}
+
+.card-div-home-new-product-featured {
+    position: relative;
+    margin: 5px;
+    overflow: hidden;
+    box-shadow: 4px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-div-home-new-product-featured :hover .card-img-featured {
+    transform: scale(0.8);
+    transition: 0.5s ease-in-out;
+}
+
+.card-div-home-new-product-featured :hover .hover-icons {
+    opacity: 1;
 }

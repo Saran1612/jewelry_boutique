@@ -18,6 +18,8 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import PinterestIcon from '@mui/icons-material/Pinterest';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import ReactStars from "react-rating-stars-component";
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 const About = () => {
 
@@ -47,6 +49,10 @@ const About = () => {
             top: 0,
             behavior: "smooth",
         });
+    };
+
+    const ratingChanged = (newRating) => {
+        // console.log(newRating);
     };
 
 
@@ -138,9 +144,47 @@ const About = () => {
                 </div>
             </Box>
 
+            <Box className="middle-content-wrapper">
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                    whileInView={{
+                        opacity: [0, 1],
+                        scale: [3, 1],
+                        transition: { duration: 1 },
+                    }}
+                    viewport={{ once: true }}
+
+                >
+                    <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
+                    <ReactStars
+                        classNames="middle-content-stars"
+                        count={4}
+                        onChange={ratingChanged}
+                        size={20}
+                        value={3.5}
+                        isHalf={true}
+                    />
+                    <p className="middle-text">
+                        <span className="content-quotes">
+                           <FormatQuoteIcon/> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+                            ullamcorper dui turpis.Nulla pellentesque mi non laoreet
+                            eleifend. Integer porttitor mollisar lorem, at molestie arcu
+                            pulvinar ut  <FormatQuoteIcon/>
+
+                        </span>
+                    </p>
+                </div>
+            </Box>
+
             <Box>
                 <SliderCorousel />
             </Box>
+
             <Box>
                 <Footer />
             </Box>

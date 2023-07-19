@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
 import Header from '../header/header'
-import { CarouselBanner, HomeNewProductCarousel, SliderCorousel } from '../../components/carousel/carousel';
+import { CarouselBanner, HomeBestSaleCarousel, HomeNewProductCarousel, HomeTopSaleCarousel, SliderCorousel } from '../../components/carousel/carousel';
 import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid } from '@mui/material';
 import Footer from '../footer/footer';
 import Tab from '@mui/material/Tab';
@@ -20,6 +20,8 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import DrawOutlinedIcon from '@mui/icons-material/DrawOutlined';
+import ReactStars from "react-rating-stars-component";
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 const Home = () => {
     const [value, setValue] = React.useState('1');
@@ -61,6 +63,10 @@ const Home = () => {
         });
     };
 
+    const ratingChanged = (newRating) => {
+        // console.log(newRating);
+    };
+
     return (
         <div>
             <Box>
@@ -87,17 +93,17 @@ const Home = () => {
                         </TabPanel>
 
                         <TabPanel value="2">
-                            <HomeNewProductCarousel />
+                            <HomeTopSaleCarousel />
                         </TabPanel>
 
                         <TabPanel value="3">
-                            <HomeNewProductCarousel />
+                            <HomeBestSaleCarousel />
                         </TabPanel>
                     </TabContext>
                 </Box>
             </Box>
 
-            <Box sx={{ margin: "30px 0px 50px 0px", padding:"50px 20px", background:"#9e9e9e1c" }}>
+            <Box sx={{ margin: "30px 0px 50px 0px", padding: "50px 20px", background: "#9e9e9e1c" }}>
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={1} lg={1}></Grid>
                     {homeFeature.map((items) => (
@@ -111,6 +117,44 @@ const Home = () => {
                     <Grid item xs={0} md={1} lg={1}></Grid>
                 </Grid>
             </Box>
+
+
+            <div className="middle-content-wrapper">
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                    whileInView={{
+                        opacity: [0, 1],
+                        scale: [3, 1],
+                        transition: { duration: 1 },
+                    }}
+                    viewport={{ once: true }}
+
+                >
+                    <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
+                    <ReactStars
+                        classNames="middle-content-stars"
+                        count={4}
+                        onChange={ratingChanged}
+                        size={20}
+                        value={3.5}
+                        isHalf={true}
+                    />
+                    <p className="middle-text">
+                        <span className="content-quotes">
+                            <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+                            ullamcorper dui turpis.Nulla pellentesque mi non laoreet
+                            eleifend. Integer porttitor mollisar lorem, at molestie arcu
+                            pulvinar ut  <FormatQuoteIcon />
+
+                        </span>
+                    </p>
+                </div>
+            </div>
 
             <Box>
                 <div style={{
@@ -154,7 +198,7 @@ const Home = () => {
                                                 <span className="blog_text"> <CommentIcon className='blog_icons' /> {items.comments}</span>
                                             </Box>
                                             <Box sx={{ width: "100%", marginTop: "10px" }}>
-                                                <span style={{ textAlign: "start", display: "flex" , color:"#707070" }}>{items.description}</span>
+                                                <span style={{ textAlign: "start", display: "flex", color: "#707070" }}>{items.description}</span>
                                             </Box>
                                         </CardContent>
                                         <CardActions>

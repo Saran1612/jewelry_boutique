@@ -27,7 +27,7 @@
     font-size: 1rem;
     font-family: 'Neuton', serif;
     font-weight: 400;
-    color:#707070;
+    color: #707070;
 }
 
 .blog_icons {
@@ -77,13 +77,52 @@
     flex-direction: column;
 }
 
-.home_feature-text{
+.home_feature-text {
     font-size: 1.25rem !important;
     color: #9F73AB;
     font-weight: 700;
 }
 
-.home_feature-icon svg{
+.home_feature-icon svg {
     font-size: 2rem !important;
     color: #9F73AB;
+}
+
+.middle-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.middle-content-wrapper {
+    display: grid;
+    justify-content: center;
+    padding: 10% 25%;
+    background: #9F73AB;
+    margin-bottom: 50px;
+    margin-top: 80px;
+}
+
+.middle-content-wrapper div {
+    display: flex;
+    justify-content: center;
+}
+
+.quotes-header {
+    font-size: 1em;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.content-quotes {
+    font-size: 0.9em;
+    color: #fff;
+    line-height: 2em;
+    letter-spacing: 1px;
+}
+
+.middle-content-stars span {
+    color:gold !important;
 }
