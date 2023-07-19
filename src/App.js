@@ -6,6 +6,7 @@ import Shop from './screens/shop/shop';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import { Products } from './screens/product/product';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route exact path="/shop" element={<Shop />} />
           <Route exact path="/contact" element={<Contact />} />
           <Route exact path="/about" element={<About />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
       </Router>
     </div>

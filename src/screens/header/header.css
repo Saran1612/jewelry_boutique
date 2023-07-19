@@ -27,8 +27,13 @@
     padding: 0px 25px !important;
     display: flex !important;
     align-items: center !important;
-    /* font-weight: 600 !important; */
+    font-weight: 600 !important;
     font-family: 'Ysabeau SC', sans-serif !important;
+    font-size: 0.875rem;
+    line-height: 1.75;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
+    text-decoration: none;
 }
 
 .header_menu-cart:hover{
@@ -72,4 +77,8 @@
     font-family: 'Fasthand', cursive;
     font-size: 0.8rem;
     color: #4D455D;
+}
+
+.header_icon{
+    margin-right: 5px !important;
 }

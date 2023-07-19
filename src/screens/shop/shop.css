@@ -1,0 +1,102 @@
+.shop_header-text {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.new_products,
+.trending_products {
+    margin: 50px 24.5px;
+}
+
+.star-review-one {
+    display: flex;
+    align-items: center;
+    margin: 16px 0px;
+}
+
+.special-deals-text {
+    color: #1e272e;
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    /* letter-spacing: 1px; */
+    line-height: 1.2;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+}
+
+.edit-icon-search {
+    color: #fff !important;
+    font-size: 16px;
+    /* letter-spacing: 1px; */
+    border: transparent;
+    text-transform: uppercase;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    transition: 0.5s all;
+    background: #9F73AB !important;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 0 !important;
+    padding: 0.1rem 1rem !important;
+}
+
+.product-input-field {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-family: 'Neuton', serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #9F73AB;
+    background-color: #efeeee;
+    background-clip: padding-box;
+    border: none;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.product-input-field:focus {
+    border-radius: 0px;
+    border: none !important;
+}
+
+.product-occasion-div svg {
+    color: #9F73AB !important;
+}
+
+.product-search-text {
+    line-height: 1.2;
+    color: #1e272e;
+    margin-bottom: 20px;
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    /* letter-spacing: 2px; */
+    text-align: left;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+}
+
+.product-occasion-div .css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
+    font-family: 'Neuton', serif !important;
+    color: #707070;
+    font-size: 1rem;
+}
+
+.related_product-text{
+    color: #000;
+    font-size: 1rem;
+    text-align: start;
+    display: flex;
+    font-weight: 700;
+}
+
+.related_product-price-text{
+    color: #707070;
+    font-size: 0.8rem;
+    text-align: start;
+    display: flex;
+    font-weight: 700;
+}

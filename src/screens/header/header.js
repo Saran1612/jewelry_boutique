@@ -16,7 +16,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import CallIcon from '@mui/icons-material/Call';
 import './header.css';
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Logo from '../../assests/logo/icons8-sparkling-diamond-100.png';
 import Logo1 from '../../assests/logo/icons8-jewel-64.png';
 import InfoIcon from '@mui/icons-material/Info';
@@ -26,20 +26,20 @@ import LogoutIcon from '@mui/icons-material/Logout';
 const drawerWidth = 240;
 
 const navItems = [
-    { id: 1, label: 'Home', route: "/", icon: <HomeIcon /> },
-    { id: 2, label: 'Shop', route: "/shop", icon: <ShoppingBagIcon /> },
-    { id: 3, label: 'About', route: "/about", icon: <InfoIcon /> },
-    { id: 4, label: 'Contact', route: "/contact", icon: <CallIcon /> }
+    { id: 1, label: 'Home', route: "/", icon: <HomeIcon className='header_icon' /> },
+    { id: 2, label: 'Shop', route: "/shop", icon: <ShoppingBagIcon className='header_icon' /> },
+    { id: 3, label: 'About', route: "/about", icon: <InfoIcon className='header_icon' /> },
+    { id: 4, label: 'Contact', route: "/contact", icon: <CallIcon className='header_icon' /> }
 ];
 
 const navItemsDataOne = [
-    { id: 1, label: 'Home', route: "/", icon: <HomeIcon /> },
-    { id: 2, label: 'Shop', route: "/shop", icon: <ShoppingBagIcon /> },
+    { id: 1, label: 'Home', route: "/", icon: <HomeIcon className='header_icon' /> },
+    { id: 2, label: 'Shop', route: "/shop", icon: <ShoppingBagIcon className='header_icon' /> },
 ];
 
 const navItemsDataTwo = [
-    { id: 1, label: 'About', route: "/about", icon: <InfoIcon /> },
-    { id: 2, label: 'Contact', route: "/contact", icon: <CallIcon /> }
+    { id: 1, label: 'About', route: "/about", icon: <InfoIcon className='header_icon' /> },
+    { id: 2, label: 'Contact', route: "/contact", icon: <CallIcon className='header_icon' /> }
 ];
 
 function HideOnScroll(props) {
@@ -90,8 +90,14 @@ function DrawerAppBar(props) {
             <Divider />
             <ul style={{ padding: "0" }}>
                 {navItems.map((item) => (
-                    <li style={{ listStyle: "none", padding: "10px 20px", display: "flex", justifyContent: "start" }}>
-                        <ReusableButton key={item.id} className="header_menu-cart-mobile" sx={{ color: '#fff', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                    <li style={{ listStyle: "none", padding: "16px 20px", display: "flex", justifyContent: "start" }}>
+                        {/* <ReusableButton key={item.id} className="header_menu-cart-mobile" sx={{ color: '#fff', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} /> */}
+                        <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                            color: isActive ? 'greenyellow' : 'black'
+                        })}>
+                            {item.icon}
+                            {item.label}
+                        </NavLink>
                     </li>
                 ))}
             </ul>
@@ -118,7 +124,13 @@ function DrawerAppBar(props) {
 
                         <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
                             {navItemsDataOne.map((item) => (
-                                <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                                // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                                <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                                    color: isActive ? 'greenyellow' : 'black'
+                                })}>
+                                    {item.icon}
+                                    {item.label}
+                                </NavLink>
                             ))}
                         </Box>
 
@@ -131,13 +143,18 @@ function DrawerAppBar(props) {
                                     <span className='header__subtext'>Boutique</span>
                                 </Box>
                             </Link>
-
                         </Box>
 
 
                         <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
                             {navItemsDataTwo.map((item) => (
-                                <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                                // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                                <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                                    color: isActive ? 'greenyellow' : 'black'
+                                })}>
+                                    {item.icon}
+                                    {item.label}
+                                </NavLink>
                             ))}
                         </Box>
 
