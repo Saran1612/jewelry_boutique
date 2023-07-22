@@ -10,14 +10,41 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import './footer.css';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 const Footer = () => {
+
+    //Footer-Policy
+    const [refPolicy, inViewPolicy] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.1, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsPolicy = useSpring({
+        from: { opacity: 0, transform: 'translate3d(-100px,0,0)' },
+        to: { opacity: inViewPolicy ? 1 : 0, transform: inViewPolicy ? 'translate3d(0,0,0)' : 'translate3d(-100px,0,0)' },
+        config: { duration: 750 },
+    });
+
+    //Footer-Address
+    const [refAddress, inViewAddress] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.1, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsAddress = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,75px,0)' },
+        to: { opacity: inViewAddress ? 1 : 0, transform: inViewAddress ? 'translate3d(0,0,0)' : 'translate3d(0,75px,0)' },
+        config: { duration: 750 },
+    });
+
     return (
         <>
-            <div style={{ padding: "40px 40px 40px 40px", background: "#9e9e9e1c" }}>
+            <animated.div ref={refAddress} style={springPropsAddress} className="foooter-address">
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={4}>
-                        <Box>
+                        <div>
                             <Link to="/" style={{ display: "flex", textDecoration: "none" }}>
                                 <img src={Logo1} alt='logo' className='header_logo' />
                                 <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
@@ -31,7 +58,7 @@ const Footer = () => {
                                 <span style={{ textAlign: "start", margin: "8px 0px 0px 0px" }}>Phone: 1-800-915-6270</span>
                                 <span style={{ textAlign: "start", margin: "8px 0px 0px 0px" }}>Email: jane.boutique@gmail.com</span>
                             </div>
-                        </Box>
+                        </div>
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={3}>
@@ -76,16 +103,18 @@ const Footer = () => {
                     </Grid>
                 </Grid>
 
-            </div>
+            </animated.div>
 
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Box style={{ background: "#9F73AB", padding: "18px 40px", color: "#fff", textAlign: "start" }}>
-                        <span className='explore_list-text'>Privacy</span>
-                        <span className='explore_list-text mx-4'>|</span>
-                        <span className='explore_list-text'>Cookie Policy</span>
-                        <span className='explore_list-text mx-4'>|</span>
-                        <span className='explore_list-text'>© 2023 jane's boutiques. All Rights Reserved.</span>
+                        <animated.div ref={refPolicy} style={springPropsPolicy}>
+                            <span className='explore_list-text'>Privacy</span>
+                            <span className='explore_list-text mx-4'>|</span>
+                            <span className='explore_list-text'>Cookie Policy</span>
+                            <span className='explore_list-text mx-4'>|</span>
+                            <span className='explore_list-text'>© 2023 jane's boutiques. All Rights Reserved.</span>
+                        </animated.div>
                     </Box>
                 </Grid>
             </Grid>

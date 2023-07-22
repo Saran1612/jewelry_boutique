@@ -23,7 +23,7 @@
 }
 
 .header_menu-cart {
-    color: #624F82 !important;
+    color: #624F82;
     padding: 0px 25px !important;
     display: flex !important;
     align-items: center !important;
@@ -81,4 +81,8 @@
 
 .header_icon{
     margin-right: 5px !important;
+}
+
+.header-logo-wrapper{
+    display: flex;
 }

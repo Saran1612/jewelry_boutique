@@ -47,47 +47,45 @@
     background: #74959A !important;
 }
 
-.team_member-box{
+.team_member-box {}
 
-}
-
-.user_name-text{
+.user_name-text {
     font-size: 1.25rem;
     font-weight: 700;
     text-align: start;
 }
 
-.user_role-text{
+.user_role-text {
     font-size: 1rem;
     font-weight: 400;
     text-align: start;
     color: #707070;
 }
 
-.user_desc-text{
+.user_desc-text {
     font-size: 1rem;
     font-weight: 400;
     text-align: start;
     color: #707070;
 }
 
-.user_img{
-    transform: scale(0.6,0.6);
+.user_img {
+    transform: scale(0.6, 0.6);
 }
 
-.team_member-card{
+.team_member-card {
     border: none !important;
     box-shadow: 0 1rem 2rem hsl(0 0% 0% / 20%) !important;
     border-radius: 6px !important;
 }
 
 
-.team_member-card:hover .user_img{
+.team_member-card:hover .user_img {
     transition: 1s;
-    transform: scale(0.8,0.8);
+    transform: scale(0.8, 0.8);
 }
 
-.team_member-container{
+.team_member-container {
     margin: 40px;
 }
 
@@ -102,21 +100,28 @@
     right: 0;
     bottom: 32%;
     transition: 3s ease;
-  }
-  
-  .card-icons {
+}
+
+.card-icons {
     display: none;
     position: relative;
-  }
-  
-  .edit-icon{
+}
+
+.edit-icon {
     color: #707070 !important;
     margin: 5px;
     padding: 8px;
     border-radius: 50%;
-  }
+}
 
-  .edit-icon:hover{
-    color:#9F73AB !important;
-  }
-  
+.edit-icon:hover {
+    color: #9F73AB !important;
+}
+
+
+.middle-content-wrapper-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

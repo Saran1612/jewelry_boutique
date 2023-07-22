@@ -22,6 +22,8 @@ import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOu
 import DrawOutlinedIcon from '@mui/icons-material/DrawOutlined';
 import ReactStars from "react-rating-stars-component";
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 const Home = () => {
     const [value, setValue] = React.useState('1');
@@ -67,6 +69,60 @@ const Home = () => {
         // console.log(newRating);
     };
 
+    //Home-Tab
+    const [refTab, inViewTab] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsOne = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewTab ? 1 : 0, transform: inViewTab ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+
+    //Home-feature
+    const [refFeatures, inViewFeatures] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.1, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsTwo = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,50px,0)' },
+        to: { opacity: inViewFeatures ? 1 : 0, transform: inViewFeatures ? 'translate3d(0,0,0)' : 'translate3d(0,50px,0)' },
+        config: { duration: 750 },
+    });
+    
+
+    //Home-comment
+    const [refComment, inViewComment] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsThree = useSpring({
+        from: { opacity: 0, scale: 0.5 },
+        to: { opacity: inViewComment ? 1 : 0, scale: inViewComment ? 1 : 0.5 },
+        config: { duration: 1000 },
+    });
+
+
+    //Home-blogs
+    const [refBlog, inViewBlog] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsFour = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewBlog ? 1 : 0, transform: inViewBlog ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 750 },
+    });
+
+
+
     return (
         <div>
             <Box>
@@ -77,10 +133,10 @@ const Home = () => {
                 <CarouselBanner />
             </Box>
 
-            <Box className="home_tabs">
+            <animated.div className="home_tabs" style={springPropsOne} ref={refTab}>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value}>
-                        <Box sx={{}}>
+                        <Box className="home_tabs-box">
                             <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
                                 <Tab label="Trending Now" value="1" />
                                 <Tab label="Top Sale" value="2" />
@@ -97,21 +153,21 @@ const Home = () => {
                         </TabPanel>
 
                         <TabPanel value="3">
-                            <HomeBestSaleCarousel />
+                            <HomeNewProductCarousel />
                         </TabPanel>
                     </TabContext>
                 </Box>
-            </Box>
+            </animated.div>
 
             <Box sx={{ margin: "30px 0px 50px 0px", padding: "50px 20px", background: "#9e9e9e1c" }}>
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={1} lg={1}></Grid>
                     {homeFeature.map((items) => (
                         <Grid item xs={12} md={2.5} lg={2.5}>
-                            <Box className="home_feature">
+                            <animated.div style={springPropsTwo} ref={refFeatures} className="home_feature">
                                 <span className='home_feature-icon'>{items.icon}</span>
                                 <span className='home_feature-text'>{items.name}</span>
-                            </Box>
+                            </animated.div>
                         </Grid>
                     ))}
                     <Grid item xs={0} md={1} lg={1}></Grid>
@@ -120,21 +176,11 @@ const Home = () => {
 
 
             <div className="middle-content-wrapper">
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                    whileInView={{
-                        opacity: [0, 1],
-                        scale: [3, 1],
-                        transition: { duration: 1 },
-                    }}
-                    viewport={{ once: true }}
+                <animated.div
+                    style={springPropsThree}
+                    ref={refComment}
+                    className="middle-content-wrapper-inner">
 
-                >
                     <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
                     <ReactStars
                         classNames="middle-content-stars"
@@ -153,24 +199,20 @@ const Home = () => {
 
                         </span>
                     </p>
-                </div>
+                </animated.div>
             </div>
 
             <Box>
-                <div style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    marginTop: "25px"
-                }}>
+                <animated.div
+                    className="home-blogs_box"
+                    ref={refBlog}
+                    style={springPropsFour}>
                     <span className='blog_header'>LATEST BLOGS</span>
                     <span className='blog_content-text mt-3'>A blog is a discussion or informational website published on the</span>
                     <span className='blog_content-text'>World Wide Web consisting of discrete</span>
-                </div>
+                </animated.div>
 
-                <Box sx={{ margin: "40px" }}>
+                <animated.div className="home_card-box" ref={refBlog} style={springPropsFour}>
                     <Grid container spacing={2}>
                         {newProducts.map((items) => (
                             <Grid item xs={12} md={5.6} lg={4}>
@@ -209,7 +251,7 @@ const Home = () => {
                             </Grid>
                         ))}
                     </Grid>
-                </Box>
+                </animated.div>
             </Box>
 
             <Box>

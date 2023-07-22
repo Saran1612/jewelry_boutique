@@ -10,6 +10,8 @@ import { ReusableInputfield } from '../../components/input/input';
 import ReusableButton from '../../components/button/button';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import Footer from '../footer/footer';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 const Contact = () => {
 
@@ -38,6 +40,45 @@ const Contact = () => {
         });
     };
 
+    //Contact-feature
+    const [refFeatures, inViewFeatures] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.1, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsTwo = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewFeatures ? 1 : 0, transform: inViewFeatures ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 750 },
+    });
+
+
+    //Contact-Message
+    const [refMessage, inViewMessage] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsMessage = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewMessage ? 1 : 0, transform: inViewMessage ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 750 },
+        delay:400
+    });
+
+    //Contact-Form
+    const [refForm, inViewForm] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsForm = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewForm ? 1 : 0, transform: inViewForm ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 750 },
+        delay: 600
+    });
+
     return (
         <div>
             <Box>
@@ -50,26 +91,28 @@ const Contact = () => {
 
             <Box sx={{ margin: "30px" }}>
                 <Box className="contact_cards mt-5">
-                    <Grid container spacing={2}>
-                        {contact.map((items, index) => (
-                            <Grid item xs={12} md={5.6} lg={3.8} sx={{ padding: "0px" }} className='contact_us-box'>
-                                {items.icon}
-                                <span className='contact_mainText'>{items.label}</span>
-                                <span className='contact_subText'>{items.phone}</span>
-                                <span className='contact_subText'>{items.tel}</span>
-                            </Grid>
-                        ))}
-                    </Grid>
+                    <animated.div ref={refFeatures} style={springPropsTwo}>
+                        <Grid container spacing={2}>
+                            {contact.map((items, index) => (
+                                <Grid item xs={12} md={5.6} lg={3.8} sx={{ padding: "0px" }} className='contact_us-box'>
+                                    {items.icon}
+                                    <span className='contact_mainText'>{items.label}</span>
+                                    <span className='contact_subText'>{items.phone}</span>
+                                    <span className='contact_subText'>{items.tel}</span>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </animated.div>
                 </Box>
 
-                <Box className="content_box">
+                <animated.div className="content_box" ref={refMessage} style={springPropsMessage}>
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                         <span className='send_msg-text'>SEND US A MESSAGE</span>
                         <span className='send_msg-subText'>You can contact us for any of your requirements. We’ll help you meet your needs.</span>
                     </Box>
-                </Box>
+                </animated.div>
 
-                <Box className="contact_form">
+                <animated.div className="contact_form" style={springPropsForm} ref={refForm}>
                     <Grid container spacing={2}>
                         <Grid item xs={0} md={2} lg={2}></Grid>
 
@@ -150,7 +193,8 @@ const Contact = () => {
 
                         <Grid item xs={0} md={2} lg={2}></Grid>
                     </Grid>
-                </Box>
+                </animated.div>
+
             </Box>
 
             <Box className="Slider">
@@ -158,11 +202,11 @@ const Contact = () => {
             </Box>
 
             <Box>
-                <Footer/>
+                <Footer />
             </Box>
 
             <Box className="top-to-btm">
-                
+
                 {showTopBtn && (
                     <NavigationIcon
                         className="icon-position icon-style"

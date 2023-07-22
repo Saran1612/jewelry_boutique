@@ -19,6 +19,8 @@ import Eight from '../../assests/newProd/e.jpg';
 import Nine from '../../assests/newProd/l.jpg';
 import Ten from '../../assests/newProd/j.jpg';
 import { Link } from 'react-router-dom';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 const Shop = () => {
 
@@ -53,6 +55,101 @@ const Shop = () => {
         });
     };
 
+    //Home-Featured
+    const [refFeatured, inViewFeatured] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsFeatured = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewFeatured ? 1 : 0, transform: inViewFeatured ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 750, }, // Adjust the duration as needed
+    });
+
+    //Home-New
+    const [refNew, inViewNew] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsNew = useSpring({
+        from: { opacity: 0, transform: 'translateY(200px)' },
+        to: { opacity: inViewNew ? 1 : 0, transform: inViewNew ? 'translateY(0px)' : 'translateY(200px)' },
+        config: { duration: 750, }, // Adjust the duration as needed
+    });
+
+    //Home-Trending
+    const [refTrending, inViewTrend] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsTrend = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewTrend ? 1 : 0, transform: inViewTrend ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+
+    //Home-FilterOne
+    const [refSearchOne, inViewSearchOne] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsSearchOne = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewSearchOne ? 1 : 0, transform: inViewSearchOne ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+        delay: 500,
+    });
+
+    //Home-FilterCustomer
+    const [refDiscount, inViewDiscount] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsDiscount = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewDiscount ? 1 : 0, transform: inViewDiscount ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+        delay: 600,
+    });
+
+
+    //Home-FilterCustomer
+    const [refCustomer, inViewCustomer] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsCustomer = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewCustomer ? 1 : 0, transform: inViewCustomer ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+    //Home-FilterRelated
+    const [refRelated, inViewRelated] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsRelated = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewRelated ? 1 : 0, transform: inViewRelated ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
     return (
         <div>
             <Box>
@@ -77,8 +174,7 @@ const Shop = () => {
                             boxShadow: "0 0 2px rgba(44, 35, 39, 0.15)"
                         }}>
 
-                            <div className="product-search-bar" style={{ width: "100%" }}>
-                                {/* <span className="product-search-text">SEARCH HERE...</span> */}
+                            <animated.div className="product-search-bar" ref={refSearchOne} style={springPropsSearchOne}>
                                 <div style={{ display: "flex" }}>
                                     <input
                                         type="text"
@@ -90,11 +186,11 @@ const Shop = () => {
                                         <SearchIcon sx={{ fontSize: "1.3rem !important" }} />
                                     </IconButton>
                                 </div>
-                            </div>
+                            </animated.div>
 
                             <div className="product-radio-box-content mt-4">
 
-                                <div className="product-occasion-div mt-4">
+                                <animated.div className="product-occasion-div mt-4" ref={refDiscount} style={springPropsDiscount}>
                                     <span className="special-deals-text mb-2">DISCOUNT</span>
                                     <FormGroup>
                                         <FormControlLabel
@@ -123,9 +219,9 @@ const Shop = () => {
                                             className='discount_text'
                                         />
                                     </FormGroup>
-                                </div>
+                                </animated.div>
 
-                                <div className="product-review-div mt-4">
+                                <animated.div className="product-review-div mt-4" ref={refCustomer} style={springPropsCustomer}>
                                     <span className="special-deals-text mb-2">
                                         CUSTOMER REVIEW
                                     </span>
@@ -216,10 +312,9 @@ const Shop = () => {
                                             }}>1</span>
                                         </div>
                                     </div>
-                                </div>
+                                </animated.div>
 
-                                <div className='related_product mt-4'>
-
+                                <animated.div className='related_product mt-4' ref={refRelated} style={springPropsRelated}>
                                     <span className="special-deals-text mb-4">
                                         RELATED PRODUCTS
                                     </span>
@@ -254,31 +349,32 @@ const Shop = () => {
                                             </Card>
                                         </Link>
                                     ))}
-                                </div>
+                                </animated.div>
                             </div>
                         </div>
                     </Grid>
+
                     <Grid item xs={12} md={9} lg={9}>
-                        <Box className="m-4">
+                        <animated.div className="m-4" ref={refFeatured} style={springPropsFeatured}>
                             <span className='shop_header-text'>Featured products</span>
                             <Box className="mt-3">
                                 <ShopFeaturedProductCarousel />
                             </Box>
-                        </Box>
+                        </animated.div>
 
-                        <Box className="new_products">
+                        <animated.div className="new_products" ref={refNew} style={springPropsNew}>
                             <span className='shop_header-text'>New products</span>
                             <Box className="mt-3">
                                 <ShopNewProductCarousel />
                             </Box>
-                        </Box>
+                        </animated.div>
 
-                        <Box className="trending_products">
+                        <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
                             <span className='shop_header-text'>Trending products</span>
                             <Box className="mt-3">
                                 <ShopTrendingProductCarousel />
                             </Box>
-                        </Box>
+                        </animated.div>
 
                     </Grid>
                 </Grid>

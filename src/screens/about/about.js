@@ -20,6 +20,8 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import ReactStars from "react-rating-stars-component";
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 const About = () => {
 
@@ -56,6 +58,47 @@ const About = () => {
     };
 
 
+    //About-why_choose-jane
+    const [refChoose, inViewChoose] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsChoose = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewChoose ? 1 : 0, transform: inViewChoose ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 1000 },
+    });
+
+
+    //About-TeamMember
+    const [refTeamMember, inViewTeamMember] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsTeamMember = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewTeamMember ? 1 : 0, transform: inViewTeamMember ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 1000 },
+    });
+
+
+    //Home-comment
+    const [refComment, inViewComment] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsThree = useSpring({
+        from: { opacity: 0, scale: 0.5 },
+        to: { opacity: inViewComment ? 1 : 0, scale: inViewComment ? 1 : 0.5 },
+        config: { duration: 1000 },
+    });
+
+
     return (
         <div>
             <Box>
@@ -68,28 +111,27 @@ const About = () => {
 
             <Box className="why_us">
                 <Grid container spacing={2}>
-                    {/* <Grid item xs={12} md={12} lg={6}>
-                        <img src={Kg} alt="banner" className='about_grid-img' />
-                    </Grid> */}
                     <Grid item xs={12} md={12} lg={12}>
-                        <Box sx={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "center", alignItems: "center", padding: { xs: "0px 0px 30px 0px", lg: "30px 50px 50px 50px" } }}>
-                            <span className='why_us-text'>Why Choose Jane ?</span>
-                            <span className='why_us-content-text mt-1 mb-4'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
-                            <div>
-                                <ul style={{ listStyle: "none", textAlign: "start" }}>
-                                    <li className='mt-2 list'><RadioButtonCheckedOutlinedIcon sx={{ fontSize: "1rem !important", color: "#707070" }} /> <span className='list_points-text'>Best & Good Delivery Service</span></li>
-                                    <li className='mt-2 list'><RadioButtonCheckedOutlinedIcon sx={{ fontSize: "1rem !important", color: "#707070" }} /> <span className='list_points-text'>Quality, Fresh, Authentic Supplier.</span></li>
-                                    <li className='mt-2 list'><RadioButtonCheckedOutlinedIcon sx={{ fontSize: "1rem !important", color: "#707070" }} /> <span className='list_points-text'>We Are Always Provide Goood Quality Products.</span></li>
-                                </ul>
+                        <animated.div ref={refChoose} style={springPropsChoose}>
+                            <Box sx={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "center", alignItems: "center", padding: { xs: "0px 0px 30px 0px", lg: "30px 50px 50px 50px" } }}>
+                                <span className='why_us-text'>Why Choose Jane ?</span>
+                                <span className='why_us-content-text mt-1 mb-4'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
+                                <div>
+                                    <ul style={{ listStyle: "none", textAlign: "start" }}>
+                                        <li className='mt-2 list'><RadioButtonCheckedOutlinedIcon sx={{ fontSize: "1rem !important", color: "#707070" }} /> <span className='list_points-text'>Best & Good Delivery Service</span></li>
+                                        <li className='mt-2 list'><RadioButtonCheckedOutlinedIcon sx={{ fontSize: "1rem !important", color: "#707070" }} /> <span className='list_points-text'>Quality, Fresh, Authentic Supplier.</span></li>
+                                        <li className='mt-2 list'><RadioButtonCheckedOutlinedIcon sx={{ fontSize: "1rem !important", color: "#707070" }} /> <span className='list_points-text'>We Are Always Provide Goood Quality Products.</span></li>
+                                    </ul>
 
-                                <ReusableButton buttonName="View More" className="view_more-button mt-4" />
-                            </div>
-                        </Box>
+                                    <ReusableButton buttonName="View More" className="view_more-button mt-4" />
+                                </div>
+                            </Box>
+                        </animated.div>
                     </Grid>
                 </Grid>
             </Box>
 
-            <Box className="team_member-box">
+            <animated.div className="team_member-box" style={springPropsTeamMember} ref={refTeamMember}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <span className='why_us-text'>Team Member</span>
                     <span className='why_us-content-text mt-1'>Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed aci erat</span>
@@ -142,24 +184,12 @@ const About = () => {
                         ))}
                     </Grid>
                 </div>
-            </Box>
+            </animated.div>
 
             <Box className="middle-content-wrapper">
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                    whileInView={{
-                        opacity: [0, 1],
-                        scale: [3, 1],
-                        transition: { duration: 1 },
-                    }}
-                    viewport={{ once: true }}
-
-                >
+                <animated.div
+                    className="middle-content-wrapper-inner"
+                    style={springPropsThree} ref={refComment} >
                     <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
                     <ReactStars
                         classNames="middle-content-stars"
@@ -171,14 +201,14 @@ const About = () => {
                     />
                     <p className="middle-text">
                         <span className="content-quotes">
-                           <FormatQuoteIcon/> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+                            <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
                             ullamcorper dui turpis.Nulla pellentesque mi non laoreet
                             eleifend. Integer porttitor mollisar lorem, at molestie arcu
-                            pulvinar ut  <FormatQuoteIcon/>
+                            pulvinar ut  <FormatQuoteIcon />
 
                         </span>
                     </p>
-                </div>
+                </animated.div>
             </Box>
 
             <Box>

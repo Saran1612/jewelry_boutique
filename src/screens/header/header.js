@@ -22,6 +22,8 @@ import Logo1 from '../../assests/logo/icons8-jewel-64.png';
 import InfoIcon from '@mui/icons-material/Info';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 const drawerWidth = 240;
 
@@ -41,6 +43,8 @@ const navItemsDataTwo = [
     { id: 1, label: 'About', route: "/about", icon: <InfoIcon className='header_icon' /> },
     { id: 2, label: 'Contact', route: "/contact", icon: <CallIcon className='header_icon' /> }
 ];
+
+
 
 function HideOnScroll(props) {
     const { children, window } = props;
@@ -76,6 +80,32 @@ function DrawerAppBar(props) {
     };
 
 
+    //Header-Tab
+    const [refTab, inViewTab] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsOne = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,-50px,0)' },
+        to: { opacity: 1, transform: 'translate3d(0,0,0)' },
+        config: { duration: 400 }, // Adjust the duration as needed
+        delay: 1000
+    });
+
+    //Header-Link
+    const [refLink, inViewLink] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsLink = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,-50px,0)' },
+        to: { opacity: 1, transform: 'translate3d(0,0,0)' },
+        config: { duration: 400 }, // Adjust the duration as needed
+    });
 
 
     const drawer = (
@@ -93,7 +123,7 @@ function DrawerAppBar(props) {
                     <li style={{ listStyle: "none", padding: "16px 20px", display: "flex", justifyContent: "start" }}>
                         {/* <ReusableButton key={item.id} className="header_menu-cart-mobile" sx={{ color: '#fff', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} /> */}
                         <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                            color: isActive ? 'greenyellow' : 'black'
+                            color: isActive ? '#74959A' : '#624F82'
                         })}>
                             {item.icon}
                             {item.label}
@@ -126,34 +156,43 @@ function DrawerAppBar(props) {
                             {navItemsDataOne.map((item) => (
                                 // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
                                 <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                                    color: isActive ? 'greenyellow' : 'black'
+                                    color: isActive ? '#74959A' : ''
                                 })}>
-                                    {item.icon}
-                                    {item.label}
+                                    <animated.div ref={refLink} style={springPropsLink}>
+                                        {item.icon}
+                                        {item.label}
+                                    </animated.div>
                                 </NavLink>
                             ))}
                         </Box>
 
 
+                        {/* <div> */}
+
                         <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: "center", alignItems: "center", width: { xs: '100%', sm: 'auto' }, marginRight: { xs: "8%", sm: "0%" }, margin: { sm: "0% 2%", md: "0% 2%", lg: "0% 4%" } }}>
                             <Link to="/" style={{ display: "flex", textDecoration: "none" }}>
-                                <img src={Logo1} alt='logo' className='header_logo' />
-                                <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
-                                    <span className='header__text'>Jane's</span>
-                                    <span className='header__subtext'>Boutique</span>
-                                </Box>
+                                <animated.div className='header-logo-wrapper' ref={refTab} style={springPropsOne}>
+                                    <img src={Logo1} alt='logo' className='header_logo' />
+                                    <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
+                                        <span className='header__text'>Jane's</span>
+                                        <span className='header__subtext'>Boutique</span>
+                                    </Box>
+                                </animated.div>
                             </Link>
                         </Box>
+                        {/* </div> */}
 
 
                         <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
                             {navItemsDataTwo.map((item) => (
                                 // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
                                 <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                                    color: isActive ? 'greenyellow' : 'black'
+                                    color: isActive ? '#74959A' : '#624F82'
                                 })}>
-                                    {item.icon}
-                                    {item.label}
+                                    <animated.div ref={refLink} style={springPropsLink}>
+                                        {item.icon}
+                                        {item.label}
+                                    </animated.div>
                                 </NavLink>
                             ))}
                         </Box>

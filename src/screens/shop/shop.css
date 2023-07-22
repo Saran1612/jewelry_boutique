@@ -65,6 +65,10 @@
     color: #9F73AB !important;
 }
 
+.product-search-bar{
+    width: 100%;
+}
+
 .product-search-text {
     line-height: 1.2;
     color: #1e272e;

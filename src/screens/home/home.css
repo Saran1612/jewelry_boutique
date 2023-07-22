@@ -124,5 +124,30 @@
 }
 
 .middle-content-stars span {
-    color:gold !important;
+    color: gold !important;
+}
+
+.middle-content-wrapper-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.home-blogs_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 25px;
+
+}
+
+.home_card-box{
+    margin: 40px;
+}
+
+.home_tabs .home_tabs-box .PrivateTabIndicator-colorSecondary-7{
+    background: #9F73AB !important;
 }

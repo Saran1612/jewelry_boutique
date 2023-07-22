@@ -267,11 +267,29 @@
     margin-right: 0.6rem;
 }
 
-.product_game{
+.product_game {
     padding: 0px !important;
 }
 
 .card-div-home-new-product-featured :hover .card-img-featured {
     transform: scale(0.8);
     transition: 0.5s ease-in-out;
+}
+
+.description-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-wrapper-div {
+    width: 100%;
+}
+
+.feature-text-box{
+    width: 100%;
+    margin: 42px 0px;
+}
+
+.product-search-bar{
+    width: 100%;
 }

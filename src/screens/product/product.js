@@ -34,6 +34,8 @@ import StarIcon from '@mui/icons-material/Star';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NavigationIcon from '@mui/icons-material/Navigation';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
 
 
 
@@ -130,6 +132,115 @@ export const Products = () => {
         { id: 3, img: Nine, name: "Cultured Freshwater Pearl", price: "190", star: "4.7" },
     ];
 
+    //Product-images
+    const [refProduct, inViewProduct] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsProduct = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewProduct ? 1 : 0, transform: inViewProduct ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+    });
+
+    //Product-description
+    const [refDescription, inViewDescription] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsDescription = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewDescription ? 1 : 0, transform: inViewDescription ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+        delay: 500
+    });
+
+
+    //Product-featured
+    const [refFeatured, inViewFeatured] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsFeatured = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewFeatured ? 1 : 0, transform: inViewFeatured ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+        delay: 500
+    });
+
+
+    //Product-featuredProd
+    const [refFeaturedProd, inViewFeaturedProd] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsFeaturedProd = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewFeaturedProd ? 1 : 0, transform: inViewFeaturedProd ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+        delay: 500
+    });
+
+
+    //Home-FilterOne
+    const [refSearchOne, inViewSearchOne] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsSearchOne = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewSearchOne ? 1 : 0, transform: inViewSearchOne ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+        delay: 500,
+    });
+
+
+    //Home-FilterDiscount
+    const [refDiscount, inViewDiscount] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsDiscount = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewDiscount ? 1 : 0, transform: inViewDiscount ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+        delay: 600,
+    });
+
+    //Home-FilterCustomer
+    const [refCustomer, inViewCustomer] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsCustomer = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewCustomer ? 1 : 0, transform: inViewCustomer ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+    //Home-FilterRelated
+    const [refRelated, inViewRelated] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsRelated = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewRelated ? 1 : 0, transform: inViewRelated ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
     return (
         <div>
             <Box>
@@ -143,7 +254,6 @@ export const Products = () => {
 
             <div className="products-wrapper">
                 {/* ///mobile */}
-
                 <Box
                     className="Mobile_screen"
                     sx={{
@@ -344,6 +454,7 @@ export const Products = () => {
                     </StyledMenu>
                 </Box>
 
+                {/* // web */}
                 <div className="products-content-div">
                     <Grid container spacing={2}>
                         <Grid
@@ -351,8 +462,7 @@ export const Products = () => {
                             xs={3}
                             sx={{ display: { xs: "none", sm: "none", md: "block" } }} >
                             <div style={{ padding: "0px 50px 0px 0px" }}>
-                                <div className="product-search-bar" style={{ width: "100%" }}>
-
+                                <animated.div className="product-search-bar" ref={refSearchOne} style={springPropsSearchOne}>
                                     <div style={{ display: "flex" }}>
                                         <input
                                             type="text"
@@ -364,11 +474,11 @@ export const Products = () => {
                                             <SearchIcon sx={{ fontSize: "1.3rem !important" }} />
                                         </IconButton>
                                     </div>
-                                </div>
+                                </animated.div>
 
                                 <div className="product-radio-box-content mt-4">
-                                    <div className="product-occasion-div">
-                                        <span className="special-deals-text mb-2">occasion</span>
+                                    <animated.div className="product-occasion-div" ref={refDiscount} style={springPropsDiscount}>
+                                        <span className="special-deals-text mb-2">CATEGORIES</span>
                                         <FormGroup>
                                             <FormControlLabel
                                                 control={<Checkbox />}
@@ -388,9 +498,9 @@ export const Products = () => {
                                                 onClick={handleClose}
                                             />
                                         </FormGroup>
-                                    </div>
+                                    </animated.div>
 
-                                    <div className="product-occasion-div mt-4">
+                                    {/* <div className="product-occasion-div mt-4">
                                         <span className="special-deals-text mb-2">DISCOUNT</span>
                                         <FormGroup>
                                             <FormControlLabel
@@ -414,9 +524,9 @@ export const Products = () => {
                                                 label="50% or More"
                                             />
                                         </FormGroup>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="product-review-div mt-4">
+                                    <animated.div className="product-review-div mt-4" ref={refCustomer} style={springPropsCustomer}>
                                         <span className="special-deals-text mb-2">
                                             CUSTOMER REVIEW
                                         </span>
@@ -507,10 +617,10 @@ export const Products = () => {
                                                 }}>1</span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </animated.div>
 
 
-                                    <div className='related_product mt-4'>
+                                    <animated.div className='related_product mt-4' ref={refRelated} style={springPropsRelated}>
                                         <span className="special-deals-text mb-4">
                                             SPECIAL DEALS
                                         </span>
@@ -545,15 +655,15 @@ export const Products = () => {
                                                 </Card>
                                             </Link>
                                         ))}
-                                    </div>
+                                    </animated.div>
+
                                 </div>
                             </div>
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={9}>
                             <div>
-                                <div
-                                    className="specific__products">
+                                <animated.div className="specific__products" ref={refProduct} style={springPropsProduct}>
                                     <Grid container spacing={3}>
                                         <Grid item xs={12} sm={6} md={6}>
                                             <div style={{ border: "1px solid #ced4da" }}>
@@ -643,45 +753,43 @@ export const Products = () => {
                                             </div>
                                         </Grid>
                                     </Grid>
-                                </div>
+                                </animated.div>
 
-                                <div
-                                    initial={{ opacity: 0, y: "100vh" }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ type: "spring", duration: 1 }}
-                                    className="product-description-below-div"
-                                >
-                                    <span className="lorem-ipsum-header-text mb-4">
-                                        Description
-                                    </span>
+                                <div className="product-description-below-div">
 
-                                    <span className="lorem-text-one">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elPellentesque vehicula augue eget nisl ullamcorper,
-                                        molestie blandit ipsum auctor. Mauris volutpat augue
-                                        dolor.Consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut lab ore et dolore magna aliqua. Ut enim ad
-                                        minim veniam, quis nostrud exercitation ullamco. labore et
-                                        dolore magna aliqua.
-                                    </span>
+                                    <animated.div className="description-box" ref={refDescription} style={springPropsDescription}>
+                                        <span className="lorem-ipsum-header-text mb-4">
+                                            Description
+                                        </span>
 
-                                    <span className="lorem-text-one mt-2 mb-4">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elPellentesque vehicula augue eget nisl ullamcorper,
-                                        molestie blandit ipsum auctor. Mauris volutpat augue dolor.
-                                        Consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut lab ore et dolore magna aliqua. Ut enim ad
-                                        minim veniam, quis nostrud exercitation ullamco. labore et
-                                        dolore magna aliqua.
-                                    </span>
+                                        <span className="lorem-text-one">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elPellentesque vehicula augue eget nisl ullamcorper,
+                                            molestie blandit ipsum auctor. Mauris volutpat augue
+                                            dolor.Consectetur adipisicing elit, sed do eiusmod tempor
+                                            incididunt ut lab ore et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud exercitation ullamco. labore et
+                                            dolore magna aliqua.
+                                        </span>
 
-                                    <div style={{ width: "100%", margin: "42px 0px" }}>
+                                        <span className="lorem-text-one mt-2 mb-4">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elPellentesque vehicula augue eget nisl ullamcorper,
+                                            molestie blandit ipsum auctor. Mauris volutpat augue dolor.
+                                            Consectetur adipisicing elit, sed do eiusmod tempor
+                                            incididunt ut lab ore et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud exercitation ullamco. labore et
+                                            dolore magna aliqua.
+                                        </span>
+                                    </animated.div>
+
+                                    <animated.div className="feature-text-box" ref={refFeatured} style={springPropsFeatured}>
                                         <span className="featured-products-text mt-2">
                                             FEATURED PRODUCTS
                                         </span>
-                                    </div>
+                                    </animated.div>
 
-                                    <div className="product-wrapper-div" style={{ width: "100%" }}>
+                                    <animated.div className="product-wrapper-div" ref={refFeaturedProd} style={springPropsFeaturedProd}>
                                         <Grid container spacing={2}>
                                             {featuredData.map((items) => (
                                                 <Grid item xs={12} sm={12} md={4} lg={4} className="product_game">
@@ -727,7 +835,8 @@ export const Products = () => {
                                                 </Grid>
                                             ))}
                                         </Grid>
-                                    </div>
+                                    </animated.div>
+
                                 </div>
                             </div>
                         </Grid>

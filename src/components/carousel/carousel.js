@@ -82,8 +82,19 @@ import ShopThree from '../../assests/header/shopThree.jpg';
 import { Link } from 'react-router-dom';
 
 
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
+
 
 export const CarouselBanner = () => {
+
+    const springProps = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: 1, transform: 'translateX(0px)' },
+        config: { duration: 800 },
+    });
+
+
     return (
         <div>
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -96,25 +107,26 @@ export const CarouselBanner = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={SlideThree} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+
+                        <animated.div style={springProps} class="carousel-caption d-md-block">
                             <h1 className='banner_text-three'>Family Collections</h1>
                             <p className='banner__description-three'>Some representative placeholder content for the first slide.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={SlideTwo} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <animated.div style={springProps} class="carousel-caption-two d-md-flex">
                             <h1 className='banner_text'>Diamond Collection</h1>
                             <p className='banner__description-two mt-2'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid atque, odio nostrum inventore repellat.</p>
                             <ReusableButton buttonName="SHOP NOW" className="shop_now-button" startIcon={<ShoppingBagIcon />} href="/shop" />
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={SlideOne} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+                        <animated.div style={springProps} class="carousel-caption d-md-block">
                             <h1 className='banner_text'>Platinum Collections</h1>
                             <p className='banner__description'>Some representative placeholder content for the third slide.</p>
-                        </div>
+                        </animated.div>
                     </div>
                 </div>
             </div>
@@ -196,9 +208,23 @@ export const SliderCorousel = () => {
 };
 
 export const ContactCarousel = () => {
+
+    //About-carousel
+    const [refContact, inViewContact] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springContactCarousel = useSpring({
+        from: { opacity: 0, transform: 'translate3d(-200px,0,0)' },
+        to: { opacity: inViewContact ? 1 : 0, transform: inViewContact ? 'translate3d(0,0,0)' : 'translate3d(-200px,0,0)' },
+        config: { duration: 900 },
+    });
+
     return (
         <div>
-            <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div id="carouselExampleCaptions" class="carousel carousel-fade" data-bs-ride="carousel">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -207,10 +233,10 @@ export const ContactCarousel = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={JewelOne} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+                        <animated.div class="carousel-caption d-md-block" ref={refContact} style={springContactCarousel}>
                             <h1 className='contact-banner_text-three'>Contact Us</h1>
                             <p className='contact-banner__description-three'>Please do not hesitate to reach out to us for any queries or feedback. We are here to create effective solutions for any of your concerns.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={Closeup} class="d-block banner" alt="..." />
@@ -820,6 +846,20 @@ export const ShopTrendingProductCarousel = () => {
 };
 
 export const AboutUsCarousel = () => {
+
+    //About-carousel
+    const [refAbout, inViewAbout] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springAboutCarousel = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: 1, transform: 'translateX(0px)' },
+        config: { duration: 800 },
+    });
+
     return (
         <div>
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -831,10 +871,10 @@ export const AboutUsCarousel = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={Ready} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+                        <animated.div class="carousel-caption d-md-block" ref={refAbout} style={springAboutCarousel}>
                             <h1 className='contact-banner_text-three'>About Us</h1>
                             <p className='contact-banner__description-three'>Learn about our tales!</p>
-                        </div>
+                        </animated.div>
                     </div>
 
                     <div class="carousel-item">
@@ -859,6 +899,20 @@ export const AboutUsCarousel = () => {
 }
 
 export const ShopCarousel = () => {
+
+    //Home-Tab
+    const [refTab, inViewTab] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springShopCarousel = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewTab ? 1 : 0, transform: inViewTab ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
     return (
         <div>
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -870,21 +924,21 @@ export const ShopCarousel = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={ShopOne} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <animated.div class="shop-carousel-edit d-md-flex" ref={refTab} style={springShopCarousel}>
                             <h1 className='contact-banner_text-three'>Shop With Us</h1>
                             <p className='contact-banner__description-three'>When you gift jewellery you achieve immortality in their heart.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={ShopTwo} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <animated.div class="shop-carousel-edit d-md-flex" >
                             <h1 className='contact-banner_text-three'>Explore</h1>
                             <p className='contact-banner__description-three'>When you gift jewellery you achieve immortality in their heart.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={ShopThree} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <div class="shop-carousel-edit d-md-flex">
                             <h1 className='contact-banner_text-three'>Our Mission</h1>
                             <p className='contact-banner__description-three'>When you gift jewellery you achieve immortality in their heart.</p>
                         </div>
