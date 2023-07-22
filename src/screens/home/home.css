@@ -144,10 +144,14 @@
 
 }
 
-.home_card-box{
+.home_card-box {
     margin: 40px;
 }
 
-.home_tabs .home_tabs-box .PrivateTabIndicator-colorSecondary-7{
+.home_tabs .home_tabs-box .PrivateTabIndicator-colorSecondary-7 {
+    background: #9F73AB !important;
+}
+
+.home_tabs .MuiTabs-indicator {
     background: #9F73AB !important;
 }
