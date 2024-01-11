@@ -152,9 +152,9 @@ const Shop = () => {
 
     return (
         <div>
-            <Box>
+            {/* <Box>
                 <Header />
-            </Box>
+            </Box> */}
 
             <Box>
                 <ShopCarousel />
@@ -384,9 +384,7 @@ const Shop = () => {
                 <SliderCorousel />
             </Box>
 
-            <Box>
-                <Footer />
-            </Box>
+
 
             <Box className="top-to-btm">
 

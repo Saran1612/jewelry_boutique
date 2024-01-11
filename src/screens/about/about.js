@@ -101,9 +101,6 @@ const About = () => {
 
     return (
         <div>
-            <Box>
-                <Header />
-            </Box>
 
             <Box>
                 <AboutUsCarousel />
@@ -215,9 +212,6 @@ const About = () => {
                 <SliderCorousel />
             </Box>
 
-            <Box>
-                <Footer />
-            </Box>
 
             <Box className="top-to-btm">
                 {showTopBtn && (

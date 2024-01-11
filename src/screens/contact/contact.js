@@ -81,10 +81,7 @@ const Contact = () => {
 
     return (
         <div>
-            <Box>
-                <Header />
-            </Box>
-
+           
             <Box>
                 <ContactCarousel />
             </Box>
@@ -201,9 +198,6 @@ const Contact = () => {
                 <SliderCorousel />
             </Box>
 
-            <Box>
-                <Footer />
-            </Box>
 
             <Box className="top-to-btm">
 

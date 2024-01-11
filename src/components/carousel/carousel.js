@@ -35,7 +35,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import './carousel.css';
 import "react-multi-carousel/lib/styles.css";
-import { Box, Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
+import { Box, Card, CardActionArea, CardContent, CardMedia, IconButton } from '@mui/material';
 
 
 
@@ -290,6 +290,10 @@ export const HomeNewProductCarousel = () => {
         },
     };
 
+    const handleCartClick = (product_id) => {
+
+    }
+
     return (
 
         <Carousel
@@ -310,9 +314,10 @@ export const HomeNewProductCarousel = () => {
         >
             {newProducts.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card sx={{ maxWidth: 345 }} className="card">
-                            <CardActionArea>
+                    {/* <Link to="/products" style={{ textDecoration: "none" }}> */}
+                    <Card sx={{ maxWidth: 345 }} className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img'
@@ -320,7 +325,9 @@ export const HomeNewProductCarousel = () => {
                                     image={items.img}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -339,14 +346,20 @@ export const HomeNewProductCarousel = () => {
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
+                    {/* </Link> */}
                 </div>
             ))}
         </Carousel>
@@ -405,9 +418,9 @@ export const HomeTopSaleCarousel = () => {
         >
             {newProducts.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card sx={{ maxWidth: 345 }} className="card">
-                            <CardActionArea>
+                    <Card sx={{ maxWidth: 345 }} className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img'
@@ -415,7 +428,9 @@ export const HomeTopSaleCarousel = () => {
                                     image={items.img}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -434,14 +449,19 @@ export const HomeTopSaleCarousel = () => {
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
                 </div>
             ))}
         </Carousel>
@@ -501,9 +521,9 @@ export const HomeBestSaleCarousel = () => {
         >
             {newProducts.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card sx={{ maxWidth: 345 }} className="card">
-                            <CardActionArea>
+                    <Card sx={{ maxWidth: 345 }} className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img'
@@ -511,7 +531,9 @@ export const HomeBestSaleCarousel = () => {
                                     image={items.img}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -530,14 +552,19 @@ export const HomeBestSaleCarousel = () => {
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
                 </div>
             ))}
         </Carousel>

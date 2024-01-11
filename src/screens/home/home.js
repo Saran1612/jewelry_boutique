@@ -94,7 +94,7 @@ const Home = () => {
         to: { opacity: inViewFeatures ? 1 : 0, transform: inViewFeatures ? 'translate3d(0,0,0)' : 'translate3d(0,50px,0)' },
         config: { duration: 750 },
     });
-    
+
 
     //Home-comment
     const [refComment, inViewComment] = useInView({
@@ -121,13 +121,11 @@ const Home = () => {
         config: { duration: 750 },
     });
 
-
-
     return (
         <div>
-            <Box>
+            {/* <Box>
                 <Header />
-            </Box>
+            </Box> */}
 
             <Box>
                 <CarouselBanner />
@@ -258,9 +256,6 @@ const Home = () => {
                 <SliderCorousel />
             </Box>
 
-            <Box>
-                <Footer />
-            </Box>
 
             <Box className="top-to-btm">
 

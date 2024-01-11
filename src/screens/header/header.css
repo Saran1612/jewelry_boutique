@@ -36,7 +36,7 @@
     text-decoration: none;
 }
 
-.header_menu-cart:hover{
+.header_menu-cart:hover {
     color: #74959A !important;
     transition: 0s;
     outline: none;
@@ -47,7 +47,7 @@
     border-bottom-right-radius: 0px;
 }
 
-.header_menu-cart:hover .header_menu-cart svg{
+.header_menu-cart:hover .header_menu-cart svg {
     color: #74959A !important;
     transition: 0s;
     outline: none;
@@ -55,7 +55,7 @@
     background-color: #fff !important;
 }
 
-.header_menu-cart svg{
+.header_menu-cart svg {
     font-size: 16px !important;
 }
 
@@ -65,24 +65,28 @@
 
 .header__text {
     text-align: start;
-    font-family: 'Fasthand', cursive; 
+    font-family: 'Fasthand', cursive;
     line-height: 1;
     font-size: 2rem;
     color: #4D455D;
     margin: 0;
 }
 
-.header__subtext{
+.header__subtext {
     text-align: start;
     font-family: 'Fasthand', cursive;
     font-size: 0.8rem;
     color: #4D455D;
 }
 
-.header_icon{
+.header_icon {
     margin-right: 5px !important;
 }
 
-.header-logo-wrapper{
+.header-logo-wrapper {
     display: flex;
+}
+
+.avatar_name {
+    font-size: 1rem !important;
 }

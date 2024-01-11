@@ -1,0 +1,41 @@
+.login_wrapper {
+    background-color: #2d2e2eef;
+    min-height: 102.8vh;
+    width: 100%;
+}
+
+.login_logo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-text {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.content {
+    width: 100%;
+    padding: 2rem;
+    box-shadow: 6px 3px 30px 20px rgba(131, 130, 130, 0.2), 0px 2px 2px 0px rgba(153, 153, 153, 0.14), 0px 1px 5px 0px rgba(156, 156, 156, 0.12);
+    background: #fff;
+    border-radius: 12px;
+}
+
+.checkbox-login svg {
+    font-size: 1rem !important;
+}
+
+.formControl-login .MuiTypography-root {
+    font-size: 0.8rem !important;
+}
+
+.formControl-login .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked {
+    color: #624F82;
+}
+
+.login_inputfield input {
+    font-size: 0.9rem;
+}

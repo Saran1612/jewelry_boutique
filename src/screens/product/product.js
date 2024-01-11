@@ -243,9 +243,6 @@ export const Products = () => {
 
     return (
         <div>
-            <Box>
-                <Header />
-            </Box>
 
             <Box>
                 <ShopCarousel />
@@ -844,9 +841,6 @@ export const Products = () => {
                 </div>
             </div>
 
-            <Box>
-                <Footer />
-            </Box>
 
             <Box className="top-to-btm">
 
