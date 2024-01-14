@@ -160,8 +160,12 @@ function Register(props) {
 
 
     return (
-        <Box className="login_wrapper">
+        <Box className="register_wrapper">
             <Grid container spacing={2} sx={{ minHeight: "100vh", display: "flex", justifyContent: "center" }}>
+                <Grid item xs={4}></Grid>
+
+
+
                 <Grid item xs={4}></Grid>
 
                 <Grid item xs={3} sx={{ width: "100%", display: "grid", alignItems: "center" }}>
@@ -316,10 +320,7 @@ function Register(props) {
                         </Box>
                     </Box>
                 </Grid>
-
-                <Grid item xs={4}></Grid>
             </Grid>
-            <ToastContainer transition={Flip} />
         </Box>
     );
 }

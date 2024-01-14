@@ -232,7 +232,7 @@ function DrawerAppBar(props) {
                             </Box>
 
                             <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: "center", alignItems: "center", width: { xs: '100%', sm: 'auto' }, marginRight: { xs: "8%", sm: "0%" }, margin: { sm: "0% 2%", md: "0% 2%", lg: "0% 4%" } }} className="logo_header">
-                                <Link to="/" style={{ display: "flex", textDecoration: "none" }}>
+                                <Link to="/user/" style={{ display: "flex", textDecoration: "none" }}>
                                     <animated.div className='header-logo-wrapper' ref={refTab} style={springPropsOne}>
                                         <img src={Logo1} alt='logo' className='header_logo' />
                                         <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
@@ -262,16 +262,16 @@ function DrawerAppBar(props) {
                         </Toolbar>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: "end" }}>
                             {/* <Tooltip title={username} placement="bottom"> */}
-                                <IconButton
-                                    onClick={handleMenuClick}
-                                    size="small"
-                                    sx={{ fontSize: "1rem" }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar className='avatar_name' sx={{ width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
-                                </IconButton>
+                            <IconButton
+                                onClick={handleMenuClick}
+                                size="small"
+                                sx={{ fontSize: "1rem" }}
+                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                            >
+                                <Avatar className='avatar_name' sx={{ width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
+                            </IconButton>
                             {/* </Tooltip> */}
                         </Box>
                     </AppBar>
@@ -335,21 +335,21 @@ function DrawerAppBar(props) {
                 >
                     <MenuItem onClick={handleMenuClose}>
                         <ListItemIcon>
-                            <Person2OutlinedIcon fontSize="small" />
+                            <Person2OutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
                         </ListItemIcon>
                         Profile
                     </MenuItem>
                     <Divider sx={{ margin: "2px !important" }} />
                     <MenuItem onClick={toggleDrawer('right', true)}>
                         <ListItemIcon>
-                            <ShoppingCartOutlinedIcon fontSize="small" />
+                            <ShoppingCartOutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
                         </ListItemIcon>
                         MyCart
                     </MenuItem>
                     <Divider sx={{ margin: "2px !important" }} />
                     <MenuItem onClick={handleLogoutClick}>
                         <ListItemIcon>
-                            <Logout fontSize="small" />
+                            <Logout fontSize="small" sx={{ color: "#624F82" }} />
                         </ListItemIcon>
                         Logout
                     </MenuItem>

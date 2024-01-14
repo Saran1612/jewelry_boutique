@@ -1,7 +1,10 @@
-.login_wrapper {
-    background-color: #2d2e2eef;
+.register_wrapper {
+    background-image: url(../../assests/header/tada.jpg);
     min-height: 102.8vh;
     width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .login_logo-box {

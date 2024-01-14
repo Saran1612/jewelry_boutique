@@ -26,7 +26,7 @@ import { CardActionArea, IconButton } from "@mui/material";
 import { ShopCarousel } from "../../components/carousel/carousel";
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -36,6 +36,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
+import { API } from "../../Networking/API";
 
 
 
@@ -89,12 +90,15 @@ const StyledMenu = styled((props) => (
 }));
 
 export const Products = () => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [productData, setProductData] = useState([]);
     const open = Boolean(anchorEl);
+    const { productId } = useParams();
     // const location = useLocation();
     // const data = location.state;
     // console.log(data, "props-data");
     // const[prodData , setProdData] = useState([]);
+    console.log(productId, "productIdproductId")
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -171,7 +175,6 @@ export const Products = () => {
         delay: 500
     });
 
-
     //Product-featuredProd
     const [refFeaturedProd, inViewFeaturedProd] = useInView({
         triggerOnce: true, // Only trigger once when the element comes into view
@@ -199,7 +202,6 @@ export const Products = () => {
         config: { duration: 750 }, // Adjust the duration as needed
         delay: 500,
     });
-
 
     //Home-FilterDiscount
     const [refDiscount, inViewDiscount] = useInView({
@@ -240,6 +242,28 @@ export const Products = () => {
         to: { opacity: inViewRelated ? 1 : 0, transform: inViewRelated ? 'translateX(0px)' : 'translateX(-200px)' },
         config: { duration: 750 }, // Adjust the duration as needed
     });
+
+    useEffect(() => {
+        if (productId) {
+            API.getOneProductData(
+                productId
+            ).then((response) => {
+                console.log(response, "respons of one product data")
+                if (response.status_code === 200) {
+                    setProductData(response.response.data);
+
+                } else {
+                    setProductData([]);
+                    console.log(response.response.message, "failed");
+                }
+            });
+        }
+    }, []);
+
+    console.log(productData, "productDatasfsdfsf");
+    const objectLength = Object.keys(productData).length;
+
+    console.log('Object length:', objectLength);
 
     return (
         <div>
@@ -660,98 +684,98 @@ export const Products = () => {
 
                         <Grid item xs={12} sm={12} md={9}>
                             <div>
-                                <animated.div className="specific__products" ref={refProduct} style={springPropsProduct}>
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={12} sm={6} md={6}>
-                                            <div style={{ border: "1px solid #ced4da" }}>
-                                                <img
-                                                    src={Six}
-                                                    alt="shoe"
-                                                    width="290"
-                                                    height="300"
-                                                    style={{ padding: "18px" }}
-                                                />
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} md={6}>
-                                            <div>
-                                                <span className="product-check-text">
-                                                    Patia Platinum And Rose Gold Chain
-                                                </span>
-                                                <div
-                                                    style={{
+                                {objectLength > 0 ?
+                                    <animated.div className="specific__products" ref={refProduct} style={springPropsProduct}>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12} sm={6} md={6}>
+                                                <div style={{ border: "1px solid #ced4da" }}>
+                                                    <img
+                                                        src={productData.image}
+                                                        alt="shoe"
+                                                        width="290"
+                                                        height="300"
+                                                        style={{ padding: "18px" }}
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} md={6}>
+                                                <div>
+                                                    <span className="product-check-text">
+                                                        {productData.name}
+                                                    </span>
+                                                    <div
+                                                        style={{
+                                                            width: "100%",
+                                                            display: "flex",
+                                                            justifyContent: "start",
+                                                            alignItems: "baseline",
+                                                        }}
+                                                    >
+                                                        <span className="product-description-price-text">
+                                                            ${productData.price}
+                                                        </span>
+                                                        <span style={{ textDecoration: "line-through" }} className="product-description-price-text-strike">
+                                                            $ 599
+                                                        </span>
+                                                        <span className="product-description-price-text-a">
+                                                            Click For Offer
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div style={{
                                                         width: "100%",
                                                         display: "flex",
                                                         justifyContent: "start",
                                                         alignItems: "baseline",
-                                                    }}
-                                                >
-                                                    <span className="product-description-price-text">
-                                                        $ 299
-                                                    </span>
-                                                    <span style={{ textDecoration: "line-through" }} className="product-description-price-text-strike">
-                                                        $ 599
-                                                    </span>
-                                                    <span className="product-description-price-text-a">
-                                                        Click For Offer
-                                                    </span>
-
-                                                </div>
-
-                                                <div style={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "start",
-                                                    alignItems: "baseline",
-                                                }}>
-                                                    <span className="product-description-avai-text">Availability:{" "} <span className="product-description-avai-text purple">In Stock</span></span>
-                                                </div>
-
-
-                                                <div className="product-search-bar" style={{ width: "100%", margin: "16px 0px " }}>
-
-                                                    <div style={{ display: "flex", width: "70%" }}>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Enter Your Email"
-                                                            name="search"
-                                                            className="product-input-field"
-                                                        />
-                                                        <IconButton className="edit-icon-search">
-                                                            <TelegramIcon sx={{ fontSize: "1.3rem !important" }} />
-                                                        </IconButton>
+                                                    }}>
+                                                        <span className="product-description-avai-text">Availability:{" "} <span className="product-description-avai-text purple">{" "}{productData.stock ? "In Stock" : "Out of Stock"}</span></span>
                                                     </div>
-                                                </div>
 
-                                                <span className="product-description-text mt-2 mt-2">
-                                                    Lorem Ipsum has been the industry's standard since the
-                                                    1500s. Praesent ullamcorper dui turpis..
-                                                </span>
-                                                <Box className="social-media-content-wrapper mt-3">
-                                                    <span className="social-media-text">
-                                                        Share Product
+
+                                                    <div className="product-search-bar" style={{ width: "100%", margin: "16px 0px " }}>
+
+                                                        <div style={{ display: "flex", width: "70%" }}>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Enter Your Email"
+                                                                name="search"
+                                                                className="product-input-field"
+                                                            />
+                                                            <IconButton className="edit-icon-search">
+                                                                <TelegramIcon sx={{ fontSize: "1.3rem !important" }} />
+                                                            </IconButton>
+                                                        </div>
+                                                    </div>
+
+                                                    <span className="product-description-text mt-2 mt-2">
+                                                        {productData.description}
                                                     </span>
-                                                    <Box className="social-media-icons-wrapper">
-                                                        <ul
-                                                            style={{
-                                                                listStyle: "none",
-                                                                display: "flex",
-                                                                padding: "0px",
-                                                            }}
-                                                        >
-                                                            <li className='explore_list'><FacebookIcon className='product_icon' /></li>
-                                                            <li className='explore_list'><InstagramIcon className='product_icon' /></li>
-                                                            <li className='explore_list'> <TwitterIcon className='product_icon' /></li>
-                                                            <li className='explore_list'><WhatsAppIcon className='product_icon' /></li>
-                                                            <li className='explore_list'><YouTubeIcon className='product_icon' /></li>
-                                                        </ul>
+                                                    <Box className="social-media-content-wrapper mt-3">
+                                                        <span className="social-media-text">
+                                                            Share Product
+                                                        </span>
+                                                        <Box className="social-media-icons-wrapper">
+                                                            <ul
+                                                                style={{
+                                                                    listStyle: "none",
+                                                                    display: "flex",
+                                                                    padding: "0px",
+                                                                }}
+                                                            >
+                                                                <li className='explore_list'><FacebookIcon className='product_icon' /></li>
+                                                                <li className='explore_list'><InstagramIcon className='product_icon' /></li>
+                                                                <li className='explore_list'> <TwitterIcon className='product_icon' /></li>
+                                                                <li className='explore_list'><WhatsAppIcon className='product_icon' /></li>
+                                                                <li className='explore_list'><YouTubeIcon className='product_icon' /></li>
+                                                            </ul>
+                                                        </Box>
                                                     </Box>
-                                                </Box>
-                                            </div>
+                                                </div>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </animated.div>
-
+                                    </animated.div>
+                                    : <Box><span>No Data Found :(</span></Box>}
                                 <div className="product-description-below-div">
 
                                     <animated.div className="description-box" ref={refDescription} style={springPropsDescription}>
@@ -836,6 +860,8 @@ export const Products = () => {
 
                                 </div>
                             </div>
+
+
                         </Grid>
                     </Grid>
                 </div>

@@ -1,5 +1,9 @@
 .login_wrapper {
     background-color: #2d2e2eef;
+    background-image: url(../../assests/header/jewelOne.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     min-height: 102.8vh;
     width: 100%;
 }

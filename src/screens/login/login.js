@@ -90,8 +90,8 @@ function Index(props) {
             if (response.success) {
                 console.log(response, "login that we tried");
                 toast.success(response.message, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    theme: "colored",
+                    position: toast.POSITION.TOP_LEFT,
+                    theme: "light",
                     hideProgressBar: true,
                     draggable: false,
                 });
@@ -125,9 +125,9 @@ function Index(props) {
                 return () => clearTimeout(timer);
             } else {
                 toast.error(response.message, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    theme: "colored",
-                    hideProgressBar: true,
+                    position: toast.POSITION.TOP_LEFT,
+                    theme: "light",
+                    hideProgressBar: false,
                     draggable: false,
                 });
             }
@@ -141,6 +141,10 @@ function Index(props) {
     return (
         <Box className="login_wrapper">
             <Grid container spacing={2} sx={{ minHeight: "100vh", display: "flex", justifyContent: "center" }}>
+                <Grid item xs={4}></Grid>
+
+
+
                 <Grid item xs={4}></Grid>
 
                 <Grid item xs={3} sx={{ width: "100%", display: "grid", alignItems: "center" }}>
@@ -231,10 +235,8 @@ function Index(props) {
                         </Box>
                     </Box>
                 </Grid>
-
-                <Grid item xs={4}></Grid>
             </Grid>
-            <ToastContainer transition={Flip} />
+
         </Box>
     );
 }

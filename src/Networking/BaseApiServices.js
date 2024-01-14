@@ -91,24 +91,16 @@ const callGetApi = async (requestMethod, url) => {
 
 const callPostApi = async (requestMethod, url, params, header) => {
   let jwtToken = await getJWTToken();
-  let requestOptions = null;
-
-  const Header = { "Content-Type": "application/json" };
-  if (header) {
-    requestOptions = {
-      method: requestMethod,
-      body: params,
-      mode: "cors",
-      headers: { "aa-token": jwtToken, "Content-Type": Header["Content-Type"] },
-    };
-  } else {
-    requestOptions = {
-      method: requestMethod,
-      body: params,
-      mode: "cors",
-      headers: { "aa-token": jwtToken },
-    };
-  }
+  console.log(params, "parmasdsadsds")
+  let requestOptions = {
+    method: requestMethod,
+    body: params,
+    mode: "cors",
+    headers: {
+      "Authorization": `Bearer ${jwtToken}`,
+      "Content-Type": "application/json"
+    },
+  };
 
   return fetch(`${url}`, requestOptions)
     .then((response) => {

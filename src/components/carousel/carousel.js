@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SlideOne from '../../assests/header/one.jpg';
 import SlideTwo from '../../assests/header/two.jpg';
 import SlideThree from '../../assests/header/three.jpg';
@@ -84,6 +84,10 @@ import { Link } from 'react-router-dom';
 
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
+import { API } from '../../Networking/API';
+import Cookies from 'js-cookie';
+import { ToastContainer, toast, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export const CarouselBanner = () => {
@@ -260,12 +264,7 @@ export const ContactCarousel = () => {
 
 export const HomeNewProductCarousel = () => {
 
-    const newProducts = [
-        { id: 1, img: Bone, name: "Brilliance Bead", price: "130", star: "4.5" },
-        { id: 2, img: PChain, name: "Bulova Jewelry", price: "150", star: "4" },
-        { id: 3, img: PTen, name: "Cultured Freshwater Pearl", price: "190", star: "4.7" },
-        { id: 4, img: BThree, name: "Customize Gemstone Ring", price: "70", star: "4.2" },
-    ]
+    const [productData, setProductData] = useState([]);
 
     const responsive = {
         superLargeDesktop: {
@@ -291,82 +290,139 @@ export const HomeNewProductCarousel = () => {
     };
 
     const handleCartClick = (product_id) => {
+        console.log(product_id, "product_id");
+        const user_id = Cookies.get("userId");
 
+        API.getAddCartProductData(
+            product_id,
+            user_id
+        ).then((response) => {
+            console.log(response, "respons of adding to cart data")
+            if (response.statusCode === 200) {
+                toast.success(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: false,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+
+            } else {
+                console.log(response.response.error, "failed");
+                toast.warn(response.response.error, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: false,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+            }
+        });
     }
 
+    useEffect(() => {
+        console.log("Inside Trending sales");
+        API.getProductData(
+        ).then((response) => {
+            console.log(response, "respons of product data")
+            if (response.status_code === 200) {
+                setProductData(response.response.data);
+                // toast.success(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+
+            } else {
+                setProductData([]);
+                console.log(response.response.message, "failed");
+                // toast.error(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+            }
+        });
+    }, []);
+
     return (
-
-        <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={3000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            // transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {newProducts.map((items) => (
-                <div className="card-div-home-new-product" key={items.id}>
-                    {/* <Link to="/products" style={{ textDecoration: "none" }}> */}
-                    <Card sx={{ maxWidth: 345 }} className="card">
-                        <CardActionArea>
-                            <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img'
-                                    height="260"
-                                    image={items.img}
-                                    alt={items.name}
-                                />
-                            </Link>
-                            <CardContent className="card_content">
-                                <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            {items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
+        <>
+            <Carousel
+                additionalTransfrom={0}
+                // arrows
+                shouldResetAutoplay
+                slidesToSlide={1}
+                autoPlay
+                customLeftArrow={<ChevronLeftIcon />}
+                customRightArrow={<ChevronRightIcon />}
+                autoPlaySpeed={3000}
+                infinite={true}
+                customTransition="transform 1000ms ease-in-out"
+                pauseOnHover={false}
+                transitionDuration={1000}
+                responsive={responsive}
+            // className='slider_carousel'
+            >
+                {productData.map((items) => (
+                    <div className="card-div-home-new-product" key={items.id}>
+                        <Card sx={{ maxWidth: 345 }} className="card">
+                            <CardActionArea>
+                                <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                    <CardMedia
+                                        component="img"
+                                        className='card-img'
+                                        height="260"
+                                        image={items.image}
+                                        alt={items.name}
+                                    />
                                 </Link>
-                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
-                                    <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
-                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
+                                <CardContent className="card_content">
+                                    <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                        <Box sx={{ width: "100%" }}>
+                                            <span className="product_text">{items.name}</span>
+                                        </Box>
+                                        <Box
+                                            sx={{
+                                                width: "100%",
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                marginTop: "5px",
+                                                alignItems: "center"
+                                            }}
+                                        >
+                                            <span className="price_text">${items.price}</span>
+                                            <span className="price_text">
+                                                4.5{items.star}
+                                                <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
+                                            </span>
+                                        </Box>
+                                    </Link>
+                                    <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                        <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
+                                            <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                        </IconButton>
 
-                                    <IconButton aria-label="favourite">
-                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-                                </div>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                    {/* </Link> */}
-                </div>
-            ))}
-        </Carousel>
+                                        <IconButton aria-label="favourite">
+                                            <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                        </IconButton>
+                                    </div>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    </div>
+                ))}
+            </Carousel>
+        </>
     );
 };
 
 export const HomeTopSaleCarousel = () => {
+
+    const [productData, setProductData] = useState([]);
 
     const newProducts = [
         { id: 1, img: Peight, name: "Diamond Layered Oval", price: "200", star: "4.6" },
@@ -398,25 +454,52 @@ export const HomeTopSaleCarousel = () => {
         },
     };
 
+    useEffect(() => {
+        console.log("Inside Trending sales");
+        API.getProductData(
+        ).then((response) => {
+            console.log(response, "respons of product data")
+            if (response.status_code === 200) {
+                setProductData(response.response.data);
+                // toast.success(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+
+            } else {
+                setProductData([]);
+                console.log(response.response.message, "failed");
+                // toast.error(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+            }
+        });
+    }, []);
+
     return (
 
         <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
+            additionalTransfrom={0}
+            arrows
+            shouldResetAutoplay
+            slidesToSlide={1}
+            autoPlay
             customLeftArrow={<ChevronLeftIcon />}
             customRightArrow={<ChevronRightIcon />}
             autoPlaySpeed={3000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
+            infinite={true}
+            customTransition="transform 1000ms ease-in-out"
             pauseOnHover={false}
-            // transitionDuration={1000}
+            transitionDuration={1000}
             responsive={responsive}
         // className='slider_carousel'
         >
-            {newProducts.map((items) => (
+            {productData.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
                     <Card sx={{ maxWidth: 345 }} className="card">
                         <CardActionArea>
@@ -425,7 +508,7 @@ export const HomeTopSaleCarousel = () => {
                                     component="img"
                                     className='card-img'
                                     height="260"
-                                    image={items.img}
+                                    image={items.image}
                                     alt={items.name}
                                 />
                             </Link>
@@ -445,7 +528,7 @@ export const HomeTopSaleCarousel = () => {
                                     >
                                         <span className="price_text">${items.price}</span>
                                         <span className="price_text">
-                                            {items.star}
+                                            4.2{items.star}
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
@@ -471,6 +554,8 @@ export const HomeTopSaleCarousel = () => {
 
 export const HomeBestSaleCarousel = () => {
 
+    const [productData, setProductData] = useState([]);
+
     const newProducts = [
         { id: 1, img: Peight, name: "Diamond Layered Oval", price: "200", star: "4.6" },
         { id: 2, img: ROne, name: "Diamond Octagonal Frame", price: "170", star: "3.9" },
@@ -501,25 +586,52 @@ export const HomeBestSaleCarousel = () => {
         },
     };
 
+    useEffect(() => {
+        console.log("Inside Trending sales");
+        API.getProductData(
+        ).then((response) => {
+            console.log(response, "respons of product data")
+            if (response.status_code === 200) {
+                setProductData(response.response.data);
+                // toast.success(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+
+            } else {
+                setProductData([]);
+                console.log(response.response.message, "failed");
+                // toast.error(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+            }
+        });
+    }, []);
+
     return (
 
         <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
+            additionalTransfrom={0}
+            arrows
+            shouldResetAutoplay
+            slidesToSlide={1}
+            autoPlay
             customLeftArrow={<ChevronLeftIcon />}
             customRightArrow={<ChevronRightIcon />}
             autoPlaySpeed={3000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
+            infinite={true}
+            customTransition="transform 1000ms ease-in-out"
             pauseOnHover={false}
-            // transitionDuration={1000}
+            transitionDuration={1000}
             responsive={responsive}
         // className='slider_carousel'
         >
-            {newProducts.map((items) => (
+            {productData.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
                     <Card sx={{ maxWidth: 345 }} className="card">
                         <CardActionArea>
@@ -528,7 +640,7 @@ export const HomeBestSaleCarousel = () => {
                                     component="img"
                                     className='card-img'
                                     height="260"
-                                    image={items.img}
+                                    image={items.image}
                                     alt={items.name}
                                 />
                             </Link>
@@ -548,7 +660,7 @@ export const HomeBestSaleCarousel = () => {
                                     >
                                         <span className="price_text">${items.price}</span>
                                         <span className="price_text">
-                                            {items.star}
+                                            4.0{items.star}
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
@@ -628,9 +740,10 @@ export const ShopFeaturedProductCarousel = () => {
         >
             {featuredProducts.map((items) => (
                 <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card className="card">
-                            <CardActionArea>
+                    {/* <Link to="/products" style={{ textDecoration: "none" }}> */}
+                    <Card className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img-featured'
@@ -638,7 +751,9 @@ export const ShopFeaturedProductCarousel = () => {
                                     image={items.img}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -657,14 +772,20 @@ export const ShopFeaturedProductCarousel = () => {
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
+                    {/* </Link> */}
                 </div>
             ))}
         </Carousel>
@@ -729,9 +850,10 @@ export const ShopNewProductCarousel = () => {
         >
             {newProducts.map((items) => (
                 <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card className="card">
-                            <CardActionArea>
+                    {/* <Link to="/products" style={{ textDecoration: "none" }}> */}
+                    <Card className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img-featured'
@@ -739,7 +861,9 @@ export const ShopNewProductCarousel = () => {
                                     image={items.img}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -758,14 +882,21 @@ export const ShopNewProductCarousel = () => {
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left " sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+
+                        </CardActionArea>
+                    </Card>
+                    {/* </Link> */}
                 </div>
             ))}
         </Carousel>
@@ -829,9 +960,10 @@ export const ShopTrendingProductCarousel = () => {
         >
             {newProducts.map((items) => (
                 <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card className="card">
-                            <CardActionArea>
+                    {/* <Link to="/products" style={{ textDecoration: "none" }}> */}
+                    <Card className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img-featured'
@@ -839,7 +971,9 @@ export const ShopTrendingProductCarousel = () => {
                                     image={items.img}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -858,14 +992,21 @@ export const ShopTrendingProductCarousel = () => {
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right " sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+
+                        </CardActionArea>
+                    </Card>
+                    {/* </Link> */}
                 </div>
             ))}
         </Carousel>

@@ -13,6 +13,8 @@ import ProtectedRoutes from './ProtectedRoutes';
 import Header from './screens/header/header';
 import Footer from './screens/footer/footer';
 import Cart from './screens/cart/cart';
+import { ToastContainer, toast, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const ROLES = "User";
@@ -24,7 +26,7 @@ function App() {
         <Route path="shop" element={<Shop />} />
         <Route path="contact" element={<Contact />} />
         <Route path="about" element={<About />} />
-        <Route path="products" element={<Products />} />
+        <Route path="products/:productId" element={<Products />} />
         {/* <Route path="cart" element={<Cart />} /> */}
 
       </Route>
@@ -61,6 +63,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      <ToastContainer transition={Flip} autoClose={2000} newestOnTop={true} theme="light" />
     </div>
   );
 }

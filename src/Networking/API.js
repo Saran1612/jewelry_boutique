@@ -36,6 +36,19 @@ const Register = (username,
   );
 };
 
+const getAddCartProductData = (product_id, user_id) => {
+  const header = true;
+  const id = product_id;
+  const param = JSON.stringify({
+    userId: user_id,
+  });
+  return BaseApiService.post(
+    BaseURL + APIRequests.toGetCartData + id,
+    param,
+    header
+  );
+}
+
 const getCartData = (userid) => {
   const header = true;
   const id = userid;
@@ -48,9 +61,23 @@ const deleteCartData = (orderid) => {
   return BaseApiService.Delete(BaseURL + APIRequests.toGetCartData + id, header);
 }
 
+const getProductData = () => {
+  const header = true;
+  return BaseApiService.get(BaseURL + APIRequests.toGetProductsData, header);
+}
+
+const getOneProductData = (product_id) => {
+  const header = true;
+  const id = product_id;
+  return BaseApiService.get(BaseURL + APIRequests.toGetProductsData + id, header);
+}
+
 export const API = {
   Login,
   Register,
   getCartData,
   deleteCartData,
+  getProductData,
+  getAddCartProductData,
+  getOneProductData
 };
