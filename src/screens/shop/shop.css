@@ -65,7 +65,7 @@
     color: #9F73AB !important;
 }
 
-.product-search-bar{
+.product-search-bar {
     width: 100%;
 }
 
@@ -89,7 +89,7 @@
     font-size: 1rem;
 }
 
-.related_product-text{
+.related_product-text {
     color: #000;
     font-size: 1rem;
     text-align: start;
@@ -97,10 +97,15 @@
     font-weight: 700;
 }
 
-.related_product-price-text{
+.related_product-price-text {
     color: #707070;
     font-size: 0.8rem;
     text-align: start;
     display: flex;
     font-weight: 700;
+}
+
+.vertical_tabs .MuiTabs-flexContainer {
+    /* height: 100%;
+    justify-content: center; */
 }

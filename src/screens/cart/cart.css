@@ -40,3 +40,16 @@
     text-align: start;
     font-weight: 500;
 }
+
+.cart_wrapper .card_card {
+    /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+    /* box-shadow: 0px 5px 10px 0px #624F82; */
+    /* box-shadow: 18px 18px 0 0 #624F82, 18px 18px 0 4px black; */
+    box-shadow: #baacd1de 10px 10px;
+    border: 1px solid #624F82;
+}
+
+.cart_wrapper .card_card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 10px 20px 2px #624F82;
+}

@@ -49,6 +49,31 @@ const getAddCartProductData = (product_id, user_id) => {
   );
 }
 
+const getForgetPassword = (email) => {
+  const header = true;
+  const param = JSON.stringify({
+    email: email,
+  });
+  return BaseApiService.post(
+    BaseURL + APIRequests.forgetPassword,
+    param,
+    header
+  );
+}
+
+const getResetPassword = (password, token) => {
+  const header = true;
+  const param = JSON.stringify({
+    password: password,
+    token: token
+  });
+  return BaseApiService.post(
+    BaseURL + APIRequests.resetPassword,
+    param,
+    header
+  );
+}
+
 const getCartData = (userid) => {
   const header = true;
   const id = userid;
@@ -61,15 +86,19 @@ const deleteCartData = (orderid) => {
   return BaseApiService.Delete(BaseURL + APIRequests.toGetCartData + id, header);
 }
 
-const getProductData = () => {
+const getProductData = (id) => {
   const header = true;
-  return BaseApiService.get(BaseURL + APIRequests.toGetProductsData, header);
+  if (id) {
+    return BaseApiService.get(BaseURL + APIRequests.toGetProductsData + id, header);
+  } else {
+    return BaseApiService.get(BaseURL + APIRequests.toGetProductsData, header);
+  }
 }
 
 const getOneProductData = (product_id) => {
   const header = true;
   const id = product_id;
-  return BaseApiService.get(BaseURL + APIRequests.toGetProductsData + id, header);
+  return BaseApiService.get(BaseURL + APIRequests.toGetOneProductsData + id, header);
 }
 
 export const API = {
@@ -79,5 +108,7 @@ export const API = {
   deleteCartData,
   getProductData,
   getAddCartProductData,
-  getOneProductData
+  getOneProductData,
+  getForgetPassword,
+  getResetPassword
 };

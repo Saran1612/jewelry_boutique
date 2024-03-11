@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
 import Header from '../header/header'
-import { CarouselBanner, HomeBestSaleCarousel, HomeNewProductCarousel, HomeTopSaleCarousel, SliderCorousel } from '../../components/carousel/carousel';
+import { CarouselBanner, HomeNewProductCarousel, HomeTopSaleCarousel, PeopleReviews, SliderCorousel } from '../../components/carousel/carousel';
 import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid } from '@mui/material';
 import Footer from '../footer/footer';
 import Tab from '@mui/material/Tab';
@@ -20,13 +20,15 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import DrawOutlinedIcon from '@mui/icons-material/DrawOutlined';
-import ReactStars from "react-rating-stars-component";
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = useState('1');
+    const loginData = useSelector((state) => {
+        return state.login.isLoggedIn;
+    });
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -105,7 +107,10 @@ const Home = () => {
     const springPropsThree = useSpring({
         from: { opacity: 0, scale: 0.5 },
         to: { opacity: inViewComment ? 1 : 0, scale: inViewComment ? 1 : 0.5 },
-        config: { duration: 1000 },
+        config: {
+            duration: 1000,
+        },
+
     });
 
 
@@ -123,9 +128,6 @@ const Home = () => {
 
     return (
         <div>
-            {/* <Box>
-                <Header />
-            </Box> */}
 
             <Box>
                 <CarouselBanner />
@@ -179,24 +181,8 @@ const Home = () => {
                     ref={refComment}
                     className="middle-content-wrapper-inner">
 
-                    <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
-                    <ReactStars
-                        classNames="middle-content-stars"
-                        count={4}
-                        onChange={ratingChanged}
-                        size={20}
-                        value={3.5}
-                        isHalf={true}
-                    />
-                    <p className="middle-text">
-                        <span className="content-quotes">
-                            <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
-                            ullamcorper dui turpis.Nulla pellentesque mi non laoreet
-                            eleifend. Integer porttitor mollisar lorem, at molestie arcu
-                            pulvinar ut  <FormatQuoteIcon />
 
-                        </span>
-                    </p>
+                    <PeopleReviews ratingChanged={ratingChanged} />
                 </animated.div>
             </div>
 

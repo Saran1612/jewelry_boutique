@@ -10,8 +10,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
@@ -30,6 +28,9 @@ import Avatar from '@mui/material/Avatar';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import Cookies from 'js-cookie';
 import Cart from '../cart/cart';
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 const drawerWidth = 240;
 
@@ -93,9 +94,6 @@ function DrawerAppBar(props) {
         setMobileOpen((prevState) => !prevState);
     };
 
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
@@ -203,10 +201,9 @@ function DrawerAppBar(props) {
 
     return (
         <>
-            <Box sx={{ display: 'flex', height: "0px" }}>
-                <CssBaseline />
+            <Box className="main_header">
                 <HideOnScroll {...props}>
-                    <AppBar component="nav" sx={{ background: "#fff", boxShadow: "none", display: "flex", flexDirection: "row" }}>
+                    <AppBar component="nav" sx={{ background: "#fff", boxShadow: "none", display: "flex", flexDirection: "row", padding: "6px", position: "static" }}>
                         <Toolbar className='header_toolbar' sx={{ width: "95%" }}>
                             <IconButton
                                 color="#4D455D"
@@ -260,23 +257,50 @@ function DrawerAppBar(props) {
 
 
                         </Toolbar>
+
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: "end" }}>
-                            {/* <Tooltip title={username} placement="bottom"> */}
-                            <IconButton
-                                onClick={handleMenuClick}
-                                size="small"
-                                sx={{ fontSize: "1rem" }}
-                                aria-controls={open ? 'account-menu' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={open ? 'true' : undefined}
-                            >
-                                <Avatar className='avatar_name' sx={{ width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
-                            </IconButton>
-                            {/* </Tooltip> */}
+                            <Tooltip title={username} placement="bottom">
+                                <Menu
+                                    menuButton={<MenuButton style={{ border: "none", background: "none" }}
+                                    // direction="right"
+                                    // align="center"
+                                    // position="anchor"
+                                    // viewScroll="auto"
+                                    // arrow={true}
+                                    >
+
+                                        <IconButton
+                                            // onClick={handleMenuClick}
+                                            size="small"
+                                            sx={{ fontSize: "1rem" }}
+                                            aria-controls={open ? 'account-menu' : undefined}
+                                            aria-haspopup="true"
+                                            aria-expanded={open ? 'true' : undefined}
+                                        >
+                                            <Avatar className='avatar_name' sx={{ width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
+                                        </IconButton>
+                                    </MenuButton>} transition>
+                                    <MenuItem onClick={() => { navigate('/user/profile'); setAnchorEl(null) }}>
+
+                                        <Person2OutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
+
+                                        Profile</MenuItem>
+                                    <MenuItem onClick={toggleDrawer('right', true)}>
+
+                                        <ShoppingCartOutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
+
+                                        Cart</MenuItem>
+                                    <MenuItem onClick={handleLogoutClick}>
+
+                                        <Logout fontSize="small" sx={{ color: "#624F82" }} />
+
+                                        Log Out</MenuItem>
+                                </Menu>
+                            </Tooltip>
                         </Box>
                     </AppBar>
                 </HideOnScroll>
-                <Box component="nav">
+                <Box component="nav" sx={{ justifyContent: "center" }}>
                     <Drawer
                         container={container}
                         variant="temporary"
@@ -293,67 +317,9 @@ function DrawerAppBar(props) {
                         {drawer}
                     </Drawer>
                 </Box>
-                <Box component="main" sx={{ p: 3 }}>
+                {/* <Box component="main" sx={{ p: 3 }}>
                     <Toolbar />
-                </Box>
-
-                <Menu
-                    anchorEl={anchorEl}
-                    id="account-menu"
-                    open={open}
-                    onClose={handleMenuClose}
-                    onClick={handleMenuClose}
-
-                    PaperProps={{
-                        elevation: 0,
-                        sx: {
-                            overflow: 'visible',
-                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                            mt: 1.5,
-                            '& .MuiAvatar-root': {
-                                width: 32,
-                                height: 32,
-                                ml: -0.5,
-                                mr: 1,
-                            },
-                            '&::before': {
-                                content: '""',
-                                display: 'block',
-                                position: 'absolute',
-                                top: 0,
-                                right: 14,
-                                width: 10,
-                                height: 10,
-                                bgcolor: 'background.paper',
-                                transform: 'translateY(-50%) rotate(45deg)',
-                                zIndex: 0,
-                            },
-                        },
-                    }}
-                // transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                // anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                >
-                    <MenuItem onClick={handleMenuClose}>
-                        <ListItemIcon>
-                            <Person2OutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
-                        </ListItemIcon>
-                        Profile
-                    </MenuItem>
-                    <Divider sx={{ margin: "2px !important" }} />
-                    <MenuItem onClick={toggleDrawer('right', true)}>
-                        <ListItemIcon>
-                            <ShoppingCartOutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
-                        </ListItemIcon>
-                        MyCart
-                    </MenuItem>
-                    <Divider sx={{ margin: "2px !important" }} />
-                    <MenuItem onClick={handleLogoutClick}>
-                        <ListItemIcon>
-                            <Logout fontSize="small" sx={{ color: "#624F82" }} />
-                        </ListItemIcon>
-                        Logout
-                    </MenuItem>
-                </Menu>
+                </Box> */}
             </Box>
 
             <Drawer

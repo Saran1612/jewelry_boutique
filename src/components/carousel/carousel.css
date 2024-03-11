@@ -1,3 +1,7 @@
+* {
+    /* color: #000 !important; */
+}
+
 .carousel-caption {
     position: absolute !important;
     bottom: 11.5rem !important;
@@ -252,7 +256,7 @@
 
 
 @media (min-width: 768px) and (max-width: 900px) {
-    .carousel-caption-two{
+    .carousel-caption-two {
         bottom: 0rem !important;
     }
 }
@@ -303,17 +307,17 @@
         text-align: center !important;
     }
 
-    .banner_text-three ,  .banner_text ,
-    .contact-banner_text-three{
+    .banner_text-three,
+    .banner_text,
+    .contact-banner_text-three {
         font-size: 3rem;
     }
 
     .banner__description-three,
     .banner__description,
     .banner__description-two,
-    .contact-banner__description-three{
+    .contact-banner__description-three {
         font-size: 1.3rem;
     }
 
 }
-

@@ -278,7 +278,7 @@ function Register(props) {
                                         />
                                     </Box>
 
-                                    <Box sx={{ display: "flex" }}>
+                                    {/* <Box sx={{ display: "flex" }}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DatePicker
                                                 className="date-picker"
@@ -292,7 +292,7 @@ function Register(props) {
                                                 name="date"
                                             />
                                         </LocalizationProvider>
-                                    </Box>
+                                    </Box> */}
 
                                     <Box sx={{ marginTop: "20px" }}>
                                         <ReusableButton

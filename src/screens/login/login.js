@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Box, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Grid, IconButton } from "@mui/material";
 import './login.css';
 import { ReusableInputfield } from "../../components/input/input";
 import Person4Icon from '@mui/icons-material/Person4';
@@ -15,23 +15,32 @@ import { API } from "../../Networking/API";
 import Cookies from "js-cookie";
 import { Secret_key } from "../../constants/constants";
 import CryptoJS from 'crypto-js';
-// import Cookies from "js-cookie";
-// import { Secret_key } from "../../Constant";
-// import CryptoJS from 'crypto-js';
-import { ToastContainer, toast, Flip } from 'react-toastify';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import GoogleIcon from '@mui/icons-material/Google';
-// import IconButton from '@mui/material/IconButton';
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/slice";
 
 
 function Index(props) {
 
     const navigate = useNavigate();
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = useState(false);
+    const loginData = useSelector((state) => {
+        console.log(state, 'state');
+        return state.cart;
+    });
+    console.log(loginData, "loginData")
+    const dispatch = useDispatch();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
 
     useEffect(() => {
         const isJwtToken = Cookies.get('jwt_token');
-        // const isRefreshToken = Cookies.get('refresh_token');
+
         if (isJwtToken) {
             navigate('/user/');
         }
@@ -102,11 +111,10 @@ function Index(props) {
                     localStorage.setItem("password", encryptedPassword);
                 }
                 const jwtToken = response.data?.accessToken;
-                // const refreshToken = response.data?.refresh_token;
+                dispatch(login({ access_token: jwtToken }))
+
                 const encryptedJwtToken = CryptoJS.AES.encrypt(JSON.stringify(jwtToken), Secret_key).toString();
-                // const encryptedRefreshToken = CryptoJS.AES.encrypt(JSON.stringify(refreshToken), Secret_key).toString();
                 Cookies.set('jwt_token', encryptedJwtToken);
-                // Cookies.set('refresh_token', encryptedRefreshToken);
                 const userRole = response.data?.user?.role;
                 const userInfoData = response.data?.user.name;
                 const userInfoID = response.data?.user.id;
@@ -168,7 +176,7 @@ function Index(props) {
                                             id="username"
                                             startAdornment={
                                                 <InputAdornment position="start">
-                                                    <Person4Icon sx={{ fontSize: "1.2rem" }} />
+                                                    <Person4Icon sx={{ fontSize: "1.2rem", color: "#624F82" }} />
                                                 </InputAdornment>
                                             }
                                             disabled={false}
@@ -184,7 +192,8 @@ function Index(props) {
 
                                     <Box sx={{ display: "flex", margin: "20px 0px" }}>
                                         <ReusableInputfield
-                                            type="password"
+                                            // type="password"
+                                            type={showPassword ? 'text' : 'password'}
                                             size="medium"
                                             className="login_inputfield"
                                             onChange={formik.handleChange}
@@ -194,7 +203,17 @@ function Index(props) {
                                             id="password"
                                             startAdornment={
                                                 <InputAdornment position="start">
-                                                    <LockIcon sx={{ fontSize: "1.2rem" }} />
+                                                    <LockIcon sx={{ fontSize: "1.2rem", color: "#624F82" }} />
+                                                </InputAdornment>
+                                            }
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                    >
+                                                        {showPassword ? <VisibilityOff sx={{ fontSize: "1.2rem", color: "#624F82" }} /> : <Visibility sx={{ fontSize: "1.2rem", color: "#624F82" }} />}
+                                                    </IconButton>
                                                 </InputAdornment>
                                             }
                                             disabled={false}
@@ -227,7 +246,8 @@ function Index(props) {
                                         />
                                     </Box>
 
-                                    <Box sx={{ width: "100%", display: "flex", justifyContent: "space-evenly", marginTop: "1rem" }}>
+                                    <Box sx={{ width: "100%", display: "flex", justifyContent: "space-evenly", flexDirection: "column", marginTop: "1rem" }}>
+                                        <Link to="/forget-password" style={{ textDecoration: "none", color: "#624F82" }}>Forget Password ?</Link>
                                         <span>Don't have an account,<Link to="/register" style={{ textDecoration: "none", color: "#624F82" }}> Register here!</Link></span>
                                     </Box>
                                 </Box>

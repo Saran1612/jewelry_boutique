@@ -14,7 +14,7 @@
 .header_toolbar {
     display: flex;
     justify-content: center;
-    /* min-height: 0px; */
+    min-height: 0 !important;
 }
 
 .header_logo {

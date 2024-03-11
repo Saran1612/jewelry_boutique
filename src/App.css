@@ -5,7 +5,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Neuton:wght@400;700&display=swap');
-*{
+
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -48,6 +50,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -61,20 +64,20 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #d9b4e3; 
+  background: #d9b4e3;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #624F82; 
+  background: #624F82;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #7DB9B6; 
+  background: #7DB9B6;
 }
 
-::selection{
+::selection {
   color: #fff;
   background-color: #7DB9B6;
 }

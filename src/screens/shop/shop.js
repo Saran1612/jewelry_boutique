@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../header/header';
-import { Box, Card, CardContent, CardMedia, Grid, IconButton } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Grid, IconButton, Tab, Tabs } from '@mui/material';
 import Footer from '../footer/footer';
 import ReactStars from "react-rating-stars-component";
 import FormGroup from "@mui/material/FormGroup";
@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import './shop.css';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import Checkbox from "@mui/material/Checkbox";
-import { ShopCarousel, ShopFeaturedProductCarousel, ShopNewProductCarousel, ShopTrendingProductCarousel, SliderCorousel } from '../../components/carousel/carousel';
+import { ShopCarousel, ShopFeaturedProductCarousel, ShopNecklacesProductCarousel, ShopNewProductCarousel, ShopTrendingProductCarousel, SliderCorousel } from '../../components/carousel/carousel';
 
 // new products
 
@@ -21,8 +21,52 @@ import Ten from '../../assests/newProd/j.jpg';
 import { Link } from 'react-router-dom';
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
+import PropTypes from 'prop-types';
+
+function a11yProps(index) {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    };
+}
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`vertical-tabpanel-${index}`}
+            aria-labelledby={`vertical-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <span>{children}</span>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
 
 const Shop = () => {
+
+
+    const [showTopBtn, setShowTopBtn] = useState(false);
+
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     const ratingChanged = (newRating) => {
         console.log(newRating);
@@ -36,7 +80,6 @@ const Shop = () => {
         { id: 5, foto: Ten, topic: "Enchanted Disney", price: "$1.00" },
     ];
 
-    const [showTopBtn, setShowTopBtn] = useState(false);
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -150,6 +193,49 @@ const Shop = () => {
         config: { duration: 750 }, // Adjust the duration as needed
     });
 
+    const ringsTobeRendered = (
+        <animated.div className="m-4" ref={refFeatured} style={springPropsFeatured}>
+            <span className='shop_header-text'>Rings</span>
+            <Box className="mt-3">
+                <ShopFeaturedProductCarousel />
+            </Box>
+        </animated.div>
+    )
+
+    const earringsTobeRendered = (
+        <animated.div className="new_products" ref={refNew} style={springPropsNew}>
+            <span className='shop_header-text'>Earrings</span>
+            <Box className="mt-3">
+                <ShopNewProductCarousel />
+            </Box>
+        </animated.div>
+    )
+
+    const braceletsTobeRendered = (
+        <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
+            <span className='shop_header-text'>Bracelets</span>
+            <Box className="mt-3">
+                <ShopTrendingProductCarousel />
+            </Box>
+        </animated.div>
+    )
+
+    const necklacesTobeRendered = (
+        <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
+            <span className='shop_header-text'>Necklaces</span>
+            <Box className="mt-3">
+                <ShopNecklacesProductCarousel />
+            </Box>
+        </animated.div>
+    )
+
+    const tabsPanel = [
+        { id: 1, index: 0, render: ringsTobeRendered },
+        { id: 2, index: 1, render: earringsTobeRendered },
+        { id: 3, index: 2, render: braceletsTobeRendered },
+        { id: 4, index: 3, render: necklacesTobeRendered },
+    ]
+
     return (
         <div>
             {/* <Box>
@@ -160,7 +246,7 @@ const Shop = () => {
                 <ShopCarousel />
             </Box>
 
-            <Box>
+            {/* <Box>
                 <Grid container spacing={2}>
                     <Grid
                         item
@@ -356,26 +442,61 @@ const Shop = () => {
 
                     <Grid item xs={12} md={9} lg={9}>
                         <animated.div className="m-4" ref={refFeatured} style={springPropsFeatured}>
-                            <span className='shop_header-text'>Featured products</span>
+                            <span className='shop_header-text'>Rings</span>
                             <Box className="mt-3">
                                 <ShopFeaturedProductCarousel />
                             </Box>
                         </animated.div>
 
                         <animated.div className="new_products" ref={refNew} style={springPropsNew}>
-                            <span className='shop_header-text'>New products</span>
+                            <span className='shop_header-text'>Earrings</span>
                             <Box className="mt-3">
                                 <ShopNewProductCarousel />
                             </Box>
                         </animated.div>
 
                         <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
-                            <span className='shop_header-text'>Trending products</span>
+                            <span className='shop_header-text'>Bracelets</span>
                             <Box className="mt-3">
                                 <ShopTrendingProductCarousel />
                             </Box>
                         </animated.div>
 
+                        <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
+                            <span className='shop_header-text'>Necklaces</span>
+                            <Box className="mt-3">
+                                <ShopTrendingProductCarousel />
+                            </Box>
+                        </animated.div>
+
+                    </Grid>
+                </Grid>
+            </Box> */}
+
+            <Box>
+                <Grid container spacing={2}>
+                    <Grid item xs={2}>
+                        <Tabs
+                            orientation="vertical"
+                            variant="scrollable"
+                            className='vertical_tabs'
+                            value={value}
+                            onChange={handleChange}
+                            aria-label="Vertical tabs example"
+                            sx={{ borderRight: 1, borderColor: 'divider', height: "100%", justifyContent: "center" }}
+                        >
+                            {["Rings", "Earrings", "Bracelets", "Necklaces"].map((items, index) => (
+                                <Tab label={items} {...a11yProps(index)} />
+                            ))}
+                        </Tabs>
+                    </Grid>
+                    <Grid item xs={10}>
+                        {tabsPanel.map((items, index) => (
+                            <TabPanel value={value} index={items.index}>
+                                {console.log(items.index, "index")}
+                                {items.render}
+                            </TabPanel>
+                        ))}
                     </Grid>
                 </Grid>
             </Box>

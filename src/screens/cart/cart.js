@@ -102,7 +102,7 @@ const Cart = ({ anchor, toggleDrawer }) => {
             >
                 {cartData.length !== 0 ?
                     cartData.map((text, index) => (
-                        <Card sx={{ display: 'flex', margin: "30px 20px", borderRadius: "20px 0px", borderTop: "3px solid #624F82", boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}>
+                        <Card sx={{ display: 'flex', margin: "30px 20px", borderRadius: "20px 0px", }} className='card_card'>
                             <CardMedia
                                 component="img"
                                 sx={{ width: 120 }}
