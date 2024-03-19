@@ -28,40 +28,14 @@ const getJWTToken = async () => {
 
 const get = async (url) => callGetApi(RequestMethod.GET, url);
 
-const post = async (url, params, header) =>
-  callPostApi(RequestMethod.POST, url, params, header);
+const post = async (url, params, header, formData) =>
+  callPostApi(RequestMethod.POST, url, params, header, formData);
 
 const put = async (url, params, header) =>
   callPutApi(RequestMethod.PUT, url, params, header);
 
 const Delete = async (url) => callDeleteApi(RequestMethod.DELETE, url);
 
-// const callGetApi = async (requestMethod, url) => {
-//   let jwtToken = await getJWTToken();
-//   console.log(jwtToken, "jwttoken")
-//   const options = {
-//     method: requestMethod,
-//     headers: {
-//       // token: "asdfghjk",
-//       "Authorization": `Bearer ${jwtToken}`,
-//     },
-//   };
-
-//   console.log(options, "options")
-
-//   return axios(`${url}`, options)
-//     .then((response) => {
-//       console.log(response, "ytfffv")
-//       const statusCode = response.status;
-//       return new Promise((resolve, reject) => {
-//         resolve({ response, statusCode });
-//         reject(new Error("Invalid Response!"));
-//       });
-//     })
-//     .catch((error) => {
-//       console.log(error, "errrrror")
-//     });
-// };
 
 const callGetApi = async (requestMethod, url) => {
   try {
@@ -89,18 +63,33 @@ const callGetApi = async (requestMethod, url) => {
   }
 };
 
-const callPostApi = async (requestMethod, url, params, header) => {
+const callPostApi = async (requestMethod, url, params, header, formData) => {
   let jwtToken = await getJWTToken();
   console.log(params, "parmasdsadsds")
-  let requestOptions = {
-    method: requestMethod,
-    body: params,
-    mode: "cors",
-    headers: {
-      "Authorization": `Bearer ${jwtToken}`,
-      "Content-Type": "application/json"
-    },
-  };
+  let requestOptions;
+  if (formData) {
+    requestOptions = {
+      method: requestMethod,
+      body: params,
+      mode: "cors",
+      headers: {
+        "Authorization": `Bearer ${jwtToken}`,
+        "Content-Type": "multipart/form-data;boundary="
+      },
+    };
+  } else {
+    requestOptions = {
+      method: requestMethod,
+      body: params,
+      mode: "cors",
+      headers: {
+        "Authorization": `Bearer ${jwtToken}`,
+        "Content-Type": "application/json"
+      },
+    };
+  }
+
+  console.log(requestOptions, "requestOptions")
 
   return fetch(`${url}`, requestOptions)
     .then((response) => {
@@ -118,7 +107,7 @@ const callPostApi = async (requestMethod, url, params, header) => {
       });
     })
     .catch((error) => {
-
+      console.log(error, "error in catch")
     });
 };
 
@@ -160,14 +149,14 @@ const callPutApi = async (requestMethod, url, params, header) => {
       method: requestMethod,
       body: params,
       mode: "cors",
-      headers: { "aa-token": jwtToken, "Content-Type": "application/json" },
+      headers: { "Authorization": `Bearer ${jwtToken}`, "Content-Type": "application/json" },
     };
   } else {
     requestOptions = {
       method: requestMethod,
       body: params,
       mode: "cors",
-      headers: { "aa-token": jwtToken },
+      headers: { "Authorization": `Bearer ${jwtToken}` },
     };
   }
 

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
-import Header from '../header/header'
 import { CarouselBanner, HomeNewProductCarousel, HomeTopSaleCarousel, PeopleReviews, SliderCorousel } from '../../components/carousel/carousel';
 import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid } from '@mui/material';
-import Footer from '../footer/footer';
 import Tab from '@mui/material/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
-import TabPanel from '@material-ui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import ReusableButton from '../../components/button/button';
 import BlogOne from '../../assests/blogs/lightweight.jpg'
 import BlogTwo from '../../assests/blogs/eid.jpg'

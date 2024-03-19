@@ -13,6 +13,7 @@ import { Products } from '../screens/product/product';
 import Profile from '../screens/profile/profile';
 import ForgetPassword from '../screens/forgetPassword/forgetPassword';
 import ResetPassword from '../screens/resetPassword/resetPassword';
+import Wishlist from '../screens/wishlist/wishlist';
 
 const Routers = () => {
     const ROLES = "User";
@@ -26,8 +27,7 @@ const Routers = () => {
                 <Route path="about" element={<About />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="products/:productId" element={<Products />} />
-                {/* <Route path="cart" element={<Cart />} /> */}
-
+                <Route path="wishlist" element={<Wishlist />} />
             </Route>
         </Routes>
     );
@@ -40,7 +40,6 @@ const Routers = () => {
                     <Route exact path="/reset-password/:token" element={<ResetPassword />} />
                     <Route exact path="/register" element={<Register />} />
                     <Route element={<ProtectedRoutes allowedRoles={ROLES} />}>
-
                         <Route
                             path="/user/*"
                             element={
@@ -51,7 +50,6 @@ const Routers = () => {
                                 </>
                             }
                         />
-
                     </Route>
                 </Routes>
             </Router>

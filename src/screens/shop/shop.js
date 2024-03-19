@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../header/header';
-import { Box, Card, CardContent, CardMedia, Grid, IconButton, Tab, Tabs } from '@mui/material';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, IconButton, Slider, Stack, Tab, Tabs } from '@mui/material';
 import Footer from '../footer/footer';
 import ReactStars from "react-rating-stars-component";
 import FormGroup from "@mui/material/FormGroup";
@@ -8,78 +8,26 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import SearchIcon from '@mui/icons-material/Search';
 import './shop.css';
 import NavigationIcon from '@mui/icons-material/Navigation';
-import Checkbox from "@mui/material/Checkbox";
-import { ShopCarousel, ShopFeaturedProductCarousel, ShopNecklacesProductCarousel, ShopNewProductCarousel, ShopTrendingProductCarousel, SliderCorousel } from '../../components/carousel/carousel';
+import Accordion from '@mui/material/Accordion';
+import Checkbox from '@mui/material/Checkbox';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AddIcon from '@mui/icons-material/Add';
+import { ShopCarousel, SliderCorousel, ProductCarousel } from '../../components/carousel/carousel';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { API } from '../../Networking/API';
+import { toast } from 'react-toastify';
+import { LineWave } from 'react-loader-spinner'
+import Spinner from '../../utils/spinner';
 
-// new products
-
-import Six from '../../assests/newProd/f.jpg';
-import Seven from '../../assests/newProd/g.jpg';
-import Eight from '../../assests/newProd/e.jpg';
-import Nine from '../../assests/newProd/l.jpg';
-import Ten from '../../assests/newProd/j.jpg';
-import { Link } from 'react-router-dom';
-import { animated, useSpring } from '@react-spring/web'
-import { useInView } from 'react-intersection-observer';
-import PropTypes from 'prop-types';
-
-function a11yProps(index) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
-    };
-}
-
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <span>{children}</span>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
 
 
 const Shop = () => {
-
-
     const [showTopBtn, setShowTopBtn] = useState(false);
-
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    const ratingChanged = (newRating) => {
-        console.log(newRating);
-    };
-
-    const cornerData = [
-        { id: 1, foto: Six, topic: "Diamond Oval", price: "$180.00" },
-        { id: 2, foto: Seven, topic: "Bulova Jewelry", price: "$99.00" },
-        { id: 3, foto: Eight, topic: "Cultured Pearl", price: "$165.00" },
-        { id: 4, foto: Nine, topic: "Diamond Frame", price: "$225.00" },
-        { id: 5, foto: Ten, topic: "Enchanted Disney", price: "$1.00" },
-    ];
-
+    const [value, setValue] = useState(1000);
+    const [productData, setProductData] = useState([]);
+    const [checked, setChecked] = useState([]);
+    const [loadSpinner, setLoadSpinner] = useState(false);
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -98,150 +46,80 @@ const Shop = () => {
         });
     };
 
-    //Home-Featured
-    const [refFeatured, inViewFeatured] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.2, // Percentage of element visibility required to trigger the animation
-    });
+    useEffect(() => {
+        if (checked.length > 0) {
+            setLoadSpinner(true)
+            console.log(checked, "it has data");
+            const categoryId = checked.map(items => items.value);
+            const [one] = categoryId;
+            console.log(one, "oneeneoneoene")
+            API.getProductData(one).then((response) => {
+                console.log(response, "respons of ring data")
+                if (response.status_code === 200) {
+                    setProductData(response.response.data);
+                } else {
+                    setProductData([]);
+                    console.log(response.response.message, "failed");
+                    toast.error(response.response.message, {
+                        position: toast.POSITION.TOP_RIGHT,
+                        theme: "colored",
+                        hideProgressBar: true,
+                        draggable: false,
+                    });
+                }
+                setLoadSpinner(false)
+            });
+        } else {
+            console.log("no datat");
+            setLoadSpinner(true)
+            API.getProductData().then((response) => {
+                console.log(response, "respons of ring data")
+                if (response.status_code === 200) {
+                    setProductData(response.response.data);
+                } else {
+                    setProductData([]);
+                    console.log(response.response.message, "failed");
+                    toast.error(response.response.message, {
+                        position: toast.POSITION.TOP_RIGHT,
+                        theme: "colored",
+                        hideProgressBar: true,
+                        draggable: false,
+                    });
+                }
+                setLoadSpinner(false)
+            });
+        }
+
+    }, [checked]);
 
 
-    const springPropsFeatured = useSpring({
-        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
-        to: { opacity: inViewFeatured ? 1 : 0, transform: inViewFeatured ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
-        config: { duration: 750, }, // Adjust the duration as needed
-    });
-
-    //Home-New
-    const [refNew, inViewNew] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.2, // Percentage of element visibility required to trigger the animation
-    });
 
 
-    const springPropsNew = useSpring({
-        from: { opacity: 0, transform: 'translateY(200px)' },
-        to: { opacity: inViewNew ? 1 : 0, transform: inViewNew ? 'translateY(0px)' : 'translateY(200px)' },
-        config: { duration: 750, }, // Adjust the duration as needed
-    });
+    const checkBoxes = [
+        { id: 1, label: "Earrings", default: false, value: 2 },
+        { id: 2, label: "Bracelets", default: false, value: 3 },
+        { id: 3, label: "Rings", default: false, value: 4 },
+        { id: 4, label: "Necklace", default: false, value: 1 },
+    ];
 
-    //Home-Trending
-    const [refTrending, inViewTrend] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.25, // Percentage of element visibility required to trigger the animation
-    });
+    const handleChangeCheckbox = (event, item) => {
+        const isChecked = event.target.checked;
+        if (isChecked) {
+            // If checked, add the item's name and value to the state
+            setChecked(prevState => [...prevState, { name: item.label, value: item.value }]);
+        } else {
+            // If unchecked, remove the item from the state
+            setChecked(prevState => prevState.filter(checkedItem => checkedItem.name !== item.label));
+        }
+    };
+    // console.log(checked, "checkedcheckedchecked")
 
-
-    const springPropsTrend = useSpring({
-        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
-        to: { opacity: inViewTrend ? 1 : 0, transform: inViewTrend ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
-        config: { duration: 750 }, // Adjust the duration as needed
-    });
-
-
-    //Home-FilterOne
-    const [refSearchOne, inViewSearchOne] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.25, // Percentage of element visibility required to trigger the animation
-    });
-
-
-    const springPropsSearchOne = useSpring({
-        from: { opacity: 0, transform: 'translateX(-200px)' },
-        to: { opacity: inViewSearchOne ? 1 : 0, transform: inViewSearchOne ? 'translateX(0px)' : 'translateX(-200px)' },
-        config: { duration: 750 }, // Adjust the duration as needed
-        delay: 500,
-    });
-
-    //Home-FilterCustomer
-    const [refDiscount, inViewDiscount] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.25, // Percentage of element visibility required to trigger the animation
-    });
-
-
-    const springPropsDiscount = useSpring({
-        from: { opacity: 0, transform: 'translateX(-200px)' },
-        to: { opacity: inViewDiscount ? 1 : 0, transform: inViewDiscount ? 'translateX(0px)' : 'translateX(-200px)' },
-        config: { duration: 750 }, // Adjust the duration as needed
-        delay: 600,
-    });
-
-
-    //Home-FilterCustomer
-    const [refCustomer, inViewCustomer] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.25, // Percentage of element visibility required to trigger the animation
-    });
-
-
-    const springPropsCustomer = useSpring({
-        from: { opacity: 0, transform: 'translateX(-200px)' },
-        to: { opacity: inViewCustomer ? 1 : 0, transform: inViewCustomer ? 'translateX(0px)' : 'translateX(-200px)' },
-        config: { duration: 750 }, // Adjust the duration as needed
-    });
-
-    //Home-FilterRelated
-    const [refRelated, inViewRelated] = useInView({
-        triggerOnce: true, // Only trigger once when the element comes into view
-        threshold: 0.25, // Percentage of element visibility required to trigger the animation
-    });
-
-
-    const springPropsRelated = useSpring({
-        from: { opacity: 0, transform: 'translateX(-200px)' },
-        to: { opacity: inViewRelated ? 1 : 0, transform: inViewRelated ? 'translateX(0px)' : 'translateX(-200px)' },
-        config: { duration: 750 }, // Adjust the duration as needed
-    });
-
-    const ringsTobeRendered = (
-        <animated.div className="m-4" ref={refFeatured} style={springPropsFeatured}>
-            <span className='shop_header-text'>Rings</span>
-            <Box className="mt-3">
-                <ShopFeaturedProductCarousel />
-            </Box>
-        </animated.div>
-    )
-
-    const earringsTobeRendered = (
-        <animated.div className="new_products" ref={refNew} style={springPropsNew}>
-            <span className='shop_header-text'>Earrings</span>
-            <Box className="mt-3">
-                <ShopNewProductCarousel />
-            </Box>
-        </animated.div>
-    )
-
-    const braceletsTobeRendered = (
-        <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
-            <span className='shop_header-text'>Bracelets</span>
-            <Box className="mt-3">
-                <ShopTrendingProductCarousel />
-            </Box>
-        </animated.div>
-    )
-
-    const necklacesTobeRendered = (
-        <animated.div className="trending_products" ref={refTrending} style={springPropsTrend}>
-            <span className='shop_header-text'>Necklaces</span>
-            <Box className="mt-3">
-                <ShopNecklacesProductCarousel />
-            </Box>
-        </animated.div>
-    )
-
-    const tabsPanel = [
-        { id: 1, index: 0, render: ringsTobeRendered },
-        { id: 2, index: 1, render: earringsTobeRendered },
-        { id: 3, index: 2, render: braceletsTobeRendered },
-        { id: 4, index: 3, render: necklacesTobeRendered },
-    ]
+    const handleChangeSlider = (event, newValue) => {
+        setValue(newValue);
+    };
 
     return (
         <div>
-            {/* <Box>
-                <Header />
-            </Box> */}
-
             <Box>
                 <ShopCarousel />
             </Box>
@@ -473,30 +351,75 @@ const Shop = () => {
                 </Grid>
             </Box> */}
 
-            <Box>
+            <Box className="tw-m-6">
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
-                        <Tabs
-                            orientation="vertical"
-                            variant="scrollable"
-                            className='vertical_tabs'
-                            value={value}
-                            onChange={handleChange}
-                            aria-label="Vertical tabs example"
-                            sx={{ borderRight: 1, borderColor: 'divider', height: "100%", justifyContent: "center" }}
-                        >
-                            {["Rings", "Earrings", "Bracelets", "Necklaces"].map((items, index) => (
-                                <Tab label={items} {...a11yProps(index)} />
-                            ))}
-                        </Tabs>
+                        <div>
+                            <span className='' style={{ textAlign: "start", margin: "15px 0px", fontWeight: "700", width: "100%", display: "flex" }}>Filter By</span>
+                            <Box className="tw-mt-2">
+                                <Accordion sx={{ boxShadow: "none", background: "#9F73AB" }}>
+                                    <AccordionSummary
+                                        expandIcon={<AddIcon sx={{ color: "#fff" }} />}
+                                        aria-controls="panel1-content"
+                                        id="panel1-header"
+                                        style={{ textAlign: "start", fontWeight: "700", color: "#fff" }}
+                                    >
+                                        Categories
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <FormGroup>
+                                            {checkBoxes.map((items) => (
+                                                <FormControlLabel key={items.id} className='discount_text' control={
+                                                    <Checkbox
+                                                        defaultChecked={items.default}
+                                                        // onChange={(event) => handleChangeCheckbox(event, items.label.toLowerCase())} 
+                                                        checked={checked.some(checkedItem => checkedItem.name === items.label)}
+                                                        onChange={(event) => handleChangeCheckbox(event, items)}
+                                                        size="small" />} label={items.label} />
+                                            ))}
+                                        </FormGroup>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </Box>
+
+                            <Box className="tw-mt-2">
+                                <Accordion sx={{ boxShadow: "none", background: "#9F73AB" }}>
+                                    <AccordionSummary
+                                        expandIcon={<AddIcon sx={{ color: "#fff" }} />}
+                                        aria-controls="panel1-content"
+                                        id="panel1-header"
+                                        style={{ textAlign: "start", fontWeight: "700", color: "#fff" }}
+                                    >
+                                        Price
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+                                            <RemoveIcon sx={{ color: "#fff" }} />
+                                            <Slider
+                                                aria-label="Volume"
+                                                value={value}
+                                                onChange={handleChangeSlider}
+                                                min={100}
+                                                max={1000}
+                                                valueLabelDisplay="auto"
+                                                sx={{ color: "#fff" }}
+                                            />
+                                            <AddIcon sx={{ color: "#fff" }} />
+                                        </Stack>
+                                        <Box sx={{
+                                            display: "flex", justifyContent: "space-between",
+                                        }}>
+                                            <span style={{ textAlign: "start", fontWeight: "700", width: "100%", fontSize: "12px", color: "#fff" }}>Rs.100 -</span>
+                                            <span style={{ textAlign: "end", fontWeight: "700", width: "100%", fontSize: "12px", color: "#fff" }}> Rs.{value}</span>
+                                        </Box>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </Box>
+                        </div>
                     </Grid>
                     <Grid item xs={10}>
-                        {tabsPanel.map((items, index) => (
-                            <TabPanel value={value} index={items.index}>
-                                {console.log(items.index, "index")}
-                                {items.render}
-                            </TabPanel>
-                        ))}
+                        {loadSpinner ? <Spinner /> :
+                            productData.length > 0 ? <ProductCarousel productData={productData} /> : null}
                     </Grid>
                 </Grid>
             </Box>
@@ -505,10 +428,7 @@ const Shop = () => {
                 <SliderCorousel />
             </Box>
 
-
-
             <Box className="top-to-btm">
-
                 {showTopBtn && (
                     <NavigationIcon
                         className="icon-position icon-style"
@@ -516,7 +436,7 @@ const Shop = () => {
                     />
                 )}
             </Box>
-        </div >
+        </div>
     )
 }
 

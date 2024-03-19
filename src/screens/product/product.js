@@ -161,7 +161,6 @@ export const Products = () => {
         delay: 500
     });
 
-
     //Product-featured
     const [refFeatured, inViewFeatured] = useInView({
         triggerOnce: true, // Only trigger once when the element comes into view
@@ -188,13 +187,11 @@ export const Products = () => {
         delay: 500
     });
 
-
     //Home-FilterOne
     const [refSearchOne, inViewSearchOne] = useInView({
         triggerOnce: true, // Only trigger once when the element comes into view
         threshold: 0.25, // Percentage of element visibility required to trigger the animation
     });
-
 
     const springPropsSearchOne = useSpring({
         from: { opacity: 0, transform: 'translateX(-200px)' },
@@ -209,7 +206,6 @@ export const Products = () => {
         threshold: 0.25, // Percentage of element visibility required to trigger the animation
     });
 
-
     const springPropsDiscount = useSpring({
         from: { opacity: 0, transform: 'translateX(-200px)' },
         to: { opacity: inViewDiscount ? 1 : 0, transform: inViewDiscount ? 'translateX(0px)' : 'translateX(-200px)' },
@@ -223,7 +219,6 @@ export const Products = () => {
         threshold: 0.25, // Percentage of element visibility required to trigger the animation
     });
 
-
     const springPropsCustomer = useSpring({
         from: { opacity: 0, transform: 'translateX(-200px)' },
         to: { opacity: inViewCustomer ? 1 : 0, transform: inViewCustomer ? 'translateX(0px)' : 'translateX(-200px)' },
@@ -235,7 +230,6 @@ export const Products = () => {
         triggerOnce: true, // Only trigger once when the element comes into view
         threshold: 0.25, // Percentage of element visibility required to trigger the animation
     });
-
 
     const springPropsRelated = useSpring({
         from: { opacity: 0, transform: 'translateX(-200px)' },
@@ -262,7 +256,6 @@ export const Products = () => {
 
     console.log(productData, "productDatasfsdfsf");
     const objectLength = Object.keys(productData).length;
-
     console.log('Object length:', objectLength);
 
     return (

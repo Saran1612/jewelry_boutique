@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -10,13 +9,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import CallIcon from '@mui/icons-material/Call';
 import './header.css';
-import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import Logo from '../../assests/logo/icons8-sparkling-diamond-100.png';
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import Tooltip from '@mui/material/Tooltip';
 import Logo1 from '../../assests/logo/icons8-jewel-64.png';
 import InfoIcon from '@mui/icons-material/Info';
@@ -168,7 +166,7 @@ function DrawerAppBar(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     function stringToColor(string) {
-        return '#9F73AB';
+        return '#624F82';
     }
 
     function stringAvatar(name) {
@@ -262,13 +260,7 @@ function DrawerAppBar(props) {
                             <Tooltip title={username} placement="bottom">
                                 <Menu
                                     menuButton={<MenuButton style={{ border: "none", background: "none" }}
-                                    // direction="right"
-                                    // align="center"
-                                    // position="anchor"
-                                    // viewScroll="auto"
-                                    // arrow={true}
                                     >
-
                                         <IconButton
                                             // onClick={handleMenuClick}
                                             size="small"
@@ -277,24 +269,29 @@ function DrawerAppBar(props) {
                                             aria-haspopup="true"
                                             aria-expanded={open ? 'true' : undefined}
                                         >
-                                            <Avatar className='avatar_name' sx={{ width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
+                                            <Avatar className='avatar_name' sx={{ background: "#624F82", width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
                                         </IconButton>
                                     </MenuButton>} transition>
+
                                     <MenuItem onClick={() => { navigate('/user/profile'); setAnchorEl(null) }}>
-
                                         <Person2OutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
+                                        Profile
+                                    </MenuItem>
 
-                                        Profile</MenuItem>
                                     <MenuItem onClick={toggleDrawer('right', true)}>
-
                                         <ShoppingCartOutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
+                                        Cart
+                                    </MenuItem>
 
-                                        Cart</MenuItem>
+                                    <MenuItem onClick={() => navigate('/user/wishlist')}>
+                                        <FavoriteBorderIcon fontSize="small" sx={{ color: "#624F82" }} />
+                                        Wishlist
+                                    </MenuItem>
+
                                     <MenuItem onClick={handleLogoutClick}>
-
                                         <Logout fontSize="small" sx={{ color: "#624F82" }} />
-
-                                        Log Out</MenuItem>
+                                        Log Out
+                                    </MenuItem>
                                 </Menu>
                             </Tooltip>
                         </Box>

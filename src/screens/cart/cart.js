@@ -88,10 +88,10 @@ const Cart = ({ anchor, toggleDrawer }) => {
     }
 
     return (
-        <Box sx={{ padding: "16px 4px" }} className="cart_wrapper">
-            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+        <Box sx={{ padding: 0 }} className="cart_wrapper">
+            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", background: "#9F73AB", padding: "30px 20px", }}>
                 <Typography sx={{ textAlign: "center" }} className='your_cart-text'>Cart Items</Typography>
-                <ShoppingBagOutlinedIcon sx={{ color: "#624F82" }} />
+                <ShoppingBagOutlinedIcon sx={{ color: "#fff" }} />
             </Box>
 
             <Box

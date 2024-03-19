@@ -8,6 +8,10 @@ const APIRequests = {
   toGetOneProductsData: "/products/unique/",
   forgetPassword: "/auth/forget-password",
   resetPassword: "/auth/reset-password",
+  toGetUserInfo: "/auth/user-info",
+  toUpdateUserInfo: "/auth/update-user",
+  toUploadProfilePic: "/auth/upload-avatar",
+  toGetWishlistData: "/wishlist/"
 };
 
 export { BaseURL, APIRequests };

@@ -169,7 +169,8 @@ function Index(props) {
                                         <ReusableInputfield
                                             type="text"
                                             size="medium"
-                                            className="login_inputfield"
+                                            // className="login_inputfield"
+                                            className="contact_input-fields"
                                             onChange={formik.handleChange}
                                             value={formik.values.username}
                                             style={{ width: "100%" }}
@@ -195,7 +196,8 @@ function Index(props) {
                                             // type="password"
                                             type={showPassword ? 'text' : 'password'}
                                             size="medium"
-                                            className="login_inputfield"
+                                            // className="login_inputfield"
+                                            className="contact_input-fields"
                                             onChange={formik.handleChange}
                                             value={formik.values.password}
                                             helperText={formik.errors.password ? formik.errors.password : ""}

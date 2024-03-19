@@ -105,7 +105,13 @@
     font-weight: 700;
 }
 
-.vertical_tabs .MuiTabs-flexContainer {
-    /* height: 100%;
-    justify-content: center; */
+.discount_text span {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.discount_text .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root,
+.discount_text .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked {
+    color: #fff;
 }

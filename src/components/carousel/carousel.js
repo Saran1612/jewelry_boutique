@@ -32,20 +32,10 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import './carousel.css';
 import "react-multi-carousel/lib/styles.css";
-import { Box, Card, CardActionArea, CardContent, CardMedia, IconButton } from '@mui/material';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, IconButton } from '@mui/material';
 import ReactStars from "react-rating-stars-component";
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
-// import 'swiper/css/swiper.css'
 
-// -----featured--------
-import FOne from '../../assests/featured/ff.jpg';
-import FTwo from '../../assests/featured/gg.jpg';
-import FThree from '../../assests/featured/ggOne.jpg';
-import FFour from '../../assests/featured/hh.jpg';
-import FFive from '../../assests/featured/kick.jpg';
-import FSeven from '../../assests/featured/nj.jpg';
-import FEight from '../../assests/featured/prod_four.jpg';
-import FNine from '../../assests/featured/prod_nine.jpg';
 
 //shopcarousel
 import ShopOne from '../../assests/header/shopOne.jpg';
@@ -525,12 +515,6 @@ export const HomeBestSaleCarousel = () => {
 
     const [productData, setProductData] = useState([]);
 
-    const newProducts = [
-        { id: 1, img: Peight, name: "Diamond Layered Oval", price: "200", star: "4.6" },
-        { id: 2, img: ROne, name: "Diamond Octagonal Frame", price: "170", star: "3.9" },
-        { id: 3, img: Psix, name: "Enchanted Disney Mulan", price: "110", star: "4" },
-        { id: 4, img: Pfive, name: "Platinum Layered Oval", price: "90", star: "4.8" }
-    ]
 
     const responsive = {
         superLargeDesktop: {
@@ -652,13 +636,11 @@ export const HomeBestSaleCarousel = () => {
     );
 };
 
-export const ShopFeaturedProductCarousel = () => {
-    const [productData, setProductData] = useState([]);
+export const ProductCarousel = ({ productData }) => {
+    const user_id = Cookies.get("userId");
 
     const handleCartClick = (product_id) => {
         console.log(product_id, "product_id");
-        const user_id = Cookies.get("userId");
-
         API.getAddCartProductData(
             product_id,
             user_id
@@ -688,152 +670,13 @@ export const ShopFeaturedProductCarousel = () => {
         });
     }
 
-    useEffect(() => {
-        console.log("Inside Trending sales");
-        const categoryId = 4;
-        API.getProductData(
-            categoryId
-        ).then((response) => {
-            console.log(response, "respons of ring data")
-            if (response.status_code === 200) {
-                setProductData(response.response.data);
-                // toast.success(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-
-            } else {
-                setProductData([]);
-                console.log(response.response.message, "failed");
-                // toast.error(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-            }
-        });
-    }, []);
-
-    const featuredProducts = [
-        { id: 1, img: FOne, name: "Brilliance Bead", price: "130", star: "4.5" },
-        { id: 2, img: FTwo, name: "Bulova Jewelry", price: "150", star: "4" },
-        { id: 3, img: FThree, name: "Cultured Pearl", price: "190", star: "4.7" },
-        { id: 4, img: FFour, name: "Gemstone Ring", price: "70", star: "4.2" },
-        { id: 5, img: FFive, name: "Diamond Oval", price: "200", star: "4.6" },
-        { id: 6, img: FSeven, name: "Diamond Octagonal", price: "170", star: "3.9" },
-        // { id: 7, img: FEight, name: "Enchanted Disney", price: "110", star: "4" },
-        { id: 8, img: FNine, name: "Platinum Oval", price: "90", star: "4.8" }
-    ]
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
-
-    return (
-
-        <Carousel
-            additionalTransfrom={0}
-            arrows
-            shouldResetAutoplay
-            slidesToSlide={1}
-            autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={6000}
-            infinite={true}
-            customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {productData.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Card className="card">
-                        <CardActionArea>
-                            <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.image}
-                                    alt={items.name}
-                                />
-                            </Link>
-                            <CardContent className="card_content">
-                                <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            4.5 {items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </Link>
-                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
-                                    <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
-                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-
-                                    <IconButton aria-label="favourite">
-                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-                                </div>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </div>
-            ))}
-        </Carousel>
-    );
-};
-
-export const ShopNewProductCarousel = () => {
-
-    const [productData, setProductData] = useState([]);
-
-    const handleCartClick = (product_id) => {
+    const handleWishlistClick = (product_id) => {
         console.log(product_id, "product_id");
-        const user_id = Cookies.get("userId");
-
-        API.getAddCartProductData(
+        API.getAddWishlistProductData(
             product_id,
             user_id
         ).then((response) => {
-            console.log(response, "respons of adding to cart data")
+            console.log(response, "respons of adding to wishlist data")
             if (response.statusCode === 200) {
                 toast.success(response.response.message, {
                     position: toast.POSITION.TOP_RIGHT,
@@ -846,7 +689,7 @@ export const ShopNewProductCarousel = () => {
 
             } else {
                 console.log(response.response.error, "failed");
-                toast.warn(response.response.error, {
+                toast.warn(response.response.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
                     hideProgressBar: false,
@@ -858,449 +701,64 @@ export const ShopNewProductCarousel = () => {
         });
     }
 
-    useEffect(() => {
-        console.log("Inside Trending sales");
-        const categoryId = 2;
-        API.getProductData(
-            categoryId
-        ).then((response) => {
-            console.log(response, "respons of earing data")
-            if (response.status_code === 200) {
-                setProductData(response.response.data);
-                // toast.success(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-
-            } else {
-                setProductData([]);
-                console.log(response.response.message, "failed");
-                // toast.error(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-            }
-        });
-    }, []);
-
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
-
     return (
+        <>
+            <Grid container spacing={2}>
+                {productData.map((items) => (
+                    <Grid item xs={3}>
+                        <div className="card-div-home-new-product-featured" key={items.id}>
+                            <Card className="card">
+                                <CardActionArea>
+                                    <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                        <CardMedia
+                                            component="img"
+                                            className='card-img-featured'
+                                            height="260"
+                                            image={items.image}
+                                            alt={items.name}
+                                        />
+                                    </Link>
+                                    <CardContent className="card_content">
+                                        <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                            <Box sx={{ width: "100%" }}>
+                                                <span className="product_text">{items.name}</span>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    width: "100%",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    marginTop: "5px",
+                                                    alignItems: "center"
+                                                }}
+                                            >
+                                                <span className="price_text">${items.price}</span>
+                                                <span className="price_text">
+                                                    4.5 {items.star}
+                                                    <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
+                                                </span>
+                                            </Box>
+                                        </Link>
+                                        <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                            <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
+                                                <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                            </IconButton>
 
-        <Carousel
-            additionalTransfrom={0}
-            arrows
-            shouldResetAutoplay
-            slidesToSlide={1}
-            autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={6000}
-            infinite={true}
-            customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {productData.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    {/* <Link to="/products" style={{ textDecoration: "none" }}> */}
-                    <Card className="card">
-                        <CardActionArea>
-                            <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.image}
-                                    alt={items.name}
-                                />
-                            </Link>
-                            <CardContent className="card_content">
-                                <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            4.2{items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </Link>
-                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
-                                    <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
-                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-
-                                    <IconButton aria-label="favourite">
-                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-                                </div>
-                            </CardContent>
-
-                        </CardActionArea>
-                    </Card>
-                    {/* </Link> */}
-                </div>
-            ))}
-        </Carousel>
+                                            <IconButton aria-label="wishlist" onClick={() => handleWishlistClick(items.id)}>
+                                                <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                            </IconButton>
+                                        </div>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </div>
+                    </Grid>
+                ))}
+            </Grid>
+        </>
     );
 };
 
-export const ShopTrendingProductCarousel = () => {
-
-    const [productData, setProductData] = useState([]);
-
-    const handleCartClick = (product_id) => {
-        console.log(product_id, "product_id");
-        const user_id = Cookies.get("userId");
-
-        API.getAddCartProductData(
-            product_id,
-            user_id
-        ).then((response) => {
-            console.log(response, "respons of adding to cart data")
-            if (response.statusCode === 200) {
-                toast.success(response.response.message, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    theme: "light",
-                    hideProgressBar: false,
-                    draggable: false,
-                    progress: undefined,
-                    autoClose: 2000
-                });
-
-            } else {
-                console.log(response.response.error, "failed");
-                toast.warn(response.response.error, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    theme: "light",
-                    hideProgressBar: false,
-                    draggable: false,
-                    progress: undefined,
-                    autoClose: 2000
-                });
-            }
-        });
-    }
-
-    useEffect(() => {
-        console.log("Inside Trending sales");
-        const categoryId = 3;
-        API.getProductData(
-            categoryId
-        ).then((response) => {
-            console.log(response, "respons of bracelets data")
-            if (response.status_code === 200) {
-                setProductData(response.response.data);
-                // toast.success(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-
-            } else {
-                setProductData([]);
-                console.log(response.response.message, "failed");
-                // toast.error(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-            }
-        });
-    }, []);
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
-
-    return (
-
-        <Carousel
-            additionalTransfrom={0}
-            arrows
-            shouldResetAutoplay
-            slidesToSlide={1}
-            autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={2000}
-            infinite={true}
-            customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {productData.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Card className="card">
-                        <CardActionArea>
-                            <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.image}
-                                    alt={items.name}
-                                />
-                            </Link>
-                            <CardContent className="card_content">
-                                <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            4.8{items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </Link>
-                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
-                                    <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
-                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-
-                                    <IconButton aria-label="favourite">
-                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-                                </div>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </div>
-            ))}
-        </Carousel>
-    );
-};
-
-export const ShopNecklacesProductCarousel = () => {
-
-    const [productData, setProductData] = useState([]);
-
-    const handleCartClick = (product_id) => {
-        console.log(product_id, "product_id");
-        const user_id = Cookies.get("userId");
-
-        API.getAddCartProductData(
-            product_id,
-            user_id
-        ).then((response) => {
-            console.log(response, "respons of adding to cart data")
-            if (response.statusCode === 200) {
-                toast.success(response.response.message, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    theme: "light",
-                    hideProgressBar: false,
-                    draggable: false,
-                    progress: undefined,
-                    autoClose: 2000
-                });
-
-            } else {
-                console.log(response.response.error, "failed");
-                toast.warn(response.response.error, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    theme: "light",
-                    hideProgressBar: false,
-                    draggable: false,
-                    progress: undefined,
-                    autoClose: 2000
-                });
-            }
-        });
-    }
-
-    useEffect(() => {
-        console.log("Inside Trending sales");
-        const categoryId = 1;
-        API.getProductData(
-            categoryId
-        ).then((response) => {
-            console.log(response, "respons of necklaces data")
-            if (response.status_code === 200) {
-                setProductData(response.response.data);
-                // toast.success(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-
-            } else {
-                setProductData([]);
-                console.log(response.response.message, "failed");
-                // toast.error(response.response.message, {
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     theme: "colored",
-                //     hideProgressBar: true,
-                //     draggable: false,
-                // });
-            }
-        });
-    }, []);
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
-
-    return (
-
-        <Carousel
-            additionalTransfrom={0}
-            arrows
-            shouldResetAutoplay
-            slidesToSlide={1}
-            autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={2000}
-            infinite={true}
-            customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {productData.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Card className="card">
-                        <CardActionArea>
-                            <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.image}
-                                    alt={items.name}
-                                />
-                            </Link>
-                            <CardContent className="card_content">
-                                <Link to="/user/products" style={{ textDecoration: "none" }}>
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            4.8{items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </Link>
-                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
-                                    <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
-                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-
-                                    <IconButton aria-label="favourite">
-                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                    </IconButton>
-                                </div>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </div>
-            ))}
-        </Carousel>
-    );
-};
 
 export const AboutUsCarousel = () => {
 
