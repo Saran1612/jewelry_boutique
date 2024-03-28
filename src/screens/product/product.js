@@ -476,7 +476,7 @@ export const Products = () => {
                             xs={3}
                             sx={{ display: { xs: "none", sm: "none", md: "block" } }} >
                             <div style={{ padding: "0px 50px 0px 0px" }}>
-                                <animated.div className="product-search-bar" ref={refSearchOne} style={springPropsSearchOne}>
+                                {/* <animated.div className="product-search-bar" ref={refSearchOne} style={springPropsSearchOne}>
                                     <div style={{ display: "flex" }}>
                                         <input
                                             type="text"
@@ -488,10 +488,10 @@ export const Products = () => {
                                             <SearchIcon sx={{ fontSize: "1.3rem !important" }} />
                                         </IconButton>
                                     </div>
-                                </animated.div>
+                                </animated.div> */}
 
                                 <div className="product-radio-box-content mt-4">
-                                    <animated.div className="product-occasion-div" ref={refDiscount} style={springPropsDiscount}>
+                                    {/* <animated.div className="product-occasion-div" ref={refDiscount} style={springPropsDiscount}>
                                         <span className="special-deals-text mb-2">CATEGORIES</span>
                                         <FormGroup>
                                             <FormControlLabel
@@ -512,35 +512,9 @@ export const Products = () => {
                                                 onClick={handleClose}
                                             />
                                         </FormGroup>
-                                    </animated.div>
+                                    </animated.div> */}
 
-                                    {/* <div className="product-occasion-div mt-4">
-                                        <span className="special-deals-text mb-2">DISCOUNT</span>
-                                        <FormGroup>
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="5% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="10% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="20% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="30% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="50% or More"
-                                            />
-                                        </FormGroup>
-                                    </div> */}
-
-                                    <animated.div className="product-review-div mt-4" ref={refCustomer} style={springPropsCustomer}>
+                                    {/* <animated.div className="product-review-div mt-4" ref={refCustomer} style={springPropsCustomer}>
                                         <span className="special-deals-text mb-2">
                                             CUSTOMER REVIEW
                                         </span>
@@ -631,7 +605,7 @@ export const Products = () => {
                                                 }}>1</span>
                                             </div>
                                         </div>
-                                    </animated.div>
+                                    </animated.div> */}
 
 
                                     <animated.div className='related_product mt-4' ref={refRelated} style={springPropsRelated}>

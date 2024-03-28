@@ -46,7 +46,7 @@ const Profile = () => {
                 toast.error(response.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
                 navigate('/')
@@ -94,7 +94,7 @@ const Profile = () => {
                 toast.error(response.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
             }
@@ -103,6 +103,7 @@ const Profile = () => {
     }
 
     const handleFileUpload = (event) => {
+        console.log(event.target.files, "targetteteted")
         const selectedFile = event.target.files[0];
         console.log(selectedFile, "selectedFile");
         setFileValue(selectedFile);
@@ -121,7 +122,7 @@ const Profile = () => {
                 toast.error(response.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
             }
@@ -135,10 +136,10 @@ const Profile = () => {
             </Box>
 
             <Grid container spacing={2} className='tw-p-14'>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ margin: "auto" }}>
                     <div className='tw-bg-[#6868681c] tw-rounded-md'>
                         {loadSpinner ? <Spinner /> : <form onSubmit={formik.handleSubmit}>
-                            <h2 className='tw-w-full tw-flex tw-text-start tw-px-5 tw-pt-3'>Profile Details</h2>
+                            <h2 className='tw-w-full tw-flex tw-text-start tw-px-5 tw-pt-3 tw-font-semibold'>Profile Details</h2>
                             <Grid container spacing={2} sx={{ margin: "1.8rem 0 0 0", width: "100%", padding: "0 1rem" }}>
                                 {formRequired.map((item, index) => (
                                     <Grid xs={6} key={index} className='p-2'>
@@ -181,16 +182,18 @@ const Profile = () => {
                 <Grid item xs={4}>
                     <div className='tw-bg-[#9F73AB] tw-rounded-md tw-h-full tw-flex tw-flex-col tw-justify-center tw-items-center'>
                         <div className='tw-relative tw-rounded-full tw-border-[#fff] tw-border-[2px] tw-border-dashed tw-p-[5px]'>
-                            <img src={profileData?.image ? profileData.image : ProfilePic} alt="profile_pic" width="100" height="100" className='tw-rounded-full tw-border-[#fff] tw-border-[1.5px] tw-border-dashed tw-p-[5px]' />
+                            <img src={profileData?.image ? profileData.image : ProfilePic} alt="profile_pic" width="125" height="125" className='tw-rounded-full tw-border-[#fff] tw-border-[1.5px] tw-border-dashed tw-p-[5px]' />
                             <input
                                 accept="image/*"
                                 id="icon-button-file"
                                 type="file"
+                                name='file'
                                 style={{ display: "none" }}
                                 onChange={handleFileUpload}
                             />
                             <label
                                 htmlFor="icon-button-file"
+                                className='profile_label'
                                 style={{
                                     padding: "0px",
                                     width: "30px",
@@ -214,14 +217,14 @@ const Profile = () => {
                                         src={CamPic}
                                         alt="CamPic"
                                         className="cloud_icon"
-                                        width="15"
-                                        height="15"
+                                        width="20"
+                                        height="20"
                                         sx={{ margin: "0px" }}
                                     />
                                 </IconButton>
                             </label>
                         </div>
-                        <span className='tw-mt-2 tw-text-white'>Neil Sams</span>
+                        <span className='tw-mt-2 tw-text-white tw-font-semibold'>Neil Sams</span>
                     </div>
                 </Grid>
             </Grid>

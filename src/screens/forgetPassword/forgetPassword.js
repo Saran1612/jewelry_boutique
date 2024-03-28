@@ -49,7 +49,7 @@ function ForgetPassword(props) {
                 toast.error(response.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
             }

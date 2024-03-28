@@ -61,7 +61,7 @@ function ResetPassword() {
                 toast.error(response.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
             }
@@ -105,7 +105,7 @@ function ResetPassword() {
                                                         aria-label="toggle password visibility"
                                                         onClick={handleClickShowPassword}
                                                     >
-                                                        {showPassword ? <VisibilityOff sx={{ fontSize: "1.2rem", color: "#624F82" }} /> : <Visibility sx={{ fontSize: "1.2rem", color: "#624F82" }} />}
+                                                        {showPassword ? <Visibility sx={{ fontSize: "1.2rem", color: "#624F82" }} /> : <VisibilityOff sx={{ fontSize: "1.2rem", color: "#624F82" }} />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             }

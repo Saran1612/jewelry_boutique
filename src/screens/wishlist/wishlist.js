@@ -40,23 +40,41 @@ const Wishlist = () => {
     }
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 40 },
-        { field: 'name', headerName: 'Name', flex: 1 },
-        { field: 'description', headerName: 'Description', flex: 1 },
+        {
+            field: 'id',
+            headerName: 'ID',
+            width: 40,
+            cellClassName: "wishlist_text",
+            headerClassName: "wishlist_header_text",
+        },
+        {
+            field: 'name', headerName: 'Name', flex: 1, cellClassName: "wishlist_text_bold",
+            headerClassName: "wishlist_header_text",
+        },
+        {
+            field: 'description', headerName: 'Description', flex: 1, cellClassName: "wishlist_text",
+            headerClassName: "wishlist_header_text",
+        },
         {
             field: 'price',
             headerName: 'Price',
             flex: 1,
+            cellClassName: "wishlist_text",
+            headerClassName: "wishlist_header_text",
         },
         {
             field: 'stock',
             headerName: 'Stock',
             flex: 1,
+            cellClassName: "wishlist_text",
+            headerClassName: "wishlist_header_text",
         },
         {
             field: "image",
             headerName: "Image",
             flex: 1,
+            cellClassName: "wishlist_text",
+            headerClassName: "wishlist_header_text",
             renderCell: (params) => {
                 console.log(params.row, "checking the url")
                 return (
@@ -69,6 +87,8 @@ const Wishlist = () => {
             field: "action",
             headerName: "Delete",
             flex: 1,
+            cellClassName: "wishlist_text",
+            headerClassName: "wishlist_header_text",
             renderCell: (params) => {
                 return (
                     <IconButton aria-label="cart" onClick={() => handleDeleteClick(params.row.product_id)}>
@@ -95,7 +115,7 @@ const Wishlist = () => {
                 toast.error(result.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
             }
@@ -118,7 +138,7 @@ const Wishlist = () => {
                             rowHeight="80px"
                             // autoHeight={true}
                             sx={{}}
-                            className=""
+                            className="wishlist_table"
                             // hideFooter={true}
                             hideFooterPagination={true}
                             hideFooterSelectedRowCount={true}

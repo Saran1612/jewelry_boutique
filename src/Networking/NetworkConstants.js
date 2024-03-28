@@ -11,7 +11,15 @@ const APIRequests = {
   toGetUserInfo: "/auth/user-info",
   toUpdateUserInfo: "/auth/update-user",
   toUploadProfilePic: "/auth/upload-avatar",
-  toGetWishlistData: "/wishlist/"
+  toGetWishlistData: "/wishlist/",
+  toGetBlogs: "/blogs/",
+  toGetReview: "/reviews/",
+  toGetBanner: "/carousel",
+  toGetOurPeople: "/contacts",
+  toGetFeedbacks: "/feedbacks",
+  toGetFilteredData: "/products/filter",
+  toGetSearchedData: "/products/search",
+
 };
 
 export { BaseURL, APIRequests };

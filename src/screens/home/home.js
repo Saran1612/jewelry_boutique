@@ -7,9 +7,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ReusableButton from '../../components/button/button';
-import BlogOne from '../../assests/blogs/lightweight.jpg'
-import BlogTwo from '../../assests/blogs/eid.jpg'
-import BlogThree from '../../assests/blogs/shine.jpg'
+import LocalMallTwoToneIcon from '@mui/icons-material/LocalMallTwoTone';
 import CommentIcon from '@mui/icons-material/Comment';
 import PersonIcon from '@mui/icons-material/Person';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -20,23 +18,60 @@ import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOu
 import DrawOutlinedIcon from '@mui/icons-material/DrawOutlined';
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
-import { useDispatch, useSelector } from 'react-redux';
+import { API } from '../../Networking/API';
+import { Usage, Banner } from '../../components/swiper/swiper';
+import Spinner from '../../utils/spinner';
 
 const Home = () => {
     const [value, setValue] = useState('1');
-    const loginData = useSelector((state) => {
-        return state.login.isLoggedIn;
-    });
+    const [blogsData, setBlogsData] = useState([]);
+    const [reviewsData, setReviewsData] = useState([]);
+    const [bannerData, setBannerData] = useState([]);
+    const [loadSpinner, setLoadSpinner] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const newProducts = [
-        { id: 1, img: BlogOne, name: "Lightweight College Jewellery", author: "Dinesh", comments: 6, description: "Eid-Al-Adha, also known as the Festival of Sacrifice, is a significant festival that Muslims celebrate worldwide. Prayers, feasts, acts of charity, and the exchange of gifts mark this sacred festival." },
-        { id: 2, img: BlogTwo, name: "Eid Al-Adha inspired jewellery", author: "Poovila", comments: 5, description: "Look stylish without compromising on functionality with this guide to lightweight college jewellery!" },
-        { id: 3, img: BlogThree, name: "Bridesmaids Jewellery", author: "Saran", comments: 5, description: "On her wedding day, the bride shines bright like a radiant diamond. She is the centre of attention with all eyes on her. With her bridesmaids around her constantly, they become hard to miss on her big day" },
-    ]
+    useEffect(() => {
+        fetchBlogs();
+        fetchReviews();
+        fetchBanner();
+    }, []);
+
+    const fetchBlogs = () => {
+        setLoadSpinner(true);
+        API.getBlogsData().then(({ response }) => {
+            console.log(response, "respose of blogs data")
+            if (response.success) {
+                setBlogsData(response.data);
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    const fetchReviews = () => {
+        setLoadSpinner(true);
+        API.getReviewsData().then(({ response }) => {
+            console.log(response, "respose of fetchReviews data")
+            if (response.success) {
+                setReviewsData(response.data);
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    const fetchBanner = () => {
+        setLoadSpinner(true);
+        const category_name = 'home'
+        API.getBannerData(category_name).then(({ response }) => {
+            console.log(response, "respose of getBannerData data")
+            if (response.success) {
+                setBannerData(response.data[0]);
+            }
+            setLoadSpinner(false);
+        })
+    }
 
     const homeFeature = [
         { id: 1, img: PersonIcon, name: "Fast shipping", icon: <LocalShippingOutlinedIcon /> },
@@ -63,10 +98,6 @@ const Home = () => {
             top: 0,
             behavior: "smooth",
         });
-    };
-
-    const ratingChanged = (newRating) => {
-        // console.log(newRating);
     };
 
     //Home-Tab
@@ -126,10 +157,10 @@ const Home = () => {
 
     return (
         <div>
+            {loadSpinner ? <Spinner /> : bannerData?.carouselImages?.length > 0 ? <Box>
+                <Banner bannerData={bannerData} bannerImages={bannerData.carouselImages} />
+            </Box> : null}
 
-            <Box>
-                <CarouselBanner />
-            </Box>
 
             <animated.div className="home_tabs" style={springPropsOne} ref={refTab}>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -173,18 +204,13 @@ const Home = () => {
             </Box>
 
 
-            <div className="middle-content-wrapper">
-                <animated.div
-                    style={springPropsThree}
-                    ref={refComment}
-                    className="middle-content-wrapper-inner">
+            {loadSpinner ? <Spinner /> :
+                reviewsData.length > 0 ?
+                    <div className="middle-content-wrapper">
+                        <Usage reviewsData={reviewsData} />
+                    </div> : null}
 
-
-                    <PeopleReviews ratingChanged={ratingChanged} />
-                </animated.div>
-            </div>
-
-            <Box>
+            {loadSpinner ? <Spinner /> : <Box>
                 <animated.div
                     className="home-blogs_box"
                     ref={refBlog}
@@ -194,9 +220,9 @@ const Home = () => {
                     <span className='blog_content-text'>World Wide Web consisting of discrete</span>
                 </animated.div>
 
-                <animated.div className="home_card-box" ref={refBlog} style={springPropsFour}>
+                {blogsData.length > 0 ? <animated.div className="home_card-box" ref={refBlog} style={springPropsFour}>
                     <Grid container spacing={2}>
-                        {newProducts.map((items) => (
+                        {blogsData?.slice(0, blogsData.length - 1).map((items) => (
                             <Grid item xs={12} md={5.6} lg={4}>
                                 <Card className="card">
                                     <CardActionArea className='blog_cardAction'>
@@ -204,7 +230,7 @@ const Home = () => {
                                             component="img"
                                             className='card-img'
                                             height="260"
-                                            image={items.img}
+                                            image={items.image}
                                             alt={items.name}
                                         />
                                         <CardContent className="card_content" sx={{ minHeight: "225px", maxHeight: "255px" }}>
@@ -233,8 +259,12 @@ const Home = () => {
                             </Grid>
                         ))}
                     </Grid>
-                </animated.div>
-            </Box>
+                </animated.div> : <Box sx={{ height: "30vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <span>No Blogs Data Found <LocalMallTwoToneIcon sx={{ color: "#9F73AB" }} /></span>
+                </Box>}
+            </Box>}
+
+
 
             <Box>
                 <SliderCorousel />

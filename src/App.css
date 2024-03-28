@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Neuton:wght@400;700&display=swap');
 
@@ -12,7 +11,6 @@
   padding: 0;
   box-sizing: border-box;
   transition: 0.25s;
-  /* font-family: 'Ysabeau SC', sans-serif; */
   font-family: 'Neuton', serif;
 }
 
@@ -79,5 +77,13 @@
 
 ::selection {
   color: #fff;
+  background-color: #7DB9B6;
+}
+
+.wishlist_table .wishlist_header_text .css-1jbbcbn-MuiDataGrid-columnHeaderTitle {
+  font-weight: 700;
+}
+
+.profile_label .css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root:hover {
   background-color: #7DB9B6;
 }

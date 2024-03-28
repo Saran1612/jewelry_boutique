@@ -23,7 +23,6 @@ import With from '../../assests/header/done.jpg';
 import Shot from '../../assests/header/tada.jpg';
 import Ready from '../../assests/header/ready.jpg';
 import ROne from '../../assests/shop/prod_two.jpg';
-import Swiper from 'react-id-swiper';
 import Peight from '../../assests/shop/prod_eight.jpg';
 import Psix from '../../assests/shop/prod_six.jpg';
 import Pfive from '../../assests/shop/prod_five.jpg';
@@ -225,6 +224,8 @@ export const ContactCarousel = () => {
 export const HomeNewProductCarousel = () => {
 
     const [productData, setProductData] = useState([]);
+    const user_id = Cookies.get("userId");
+
 
     const responsive = {
         superLargeDesktop: {
@@ -262,7 +263,7 @@ export const HomeNewProductCarousel = () => {
                 toast.success(response.response.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -273,7 +274,37 @@ export const HomeNewProductCarousel = () => {
                 toast.warn(response.response.error, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+            }
+        });
+    }
+    const handleWishlistClick = (product_id) => {
+        console.log(product_id, "product_id");
+        API.getAddWishlistProductData(
+            product_id,
+            user_id
+        ).then((response) => {
+            console.log(response, "respons of adding to wishlist data")
+            if (response.statusCode === 200) {
+                toast.success(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+
+            } else {
+                console.log(response.response.error, "failed");
+                toast.warn(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -366,7 +397,7 @@ export const HomeNewProductCarousel = () => {
                                             <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
                                         </IconButton>
 
-                                        <IconButton aria-label="favourite">
+                                        <IconButton aria-label="wishlist" onClick={() => handleWishlistClick(items.id)}>
                                             <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
                                         </IconButton>
                                     </div>
@@ -636,6 +667,7 @@ export const HomeBestSaleCarousel = () => {
     );
 };
 
+//using now
 export const ProductCarousel = ({ productData }) => {
     const user_id = Cookies.get("userId");
 
@@ -650,7 +682,7 @@ export const ProductCarousel = ({ productData }) => {
                 toast.success(response.response.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -661,7 +693,7 @@ export const ProductCarousel = ({ productData }) => {
                 toast.warn(response.response.error, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -681,7 +713,7 @@ export const ProductCarousel = ({ productData }) => {
                 toast.success(response.response.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -692,7 +724,7 @@ export const ProductCarousel = ({ productData }) => {
                 toast.warn(response.response.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -704,7 +736,7 @@ export const ProductCarousel = ({ productData }) => {
     return (
         <>
             <Grid container spacing={2}>
-                {productData.map((items) => (
+                {productData?.map((items) => (
                     <Grid item xs={3}>
                         <div className="card-div-home-new-product-featured" key={items.id}>
                             <Card className="card">
@@ -864,58 +896,58 @@ export const ShopCarousel = () => {
     )
 }
 
-export const PeopleReviews = (props) => {
-    const { ratingChanged } = props;
-    const params = {
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-            dynamicBullets: true
-        }
-    }
-    return (
-        <Swiper {...params}>
-            {/* First Slide */}
-            <div>
-                <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
-                <ReactStars
-                    classNames="middle-content-stars"
-                    count={4}
-                    onChange={ratingChanged}
-                    size={20}
-                    value={3.5}
-                    isHalf={true}
-                />
-                <p className="middle-text">
-                    <span className="content-quotes">
-                        <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
-                        ullamcorper dui turpis.Nulla pellentesque mi non laoreet
-                        eleifend. Integer porttitor mollisar lorem, at molestie arcu
-                        pulvinar ut  <FormatQuoteIcon />
-                    </span>
-                </p>
-            </div>
+// export const PeopleReviews = (props) => {
+//     const { ratingChanged } = props;
+//     const params = {
+//         pagination: {
+//             el: '.swiper-pagination',
+//             clickable: true,
+//             dynamicBullets: true
+//         }
+//     }
+//     return (
+//         <Swiper {...params}>
+//             {/* First Slide */}
+//             <div>
+//                 <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
+//                 <ReactStars
+//                     classNames="middle-content-stars"
+//                     count={4}
+//                     onChange={ratingChanged}
+//                     size={20}
+//                     value={3.5}
+//                     isHalf={true}
+//                 />
+//                 <p className="middle-text">
+//                     <span className="content-quotes">
+//                         <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+//                         ullamcorper dui turpis.Nulla pellentesque mi non laoreet
+//                         eleifend. Integer porttitor mollisar lorem, at molestie arcu
+//                         pulvinar ut  <FormatQuoteIcon />
+//                     </span>
+//                 </p>
+//             </div>
 
-            {/* Second Slide */}
-            <div>
-                <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
-                <ReactStars
-                    classNames="middle-content-stars"
-                    count={4}
-                    onChange={ratingChanged}
-                    size={20}
-                    value={3.5}
-                    isHalf={true}
-                />
-                <p className="middle-text">
-                    <span className="content-quotes">
-                        <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
-                        ullamcorper dui turpis.Nulla pellentesque mi non laoreet
-                        eleifend. Integer porttitor mollisar lorem, at molestie arcu
-                        pulvinar ut  <FormatQuoteIcon />
-                    </span>
-                </p>
-            </div>
-        </Swiper>
-    )
-}
+//             {/* Second Slide */}
+//             <div>
+//                 <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
+//                 <ReactStars
+//                     classNames="middle-content-stars"
+//                     count={4}
+//                     onChange={ratingChanged}
+//                     size={20}
+//                     value={3.5}
+//                     isHalf={true}
+//                 />
+//                 <p className="middle-text">
+//                     <span className="content-quotes">
+//                         <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+//                         ullamcorper dui turpis.Nulla pellentesque mi non laoreet
+//                         eleifend. Integer porttitor mollisar lorem, at molestie arcu
+//                         pulvinar ut  <FormatQuoteIcon />
+//                     </span>
+//                 </p>
+//             </div>
+//         </Swiper>
+//     )
+// }

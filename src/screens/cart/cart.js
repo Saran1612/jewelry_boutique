@@ -10,7 +10,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import './cart.css'
 import { API } from '../../Networking/API';
-import { ToastContainer, toast, Flip } from 'react-toastify';
+import { toast } from 'react-toastify';
+import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { useTheme } from '@mui/material/styles';
@@ -66,7 +67,7 @@ const Cart = ({ anchor, toggleDrawer }) => {
                 toast.success(response.result.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -78,7 +79,7 @@ const Cart = ({ anchor, toggleDrawer }) => {
                 toast.error(response.result.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                     progress: undefined,
                     autoClose: 2000
@@ -89,7 +90,12 @@ const Cart = ({ anchor, toggleDrawer }) => {
 
     return (
         <Box sx={{ padding: 0 }} className="cart_wrapper">
-            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", background: "#9F73AB", padding: "30px 20px", }}>
+            <Box sx={{ display: 'flex', justifyContent: "end", alignItems: "center", background: "#9F73AB" }}>
+                <IconButton aria-label="previous" onClick={toggleDrawer('right', false)}>
+                    <CloseTwoToneIcon sx={{ color: "#fff" }} />
+                </IconButton>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", background: "#9F73AB", padding: "0px 20px 30px 20px", }}>
                 <Typography sx={{ textAlign: "center" }} className='your_cart-text'>Cart Items</Typography>
                 <ShoppingBagOutlinedIcon sx={{ color: "#fff" }} />
             </Box>

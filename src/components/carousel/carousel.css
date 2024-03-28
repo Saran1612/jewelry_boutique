@@ -3,14 +3,7 @@
 }
 
 .carousel-caption {
-    position: absolute !important;
-    bottom: 11.5rem !important;
-    padding-top: 1.25rem !important;
-    padding-bottom: 1.25rem !important;
-    color: #fff !important;
-    text-align: center !important;
-    left: 3% !important;
-    right: 0 !important;
+    bottom: 10.25rem;
 }
 
 .carousel-caption-two {
@@ -84,8 +77,7 @@
     font-weight: 800;
     /* font-family: 'Great Vibes', cursive; */
     font-family: 'Dancing Script', cursive;
-    /* color: #7DB9B6;  */
-    color: #9F73AB;
+    color: #fff;
     /* animation: fadeInUp 0.9s ease-in-out 0.3s 1 both; */
 }
 
@@ -102,10 +94,8 @@
     font-size: 1.6rem;
     font-weight: 800;
     text-align: start;
-    /* font-family: 'Ysabeau SC', sans-serif !important; */
     font-family: 'Neuton', serif;
-    /* color: #7DB9B6;  */
-    color: #9F73AB;
+    color: #fff;
     width: 45%;
 }
 
@@ -263,13 +253,13 @@
 
 
 @media (min-width: 320px) and (max-width: 767px) {
-    .carousel-caption {
+    /* .carousel-caption {
         bottom: 5rem !important;
         display: flex !important;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
-    }
+        flex-direction: column; */
+    /* } */
 
     .carousel-caption-two {
         bottom: 0rem !important;

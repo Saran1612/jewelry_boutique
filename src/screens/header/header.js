@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import CallIcon from '@mui/icons-material/Call';
@@ -21,32 +21,89 @@ import InfoIcon from '@mui/icons-material/Info';
 import Logout from '@mui/icons-material/Logout';
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Avatar from '@mui/material/Avatar';
-import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import Person2TwoToneIcon from '@mui/icons-material/Person2TwoTone';
 import Cookies from 'js-cookie';
 import Cart from '../cart/cart';
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
+import { styled } from '@mui/material/styles';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import SearchIcon from '@mui/icons-material/Search';
+import HouseTwoToneIcon from '@mui/icons-material/HouseTwoTone';
+import ShoppingBagTwoToneIcon from '@mui/icons-material/ShoppingBagTwoTone';
+import InfoTwoToneIcon from '@mui/icons-material/InfoTwoTone';
+import PhoneTwoToneIcon from '@mui/icons-material/PhoneTwoTone';
+import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
+import InputBase from '@mui/material/InputBase';
+import debouce from "lodash.debounce";
+import { API } from '../../Networking/API';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearch } from '../../redux/slice';
+import { toast } from 'react-toastify';
 
 const drawerWidth = 240;
 
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: "none",
+    color: "#624F82",
+    cursor: "pointer",
+    '&:hover': {
+        backgroundColor: "none",
+        color: "#624F82",
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    width: '100%',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        [theme.breakpoints.up('sm')]: {
+            width: '0ch',
+            '&:focus': {
+                width: '20ch',
+            },
+        },
+    },
+}));
+
 const navItems = [
-    { id: 1, label: 'Home', route: "/user/", icon: <HomeIcon className='header_icon' /> },
+    { id: 1, label: 'Home', route: "/user/home", icon: <HomeIcon className='header_icon' /> },
     { id: 2, label: 'Shop', route: "/user/shop", icon: <ShoppingBagIcon className='header_icon' /> },
     { id: 3, label: 'About', route: "/user/about", icon: <InfoIcon className='header_icon' /> },
     { id: 4, label: 'Contact', route: "/user/contact", icon: <CallIcon className='header_icon' /> }
 ];
 
 const navItemsDataOne = [
-    { id: 1, label: 'Home', route: "/user/", icon: <HomeIcon className='header_icon' /> },
-    { id: 2, label: 'Shop', route: "/user/shop", icon: <ShoppingBagIcon className='header_icon' /> },
+    { id: 1, label: 'Home', route: "/user/home", icon: <HouseTwoToneIcon className='header_icon' /> },
+    { id: 2, label: 'Shop', route: "/user/shop", icon: <ShoppingBagTwoToneIcon className='header_icon' /> },
 ];
 
 const navItemsDataTwo = [
-    { id: 1, label: 'About', route: "/user/about", icon: <InfoIcon className='header_icon' /> },
-    { id: 2, label: 'Contact', route: "/user/contact", icon: <CallIcon className='header_icon' /> }
+    { id: 1, label: 'About', route: "/user/about", icon: <InfoTwoToneIcon className='header_icon' /> },
+    { id: 2, label: 'Contact', route: "/user/contact", icon: <PhoneTwoToneIcon className='header_icon' /> }
 ];
 
 
@@ -79,13 +136,30 @@ HideOnScroll.propTypes = {
 function DrawerAppBar(props) {
     const { window } = props;
     const navigate = useNavigate();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [username, setUsername] = React.useState("");
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [username, setUsername] = useState("");
+    const [searchValue, setSearchValue] = useState("");
 
-    const [state, setState] = React.useState({
+
+    const handleSearchChange = (event) => {
+        setSearchValue(event.target.value);
+        fetchSearch(event.target.value);
+    };
+
+    useEffect(() => {
+        return () => {
+            debouncedResults.cancel();
+        };
+    });
+
+    const debouncedResults = useMemo(() => {
+        return debouce(handleSearchChange, 2000);
+    }, []);
+
+    const [state, setState] = useState({
         right: false,
     });
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
     const handleDrawerToggle = () => {
@@ -103,10 +177,32 @@ function DrawerAppBar(props) {
         handleMenuClose();
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         const name = Cookies.get("username");
         setUsername(name);
     }, [])
+
+    const fetchSearch = (keyword) => {
+        API.getSearchedProduct(keyword).then(({ response }) => {
+            console.log(response, "responseofsearchkeyword")
+            if (response.success) {
+                // dispatch(setSearch({ keyword: keyword, data: response.data }))
+
+                navigate('/user/shop', { state: { keyword: keyword, data: response.data } })
+            }
+            // else {
+            //     toast.error(response.message, {
+            //         position: toast.POSITION.TOP_RIGHT,
+            //         theme: "colored",
+            //         hideProgressBar: true,
+            //         draggable: false,
+            //     });
+            // }
+            setSearchValue("")
+        }).finally(() => {
+            setSearchValue("");
+        });
+    }
 
 
     //Header-Tab
@@ -201,8 +297,8 @@ function DrawerAppBar(props) {
         <>
             <Box className="main_header">
                 <HideOnScroll {...props}>
-                    <AppBar component="nav" sx={{ background: "#fff", boxShadow: "none", display: "flex", flexDirection: "row", padding: "6px", position: "static" }}>
-                        <Toolbar className='header_toolbar' sx={{ width: "95%" }}>
+                    <AppBar component="nav" position="fixed" sx={{ background: "#fff", boxShadow: "none", display: "flex", flexDirection: "row", padding: "6px", }}>
+                        <Toolbar className='header_toolbar tw-w-full tw-flex tw-justify-between tw-p-0'>
                             <IconButton
                                 color="#4D455D"
                                 aria-label="open drawer"
@@ -213,21 +309,8 @@ function DrawerAppBar(props) {
                                 <MenuIcon />
                             </IconButton>
 
-                            <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                                {navItemsDataOne.map((item) => (
-                                    <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                                        color: isActive ? '#74959A' : ''
-                                    })}>
-                                        <animated.div ref={refLink} style={springPropsLink}>
-                                            {item.icon}
-                                            {item.label}
-                                        </animated.div>
-                                    </NavLink>
-                                ))}
-                            </Box>
-
-                            <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: "center", alignItems: "center", width: { xs: '100%', sm: 'auto' }, marginRight: { xs: "8%", sm: "0%" }, margin: { sm: "0% 2%", md: "0% 2%", lg: "0% 4%" } }} className="logo_header">
-                                <Link to="/user/" style={{ display: "flex", textDecoration: "none" }}>
+                            <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: "center", alignItems: "center", width: { xs: '100%', sm: 'auto' }, marginRight: { xs: "8%", sm: "0%" }, margin: { sm: "0% 2%", md: "0% 2%", lg: "0% 2%" } }} className="logo_header">
+                                <Link to="/user/home" style={{ display: "flex", textDecoration: "none" }}>
                                     <animated.div className='header-logo-wrapper' ref={refTab} style={springPropsOne}>
                                         <img src={Logo1} alt='logo' className='header_logo' />
                                         <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
@@ -238,63 +321,110 @@ function DrawerAppBar(props) {
                                 </Link>
                             </Box>
 
-                            <Box sx={{ display: { xs: 'none', sm: 'flex' } }} className="navlinks">
-                                {navItemsDataTwo.map((item) => (
-                                    // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
-                                    <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                                        color: isActive ? '#74959A' : '#624F82'
-                                    })}>
-                                        <animated.div ref={refLink} style={springPropsLink}>
-                                            {item.icon}
-                                            {item.label}
-                                        </animated.div>
-                                    </NavLink>
+                            <Box className="tw-flex">
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+                                    {navItemsDataOne.map((item) => (
+                                        <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                                            color: isActive ? '#74959A' : ''
+                                        })}>
+                                            <animated.div ref={refLink} style={springPropsLink}>
+                                                {item.icon}
+                                                {item.label}
+                                            </animated.div>
+                                        </NavLink>
+                                    ))}
+                                </Box>
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' } }} className="navlinks">
+                                    {navItemsDataTwo.map((item) => (
+                                        // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                                        <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                                            color: isActive ? '#74959A' : '#624F82'
+                                        })}>
+                                            <animated.div ref={refLink} style={springPropsLink}>
+                                                {item.icon}
+                                                {item.label}
+                                            </animated.div>
+                                        </NavLink>
 
-                                ))}
-                            </Box>
+                                    ))}
+                                </Box>
 
-
-                        </Toolbar>
-
-                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: "end" }}>
-                            <Tooltip title={username} placement="bottom">
-                                <Menu
-                                    menuButton={<MenuButton style={{ border: "none", background: "none" }}
+                                <Box className="tw-flex tw-justify-center tw-items-center tw-pr-[16px]" sx={{ display: { xs: "none", md: "flex" } }}>
+                                    {/* <IconButton
+                                        title="search"
+                                        color="#4D455D"
+                                        edge="start"
                                     >
+                                        <SearchTwoToneIcon fontSize="small" sx={{ color: "#624F82", fontSize: "1.5rem" }} />
+                                    </IconButton> */}
+                                    <animated.div ref={refLink} style={springPropsLink}>
+                                        <Search className='tw-cursor-pointer' sx={{ cursor: "pointer" }}>
+                                            <SearchIconWrapper>
+                                                <SearchIcon />
+                                            </SearchIconWrapper>
+                                            <StyledInputBase
+                                                placeholder="Search product here…"
+                                                inputProps={{ 'aria-label': 'search' }}
+                                                // value={searchValue}
+                                                // onChange={handleSearchChange}
+                                                onChange={debouncedResults}
+                                            />
+                                        </Search>
+                                    </animated.div>
+                                </Box>
+
+                                <Box className="tw-flex tw-justify-center tw-items-center tw-px-[16px]">
+                                    <animated.div ref={refLink} style={springPropsLink}>
                                         <IconButton
-                                            // onClick={handleMenuClick}
-                                            size="small"
-                                            sx={{ fontSize: "1rem" }}
-                                            aria-controls={open ? 'account-menu' : undefined}
-                                            aria-haspopup="true"
-                                            aria-expanded={open ? 'true' : undefined}
+                                            title="cart"
+                                            color="#4D455D"
+                                            aria-label="open drawer"
+                                            edge="start"
+                                            onClick={toggleDrawer('right', true)}
                                         >
-                                            <Avatar className='avatar_name' sx={{ background: "#624F82", width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
+                                            <ShoppingCartTwoToneIcon fontSize="small" sx={{ color: "#624F82", fontSize: "1.4rem" }} />
                                         </IconButton>
-                                    </MenuButton>} transition>
+                                    </animated.div>
+                                </Box>
 
-                                    <MenuItem onClick={() => { navigate('/user/profile'); setAnchorEl(null) }}>
-                                        <Person2OutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
-                                        Profile
-                                    </MenuItem>
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: "end" }}>
+                                    {/* <animated.div ref={refLink} style={springPropsLink}> */}
+                                    <Tooltip title={username} placement="bottom">
+                                        <Menu
+                                            menuButton={<MenuButton style={{ border: "none", background: "none" }}
+                                            >
+                                                <IconButton
+                                                    // onClick={handleMenuClick}
+                                                    size="small"
+                                                    sx={{ fontSize: "1rem" }}
+                                                    aria-controls={open ? 'account-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                >
+                                                    <Avatar className='avatar_name' sx={{ background: "#624F82", width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
+                                                </IconButton>
+                                            </MenuButton>} transition>
 
-                                    <MenuItem onClick={toggleDrawer('right', true)}>
-                                        <ShoppingCartOutlinedIcon fontSize="small" sx={{ color: "#624F82" }} />
-                                        Cart
-                                    </MenuItem>
+                                            <MenuItem onClick={() => { navigate('/user/profile'); setAnchorEl(null) }}>
+                                                <Person2TwoToneIcon fontSize="small" sx={{ color: "#624F82", marginRight: "10px" }} />
+                                                Profile
+                                            </MenuItem>
 
-                                    <MenuItem onClick={() => navigate('/user/wishlist')}>
-                                        <FavoriteBorderIcon fontSize="small" sx={{ color: "#624F82" }} />
-                                        Wishlist
-                                    </MenuItem>
+                                            <MenuItem onClick={() => navigate('/user/wishlist')}>
+                                                <FavoriteTwoToneIcon fontSize="small" sx={{ color: "#624F82", marginRight: "10px" }} />
+                                                Wishlist
+                                            </MenuItem>
 
-                                    <MenuItem onClick={handleLogoutClick}>
-                                        <Logout fontSize="small" sx={{ color: "#624F82" }} />
-                                        Log Out
-                                    </MenuItem>
-                                </Menu>
-                            </Tooltip>
-                        </Box>
+                                            <MenuItem onClick={handleLogoutClick}>
+                                                <Logout fontSize="small" sx={{ color: "#624F82", marginRight: "10px" }} />
+                                                Log Out
+                                            </MenuItem>
+                                        </Menu>
+                                    </Tooltip>
+                                    {/* </animated.div> */}
+                                </Box>
+                            </Box>
+                        </Toolbar>
                     </AppBar>
                 </HideOnScroll>
                 <Box component="nav" sx={{ justifyContent: "center" }}>
@@ -306,6 +436,7 @@ function DrawerAppBar(props) {
                         ModalProps={{
                             keepMounted: true, // Better open performance on mobile.
                         }}
+                        transitionDuration={900}
                         sx={{
                             display: { xs: 'block', sm: 'none' },
                             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
@@ -314,15 +445,14 @@ function DrawerAppBar(props) {
                         {drawer}
                     </Drawer>
                 </Box>
-                {/* <Box component="main" sx={{ p: 3 }}>
-                    <Toolbar />
-                </Box> */}
-            </Box>
+            </Box >
 
             <Drawer
                 anchor="right"
                 open={state['right']}
                 onClose={toggleDrawer('right', false)}
+                transitionDuration={900}
+                sx={{ width: "100%" }}
             >
                 <Cart anchor="right" toggleDrawer={toggleDrawer} />
             </Drawer>

@@ -65,16 +65,19 @@ const callGetApi = async (requestMethod, url) => {
 
 const callPostApi = async (requestMethod, url, params, header, formData) => {
   let jwtToken = await getJWTToken();
-  console.log(params, "parmasdsadsds")
+  console.log(params, "formDataformData")
+
+
   let requestOptions;
-  if (formData) {
+  if (formData === "formData") {
     requestOptions = {
       method: requestMethod,
       body: params,
       mode: "cors",
+      redirect: "follow",
+      maxBodyLength: Infinity,
       headers: {
         "Authorization": `Bearer ${jwtToken}`,
-        "Content-Type": "multipart/form-data;boundary="
       },
     };
   } else {

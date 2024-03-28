@@ -91,6 +91,7 @@ function Register(props) {
     });
 
     const registerApiCall = (values, resetForm) => {
+        console.log("insi")
         const { username, password, email, phonenumber } = values;
         // const formattedDate = formik.values.date ? dayjs(formik.values.date).format('DD-MM-YYYY') : '';
         const age = calculateAge(values.date);
@@ -278,7 +279,7 @@ function Register(props) {
                                         />
                                     </Box>
 
-                                    {/* <Box sx={{ display: "flex" }}>
+                                    <Box sx={{ display: "flex" }}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DatePicker
                                                 className="date-picker"
@@ -292,7 +293,7 @@ function Register(props) {
                                                 name="date"
                                             />
                                         </LocalizationProvider>
-                                    </Box> */}
+                                    </Box>
 
                                     <Box sx={{ marginTop: "20px" }}>
                                         <ReusableButton
@@ -305,7 +306,6 @@ function Register(props) {
                                             name="pdf"
                                             style={{ width: "100%", color: "#fff", background: "#624F82", padding: "8px 0px" }}
                                             disabled={false}
-                                            className="downloadbtn pdf"
                                             type="submit"
                                         />
                                     </Box>

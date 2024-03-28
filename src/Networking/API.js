@@ -20,7 +20,8 @@ const Register = (username,
   email,
   password,
   phonenumber,
-  formattedDate) => {
+  formattedDate
+) => {
   const header = true;
   const param = JSON.stringify({
     name: username,
@@ -87,6 +88,48 @@ const getResetPassword = (password, token) => {
   );
 }
 
+const postFeedback = (name, email, phone, subject, message) => {
+  const header = true;
+  const param = JSON.stringify({
+    name: name,
+    phone: `${phone}`,
+    email: email,
+    subject: subject,
+    description: message
+  });
+  return BaseApiService.post(
+    BaseURL + APIRequests.toGetFeedbacks,
+    param,
+    header
+  );
+}
+
+const getFilteredData = (id, price) => {
+  const header = true;
+  const param = JSON.stringify({
+    ids: id,
+    price: `${price}`
+  });
+  return BaseApiService.post(
+    BaseURL + APIRequests.toGetFilteredData,
+    param,
+    header
+  );
+}
+
+
+const getSearchedProduct = (keyword) => {
+  const header = true;
+  const param = JSON.stringify({
+    keywords: keyword,
+  });
+  return BaseApiService.post(
+    BaseURL + APIRequests.toGetSearchedData,
+    param,
+    header
+  );
+}
+
 const getCartData = (userid) => {
   const header = true;
   const id = userid;
@@ -97,6 +140,27 @@ const getWishlistData = (userid) => {
   const header = true;
   const id = userid;
   return BaseApiService.get(BaseURL + APIRequests.toGetWishlistData + id, header);
+}
+
+const getBlogsData = () => {
+  const header = true;
+  return BaseApiService.get(BaseURL + APIRequests.toGetBlogs, header);
+}
+
+const getReviewsData = () => {
+  const header = true;
+  return BaseApiService.get(BaseURL + APIRequests.toGetReview, header);
+}
+
+const getBannerData = (category) => {
+  const header = true;
+  const name = `?category=${category}`
+  return BaseApiService.get(BaseURL + APIRequests.toGetBanner + name, header);
+}
+
+const getOurPeoples = () => {
+  const header = true;
+  return BaseApiService.get(BaseURL + APIRequests.toGetOurPeople, header);
 }
 
 const deleteCartData = (orderid) => {
@@ -151,8 +215,10 @@ const uploadProfilePic = (image) => {
   let fd = new FormData();
   fd.append("image", image);
 
-  // Logging to verify FormData construction
   console.log(fd.get("image"), "fomras"); // Verify if the image is appended correctly
+  for (var pair of fd.entries()) {
+    console.log(pair, "paoirpairssss");
+  }
   return BaseApiService.post(
     BaseURL + APIRequests.toUploadProfilePic,
     fd,
@@ -176,5 +242,12 @@ export const API = {
   updateUserInfo,
   uploadProfilePic,
   getAddWishlistProductData,
-  deleteWishlistProducts
+  deleteWishlistProducts,
+  getBlogsData,
+  getReviewsData,
+  getBannerData,
+  getOurPeoples,
+  postFeedback,
+  getFilteredData,
+  getSearchedProduct
 };

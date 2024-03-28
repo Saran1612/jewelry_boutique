@@ -22,16 +22,62 @@ import ReactStars from "react-rating-stars-component";
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { animated, useSpring } from '@react-spring/web'
 import { useInView } from 'react-intersection-observer';
+import { Banner, Usage } from '../../components/swiper/swiper';
+import Spinner from '../../utils/spinner';
+import { API } from '../../Networking/API';
+import { Link } from 'react-router-dom';
 
 const About = () => {
+    const [loadSpinner, setLoadSpinner] = useState(false);
+    const [bannerData, setBannerData] = useState([]);
+    const [peoplesData, setPeoplesData] = useState([]);
+    const [reviewsData, setReviewsData] = useState([]);
+
+    const fetchBanner = () => {
+        setLoadSpinner(true);
+        const category_name = 'about'
+        API.getBannerData(category_name).then(({ response }) => {
+            console.log(response, "respose of getBannerData in shop data")
+            if (response.success) {
+                setBannerData(response.data[0]);
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    const fetchOurPeoples = () => {
+        setLoadSpinner(true);
+        API.getOurPeoples().then(({ response }) => {
+            console.log(response, "response of our peoples")
+            if (response.success) {
+                setPeoplesData(response.data)
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    const fetchReviews = () => {
+        setLoadSpinner(true);
+        API.getReviewsData().then(({ response }) => {
+            console.log(response, "respose of fetchReviews data")
+            if (response.success) {
+                setReviewsData(response.data);
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    useEffect(() => {
+        fetchBanner();
+        fetchOurPeoples();
+        fetchReviews();
+    }, [])
 
     const DataTransfer = [
         { id: 1, img: UserOne, name: "Johakim Low", role: "Founder & CEO", description: "Burna phasellus aliquam sempe arcu bal dictum integer quis mi necili dapibus pretium in quis!" },
         { id: 2, img: UserFour, name: "Jamie McGuirk", role: "Managing Director", description: "Burna phasellus aliquam sempe arcu bal dictum integer quis mi necili dapibus pretium in quis!" },
         { id: 3, img: UserTwo, name: "Micle Jackarim", role: "Sales Director", description: "Burna phasellus aliquam sempe arcu bal dictum integer quis mi necili dapibus pretium in quis!" },
         { id: 4, img: UserThree, name: "Henry Todd", role: "General Manager", description: "Burna phasellus aliquam sempe arcu bal dictum integer quis mi necili dapibus pretium in quis!" },
-        // { id: 5, name: "Mitchell Starc", role: "Founder & CEO", description: "Burna phasellus aliquam sempe arcu bal dictum integer quis mi necili dapibus pretium in quis!" },
-        // { id: 6, name: "", role: "Founder & CEO", description: "Burna phasellus aliquam sempe arcu bal dictum integer quis mi necili dapibus pretium in quis!" }
     ]
 
     const [showTopBtn, setShowTopBtn] = useState(false);
@@ -102,9 +148,9 @@ const About = () => {
     return (
         <div>
 
-            <Box>
-                <AboutUsCarousel />
-            </Box>
+            {loadSpinner ? <Spinner /> : bannerData?.carouselImages?.length > 0 ? <Box>
+                <Banner bannerData={bannerData} bannerImages={bannerData.carouselImages} />
+            </Box> : null}
 
             <Box className="why_us">
                 <Grid container spacing={2}>
@@ -137,15 +183,16 @@ const About = () => {
 
                 <div className='team_member-container'>
                     <Grid container spacing={2}>
-                        {DataTransfer.map((items) => (
+                        {console.log(peoplesData, "peoplesData")}
+                        {peoplesData?.map((items) => (
                             <Grid item xs={12} md={6} lg={3}>
                                 <Card sx={{}} className='team_member-card'>
                                     <CardActionArea>
                                         <CardMedia
                                             component="img"
                                             // height="140"
-                                            image={items.img}
-                                            alt={items.img}
+                                            image={items.image}
+                                            alt={items.name}
                                             className='user_img'
                                         />
                                         <CardContent>
@@ -162,18 +209,29 @@ const About = () => {
                                             </Box>
                                         </CardContent>
                                         <div className="card-icons">
-                                            <IconButton className="edit-icon">
-                                                <TwitterIcon sx={{ fontSize: "1.3rem !important" }} />
-                                            </IconButton>
-                                            <IconButton className="edit-icon">
-                                                <PinterestIcon sx={{ fontSize: "1.3rem !important" }} />
-                                            </IconButton>
-                                            <IconButton className="edit-icon">
-                                                <InstagramIcon sx={{ fontSize: "1.3rem !important" }} />
-                                            </IconButton>
-                                            <IconButton className="edit-icon">
-                                                <FacebookIcon sx={{ fontSize: "1.3rem !important" }} />
-                                            </IconButton>
+                                            <Link to={items.twitter}>
+                                                <IconButton className="edit-icon">
+                                                    <TwitterIcon sx={{ fontSize: "1.3rem !important" }} />
+                                                </IconButton>
+                                            </Link>
+
+                                            <Link to={items.twitter}>
+                                                <IconButton className="edit-icon">
+                                                    <PinterestIcon sx={{ fontSize: "1.3rem !important" }} />
+                                                </IconButton>
+                                            </Link>
+
+                                            <Link to={items.instagram}>
+                                                <IconButton className="edit-icon">
+                                                    <InstagramIcon sx={{ fontSize: "1.3rem !important" }} />
+                                                </IconButton>
+                                            </Link>
+
+                                            <Link to={items.facebook}>
+                                                <IconButton className="edit-icon">
+                                                    <FacebookIcon sx={{ fontSize: "1.3rem !important" }} />
+                                                </IconButton>
+                                            </Link>
                                         </div>
                                     </CardActionArea>
                                 </Card>
@@ -183,30 +241,11 @@ const About = () => {
                 </div>
             </animated.div>
 
-            <Box className="middle-content-wrapper">
-                <animated.div
-                    className="middle-content-wrapper-inner"
-                    style={springPropsThree} ref={refComment} >
-                    <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
-                    <ReactStars
-                        classNames="middle-content-stars"
-                        count={4}
-                        onChange={ratingChanged}
-                        size={20}
-                        value={3.5}
-                        isHalf={true}
-                    />
-                    <p className="middle-text">
-                        <span className="content-quotes">
-                            <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
-                            ullamcorper dui turpis.Nulla pellentesque mi non laoreet
-                            eleifend. Integer porttitor mollisar lorem, at molestie arcu
-                            pulvinar ut  <FormatQuoteIcon />
-
-                        </span>
-                    </p>
-                </animated.div>
-            </Box>
+            {loadSpinner ? <Spinner /> :
+                reviewsData.length > 0 ?
+                    <div className="middle-content-wrapper">
+                        <Usage reviewsData={reviewsData} />
+                    </div> : null}
 
             <Box>
                 <SliderCorousel />

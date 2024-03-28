@@ -128,14 +128,14 @@ function Index(props) {
                     Cookies.set('role', "Admin");
                 }
                 const timer = setTimeout(() => {
-                    navigate('/user');
+                    navigate('/user/home');
                 }, 2000);
                 return () => clearTimeout(timer);
             } else {
                 toast.error(response.message, {
                     position: toast.POSITION.TOP_LEFT,
                     theme: "light",
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     draggable: false,
                 });
             }
@@ -214,7 +214,7 @@ function Index(props) {
                                                         aria-label="toggle password visibility"
                                                         onClick={handleClickShowPassword}
                                                     >
-                                                        {showPassword ? <VisibilityOff sx={{ fontSize: "1.2rem", color: "#624F82" }} /> : <Visibility sx={{ fontSize: "1.2rem", color: "#624F82" }} />}
+                                                        {showPassword ? <Visibility sx={{ fontSize: "1.2rem", color: "#624F82" }} /> : <VisibilityOff sx={{ fontSize: "1.2rem", color: "#624F82" }} />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             }
@@ -228,9 +228,9 @@ function Index(props) {
                                         />
                                     </Box>
 
-                                    <Box sx={{ display: "flex", margin: "15px 0px" }}>
+                                    {/* <Box sx={{ display: "flex", margin: "15px 0px" }}>
                                         <FormControlLabel control={<Checkbox className="checkbox-login" checked={checked} onChange={handleCheckBox} />} label="Remember Me" className="formControl-login" />
-                                    </Box>
+                                    </Box> */}
 
                                     <Box>
                                         <ReusableButton

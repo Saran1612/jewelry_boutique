@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { loginReducers } from "./slice";
+import { loginReducers, searchReducers } from "./slice";
 
 const store = configureStore({
     reducer: {
-        login: loginReducers
+        login: loginReducers,
+        search: searchReducers
     }
 })
 
