@@ -12,9 +12,8 @@
 }
 
 .header_toolbar {
-    display: flex;
-    justify-content: center;
-    /* min-height: 0px; */
+    min-height: 0 !important;
+    padding: 0px;
 }
 
 .header_logo {
@@ -23,12 +22,11 @@
 }
 
 .header_menu-cart {
-    color: #624F82 !important;
+    color: #624F82;
     padding: 0px 25px !important;
     display: flex !important;
     align-items: center !important;
     font-weight: 600 !important;
-    font-family: 'Ysabeau SC', sans-serif !important;
     font-size: 0.875rem;
     line-height: 1.75;
     letter-spacing: 0.02857em;
@@ -36,18 +34,17 @@
     text-decoration: none;
 }
 
-.header_menu-cart:hover{
+.header_menu-cart:hover {
     color: #74959A !important;
     transition: 0s;
     outline: none;
     box-shadow: none;
     background-color: #fff !important;
-    /* border-bottom: 1.5px solid #74959A; */
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
-.header_menu-cart:hover .header_menu-cart svg{
+.header_menu-cart:hover .header_menu-cart svg {
     color: #74959A !important;
     transition: 0s;
     outline: none;
@@ -55,7 +52,7 @@
     background-color: #fff !important;
 }
 
-.header_menu-cart svg{
+.header_menu-cart svg {
     font-size: 16px !important;
 }
 
@@ -65,20 +62,28 @@
 
 .header__text {
     text-align: start;
-    font-family: 'Fasthand', cursive; 
+    font-family: 'Fasthand', cursive;
     line-height: 1;
     font-size: 2rem;
     color: #4D455D;
     margin: 0;
 }
 
-.header__subtext{
+.header__subtext {
     text-align: start;
     font-family: 'Fasthand', cursive;
     font-size: 0.8rem;
     color: #4D455D;
 }
 
-.header_icon{
+.header_icon {
     margin-right: 5px !important;
+}
+
+.header-logo-wrapper {
+    display: flex;
+}
+
+.avatar_name {
+    font-size: 1rem !important;
 }

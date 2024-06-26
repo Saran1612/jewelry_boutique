@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
-import Header from '../header/header'
-import { CarouselBanner, HomeBestSaleCarousel, HomeNewProductCarousel, HomeTopSaleCarousel, SliderCorousel } from '../../components/carousel/carousel';
+import { CarouselBanner, HomeNewProductCarousel, HomeTopSaleCarousel, PeopleReviews, SliderCorousel } from '../../components/carousel/carousel';
 import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid } from '@mui/material';
-import Footer from '../footer/footer';
 import Tab from '@mui/material/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
-import TabPanel from '@material-ui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import ReusableButton from '../../components/button/button';
-import BlogOne from '../../assests/blogs/lightweight.jpg'
-import BlogTwo from '../../assests/blogs/eid.jpg'
-import BlogThree from '../../assests/blogs/shine.jpg'
+import LocalMallTwoToneIcon from '@mui/icons-material/LocalMallTwoTone';
 import CommentIcon from '@mui/icons-material/Comment';
 import PersonIcon from '@mui/icons-material/Person';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -20,21 +16,62 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import DrawOutlinedIcon from '@mui/icons-material/DrawOutlined';
-import ReactStars from "react-rating-stars-component";
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
+import { API } from '../../Networking/API';
+import { Usage, Banner } from '../../components/swiper/swiper';
+import Spinner from '../../utils/spinner';
 
 const Home = () => {
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = useState('1');
+    const [blogsData, setBlogsData] = useState([]);
+    const [reviewsData, setReviewsData] = useState([]);
+    const [bannerData, setBannerData] = useState([]);
+    const [loadSpinner, setLoadSpinner] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const newProducts = [
-        { id: 1, img: BlogOne, name: "Lightweight College Jewellery", author: "Dinesh", comments: 6, description: "Eid-Al-Adha, also known as the Festival of Sacrifice, is a significant festival that Muslims celebrate worldwide. Prayers, feasts, acts of charity, and the exchange of gifts mark this sacred festival." },
-        { id: 2, img: BlogTwo, name: "Eid Al-Adha inspired jewellery", author: "Poovila", comments: 5, description: "Look stylish without compromising on functionality with this guide to lightweight college jewellery!" },
-        { id: 3, img: BlogThree, name: "Bridesmaids Jewellery", author: "Saran", comments: 5, description: "On her wedding day, the bride shines bright like a radiant diamond. She is the centre of attention with all eyes on her. With her bridesmaids around her constantly, they become hard to miss on her big day" },
-    ]
+    useEffect(() => {
+        fetchBlogs();
+        fetchReviews();
+        fetchBanner();
+    }, []);
+
+    const fetchBlogs = () => {
+        setLoadSpinner(true);
+        API.getBlogsData().then(({ response }) => {
+            console.log(response, "respose of blogs data")
+            if (response.success) {
+                setBlogsData(response.data);
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    const fetchReviews = () => {
+        setLoadSpinner(true);
+        API.getReviewsData().then(({ response }) => {
+            console.log(response, "respose of fetchReviews data")
+            if (response.success) {
+                setReviewsData(response.data);
+            }
+            setLoadSpinner(false);
+        })
+    }
+
+    const fetchBanner = () => {
+        setLoadSpinner(true);
+        const category_name = 'home'
+        API.getBannerData(category_name).then(({ response }) => {
+            console.log(response, "respose of getBannerData data")
+            if (response.success) {
+                setBannerData(response.data[0]);
+            }
+            setLoadSpinner(false);
+        })
+    }
 
     const homeFeature = [
         { id: 1, img: PersonIcon, name: "Fast shipping", icon: <LocalShippingOutlinedIcon /> },
@@ -63,24 +100,72 @@ const Home = () => {
         });
     };
 
-    const ratingChanged = (newRating) => {
-        // console.log(newRating);
-    };
+    //Home-Tab
+    const [refTab, inViewTab] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsOne = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewTab ? 1 : 0, transform: inViewTab ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+
+    //Home-feature
+    const [refFeatures, inViewFeatures] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.1, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsTwo = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,50px,0)' },
+        to: { opacity: inViewFeatures ? 1 : 0, transform: inViewFeatures ? 'translate3d(0,0,0)' : 'translate3d(0,50px,0)' },
+        config: { duration: 750 },
+    });
+
+
+    //Home-comment
+    const [refComment, inViewComment] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsThree = useSpring({
+        from: { opacity: 0, scale: 0.5 },
+        to: { opacity: inViewComment ? 1 : 0, scale: inViewComment ? 1 : 0.5 },
+        config: {
+            duration: 1000,
+        },
+
+    });
+
+
+    //Home-blogs
+    const [refBlog, inViewBlog] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsFour = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,200px,0)' },
+        to: { opacity: inViewBlog ? 1 : 0, transform: inViewBlog ? 'translate3d(0,0,0)' : 'translate3d(0,200px,0)' },
+        config: { duration: 750 },
+    });
 
     return (
         <div>
-            <Box>
-                <Header />
-            </Box>
+            {loadSpinner ? <Spinner /> : bannerData?.carouselImages?.length > 0 ? <Box>
+                <Banner bannerData={bannerData} bannerImages={bannerData.carouselImages} />
+            </Box> : null}
 
-            <Box>
-                <CarouselBanner />
-            </Box>
 
-            <Box className="home_tabs">
+            <animated.div className="home_tabs" style={springPropsOne} ref={refTab}>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value}>
-                        <Box sx={{}}>
+                        <Box className="home_tabs-box">
                             <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
                                 <Tab label="Trending Now" value="1" />
                                 <Tab label="Top Sale" value="2" />
@@ -97,21 +182,21 @@ const Home = () => {
                         </TabPanel>
 
                         <TabPanel value="3">
-                            <HomeBestSaleCarousel />
+                            <HomeNewProductCarousel />
                         </TabPanel>
                     </TabContext>
                 </Box>
-            </Box>
+            </animated.div>
 
             <Box sx={{ margin: "30px 0px 50px 0px", padding: "50px 20px", background: "#9e9e9e1c" }}>
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={1} lg={1}></Grid>
                     {homeFeature.map((items) => (
                         <Grid item xs={12} md={2.5} lg={2.5}>
-                            <Box className="home_feature">
+                            <animated.div style={springPropsTwo} ref={refFeatures} className="home_feature">
                                 <span className='home_feature-icon'>{items.icon}</span>
                                 <span className='home_feature-text'>{items.name}</span>
-                            </Box>
+                            </animated.div>
                         </Grid>
                     ))}
                     <Grid item xs={0} md={1} lg={1}></Grid>
@@ -119,60 +204,25 @@ const Home = () => {
             </Box>
 
 
-            <div className="middle-content-wrapper">
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                    whileInView={{
-                        opacity: [0, 1],
-                        scale: [3, 1],
-                        transition: { duration: 1 },
-                    }}
-                    viewport={{ once: true }}
+            {loadSpinner ? <Spinner /> :
+                reviewsData.length > 0 ?
+                    <div className="middle-content-wrapper">
+                        <Usage reviewsData={reviewsData} />
+                    </div> : null}
 
-                >
-                    <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
-                    <ReactStars
-                        classNames="middle-content-stars"
-                        count={4}
-                        onChange={ratingChanged}
-                        size={20}
-                        value={3.5}
-                        isHalf={true}
-                    />
-                    <p className="middle-text">
-                        <span className="content-quotes">
-                            <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
-                            ullamcorper dui turpis.Nulla pellentesque mi non laoreet
-                            eleifend. Integer porttitor mollisar lorem, at molestie arcu
-                            pulvinar ut  <FormatQuoteIcon />
-
-                        </span>
-                    </p>
-                </div>
-            </div>
-
-            <Box>
-                <div style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    marginTop: "25px"
-                }}>
+            {loadSpinner ? <Spinner /> : <Box>
+                <animated.div
+                    className="home-blogs_box"
+                    ref={refBlog}
+                    style={springPropsFour}>
                     <span className='blog_header'>LATEST BLOGS</span>
                     <span className='blog_content-text mt-3'>A blog is a discussion or informational website published on the</span>
                     <span className='blog_content-text'>World Wide Web consisting of discrete</span>
-                </div>
+                </animated.div>
 
-                <Box sx={{ margin: "40px" }}>
+                {blogsData.length > 0 ? <animated.div className="home_card-box" ref={refBlog} style={springPropsFour}>
                     <Grid container spacing={2}>
-                        {newProducts.map((items) => (
+                        {blogsData?.slice(0, blogsData.length - 1).map((items) => (
                             <Grid item xs={12} md={5.6} lg={4}>
                                 <Card className="card">
                                     <CardActionArea className='blog_cardAction'>
@@ -180,7 +230,7 @@ const Home = () => {
                                             component="img"
                                             className='card-img'
                                             height="260"
-                                            image={items.img}
+                                            image={items.image}
                                             alt={items.name}
                                         />
                                         <CardContent className="card_content" sx={{ minHeight: "225px", maxHeight: "255px" }}>
@@ -209,16 +259,17 @@ const Home = () => {
                             </Grid>
                         ))}
                     </Grid>
-                </Box>
-            </Box>
+                </animated.div> : <Box sx={{ height: "30vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <span>No Blogs Data Found <LocalMallTwoToneIcon sx={{ color: "#9F73AB" }} /></span>
+                </Box>}
+            </Box>}
+
+
 
             <Box>
                 <SliderCorousel />
             </Box>
 
-            <Box>
-                <Footer />
-            </Box>
 
             <Box className="top-to-btm">
 

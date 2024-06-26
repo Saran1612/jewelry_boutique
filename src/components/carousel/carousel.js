@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SlideOne from '../../assests/header/one.jpg';
 import SlideTwo from '../../assests/header/two.jpg';
 import SlideThree from '../../assests/header/three.jpg';
@@ -22,11 +22,7 @@ import Ziah from '../../assests/contact_carousel/ziah.svg';
 import With from '../../assests/header/done.jpg';
 import Shot from '../../assests/header/tada.jpg';
 import Ready from '../../assests/header/ready.jpg';
-import Bone from '../../assests/shop/bracelet_one.jpg';
 import ROne from '../../assests/shop/prod_two.jpg';
-import PTen from '../../assests/shop/prod_ten.jpg';
-import BThree from '../../assests/shop/bracelet_three.jpg';
-import PChain from '../../assests/shop/prod_chain.jpg'
 import Peight from '../../assests/shop/prod_eight.jpg';
 import Psix from '../../assests/shop/prod_six.jpg';
 import Pfive from '../../assests/shop/prod_five.jpg';
@@ -35,44 +31,9 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import './carousel.css';
 import "react-multi-carousel/lib/styles.css";
-import { Box, Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
-
-
-
-// -----featured--------
-import FOne from '../../assests/featured/ff.jpg';
-import FTwo from '../../assests/featured/gg.jpg';
-import FThree from '../../assests/featured/ggOne.jpg';
-import FFour from '../../assests/featured/hh.jpg';
-import FFive from '../../assests/featured/kick.jpg';
-import FSeven from '../../assests/featured/nj.jpg';
-import FEight from '../../assests/featured/prod_four.jpg';
-import FNine from '../../assests/featured/prod_nine.jpg';
-
-
-// new products
-import One from '../../assests/newProd/a.jpg';
-import Two from '../../assests/newProd/b.jpg';
-import Three from '../../assests/newProd/c.jpg';
-import Four from '../../assests/newProd/d.jpg';
-import Five from '../../assests/newProd/e.jpg';
-import Six from '../../assests/newProd/f.jpg';
-import Seven from '../../assests/newProd/g.jpg';
-import Eight from '../../assests/newProd/h.jpg';
-import Nine from '../../assests/newProd/l.jpg';
-import Ten from '../../assests/newProd/j.jpg';
-
-
-// trending products
-import FSix from '../../assests/featured/kkk.jpg';
-import POne from '../../assests/newProd/a.jpg';
-import PTwo from '../../assests/newProd/b.jpg';
-import PThree from '../../assests/newProd/c.jpg';
-import PFour from '../../assests/newProd/d.jpg';
-import PFive from '../../assests/newProd/e.jpg';
-import PSix from '../../assests/newProd/f.jpg';
-import PSeven from '../../assests/newProd/g.jpg';
-import PEight from '../../assests/newProd/h.jpg';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, IconButton } from '@mui/material';
+import ReactStars from "react-rating-stars-component";
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 
 //shopcarousel
@@ -80,10 +41,23 @@ import ShopOne from '../../assests/header/shopOne.jpg';
 import ShopTwo from '../../assests/header/shopTwo.jpg';
 import ShopThree from '../../assests/header/shopThree.jpg';
 import { Link } from 'react-router-dom';
-
+import { animated, useSpring, easings, config } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
+import { API } from '../../Networking/API';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export const CarouselBanner = () => {
+
+    const springProps = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: 1, transform: 'translateX(0px)' },
+        config: { duration: 1000, },
+    });
+
+
     return (
         <div>
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -96,25 +70,26 @@ export const CarouselBanner = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={SlideThree} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+
+                        <animated.div style={springProps} class="carousel-caption d-md-block">
                             <h1 className='banner_text-three'>Family Collections</h1>
                             <p className='banner__description-three'>Some representative placeholder content for the first slide.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={SlideTwo} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <animated.div style={springProps} class="carousel-caption-two d-md-flex">
                             <h1 className='banner_text'>Diamond Collection</h1>
                             <p className='banner__description-two mt-2'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid atque, odio nostrum inventore repellat.</p>
                             <ReusableButton buttonName="SHOP NOW" className="shop_now-button" startIcon={<ShoppingBagIcon />} href="/shop" />
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={SlideOne} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+                        <animated.div style={springProps} class="carousel-caption d-md-block">
                             <h1 className='banner_text'>Platinum Collections</h1>
                             <p className='banner__description'>Some representative placeholder content for the third slide.</p>
-                        </div>
+                        </animated.div>
                     </div>
                 </div>
             </div>
@@ -196,9 +171,23 @@ export const SliderCorousel = () => {
 };
 
 export const ContactCarousel = () => {
+
+    //About-carousel
+    const [refContact, inViewContact] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springContactCarousel = useSpring({
+        from: { opacity: 0, transform: 'translate3d(-200px,0,0)' },
+        to: { opacity: inViewContact ? 1 : 0, transform: inViewContact ? 'translate3d(0,0,0)' : 'translate3d(-200px,0,0)' },
+        config: { duration: 900 },
+    });
+
     return (
         <div>
-            <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div id="carouselExampleCaptions" class="carousel carousel-fade" data-bs-ride="carousel">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -207,10 +196,10 @@ export const ContactCarousel = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={JewelOne} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+                        <animated.div class="carousel-caption d-md-block" ref={refContact} style={springContactCarousel}>
                             <h1 className='contact-banner_text-three'>Contact Us</h1>
                             <p className='contact-banner__description-three'>Please do not hesitate to reach out to us for any queries or feedback. We are here to create effective solutions for any of your concerns.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={Closeup} class="d-block banner" alt="..." />
@@ -234,12 +223,9 @@ export const ContactCarousel = () => {
 
 export const HomeNewProductCarousel = () => {
 
-    const newProducts = [
-        { id: 1, img: Bone, name: "Brilliance Bead", price: "130", star: "4.5" },
-        { id: 2, img: PChain, name: "Bulova Jewelry", price: "150", star: "4" },
-        { id: 3, img: PTen, name: "Cultured Freshwater Pearl", price: "190", star: "4.7" },
-        { id: 4, img: BThree, name: "Customize Gemstone Ring", price: "70", star: "4.2" },
-    ]
+    const [productData, setProductData] = useState([]);
+    const user_id = Cookies.get("userId");
+
 
     const responsive = {
         superLargeDesktop: {
@@ -264,71 +250,171 @@ export const HomeNewProductCarousel = () => {
         },
     };
 
-    return (
+    const handleCartClick = (product_id) => {
+        console.log(product_id, "product_id");
+        const user_id = Cookies.get("userId");
 
-        <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={3000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            // transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {newProducts.map((items) => (
-                <div className="card-div-home-new-product" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
+        API.getAddCartProductData(
+            product_id,
+            user_id
+        ).then((response) => {
+            console.log(response, "respons of adding to cart data")
+            if (response.statusCode === 200) {
+                toast.success(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+
+            } else {
+                console.log(response.response.error, "failed");
+                toast.warn(response.response.error, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+            }
+        });
+    }
+    const handleWishlistClick = (product_id) => {
+        console.log(product_id, "product_id");
+        API.getAddWishlistProductData(
+            product_id,
+            user_id
+        ).then((response) => {
+            console.log(response, "respons of adding to wishlist data")
+            if (response.statusCode === 200) {
+                toast.success(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+
+            } else {
+                console.log(response.response.error, "failed");
+                toast.warn(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+            }
+        });
+    }
+
+    useEffect(() => {
+        console.log("Inside Trending sales");
+        API.getProductData(
+        ).then((response) => {
+            console.log(response, "respons of product data")
+            if (response.status_code === 200) {
+                setProductData(response.response.data);
+                // toast.success(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+
+            } else {
+                setProductData([]);
+                console.log(response.response.message, "failed");
+                // toast.error(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+            }
+        });
+    }, []);
+
+    return (
+        <>
+            <Carousel
+                additionalTransfrom={0}
+                // arrows
+                shouldResetAutoplay
+                slidesToSlide={1}
+                autoPlay
+                customLeftArrow={<ChevronLeftIcon />}
+                customRightArrow={<ChevronRightIcon />}
+                autoPlaySpeed={3000}
+                infinite={true}
+                customTransition="transform 1000ms ease-in-out"
+                pauseOnHover={false}
+                transitionDuration={1000}
+                responsive={responsive}
+            // className='slider_carousel'
+            >
+                {productData.map((items) => (
+                    <div className="card-div-home-new-product" key={items.id}>
                         <Card sx={{ maxWidth: 345 }} className="card">
                             <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img'
-                                    height="260"
-                                    image={items.img}
-                                    alt={items.name}
-                                />
+                                <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                    <CardMedia
+                                        component="img"
+                                        className='card-img'
+                                        height="260"
+                                        image={items.image}
+                                        alt={items.name}
+                                    />
+                                </Link>
                                 <CardContent className="card_content">
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            {items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
+                                    <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                        <Box sx={{ width: "100%" }}>
+                                            <span className="product_text">{items.name}</span>
+                                        </Box>
+                                        <Box
+                                            sx={{
+                                                width: "100%",
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                marginTop: "5px",
+                                                alignItems: "center"
+                                            }}
+                                        >
+                                            <span className="price_text">${items.price}</span>
+                                            <span className="price_text">
+                                                4.5{items.star}
+                                                <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
+                                            </span>
+                                        </Box>
+                                    </Link>
+                                    <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                        <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
+                                            <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                        </IconButton>
+
+                                        <IconButton aria-label="wishlist" onClick={() => handleWishlistClick(items.id)}>
+                                            <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                        </IconButton>
+                                    </div>
                                 </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                </div>
                             </CardActionArea>
                         </Card>
-                    </Link>
-                </div>
-            ))}
-        </Carousel>
+                    </div>
+                ))}
+            </Carousel>
+        </>
     );
 };
 
 export const HomeTopSaleCarousel = () => {
 
+    const [productData, setProductData] = useState([]);
+
     const newProducts = [
         { id: 1, img: Peight, name: "Diamond Layered Oval", price: "200", star: "4.6" },
         { id: 2, img: ROne, name: "Diamond Octagonal Frame", price: "170", star: "3.9" },
@@ -359,37 +445,66 @@ export const HomeTopSaleCarousel = () => {
         },
     };
 
+    useEffect(() => {
+        console.log("Inside Trending sales");
+        API.getProductData(
+        ).then((response) => {
+            console.log(response, "respons of product data")
+            if (response.status_code === 200) {
+                setProductData(response.response.data);
+                // toast.success(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+
+            } else {
+                setProductData([]);
+                console.log(response.response.message, "failed");
+                // toast.error(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+            }
+        });
+    }, []);
+
     return (
 
         <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
+            additionalTransfrom={0}
+            arrows
+            shouldResetAutoplay
+            slidesToSlide={1}
+            autoPlay
             customLeftArrow={<ChevronLeftIcon />}
             customRightArrow={<ChevronRightIcon />}
             autoPlaySpeed={3000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
+            infinite={true}
+            customTransition="transform 1000ms ease-in-out"
             pauseOnHover={false}
-            // transitionDuration={1000}
+            transitionDuration={1000}
             responsive={responsive}
         // className='slider_carousel'
         >
-            {newProducts.map((items) => (
+            {productData.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card sx={{ maxWidth: 345 }} className="card">
-                            <CardActionArea>
+                    <Card sx={{ maxWidth: 345 }} className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img'
                                     height="260"
-                                    image={items.img}
+                                    image={items.image}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -404,33 +519,33 @@ export const HomeTopSaleCarousel = () => {
                                     >
                                         <span className="price_text">${items.price}</span>
                                         <span className="price_text">
-                                            {items.star}
+                                            4.2{items.star}
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
                 </div>
             ))}
         </Carousel>
     );
 };
-
 
 export const HomeBestSaleCarousel = () => {
 
-    const newProducts = [
-        { id: 1, img: Peight, name: "Diamond Layered Oval", price: "200", star: "4.6" },
-        { id: 2, img: ROne, name: "Diamond Octagonal Frame", price: "170", star: "3.9" },
-        { id: 3, img: Psix, name: "Enchanted Disney Mulan", price: "110", star: "4" },
-        { id: 4, img: Pfive, name: "Platinum Layered Oval", price: "90", star: "4.8" }
-    ]
+    const [productData, setProductData] = useState([]);
+
 
     const responsive = {
         superLargeDesktop: {
@@ -455,37 +570,66 @@ export const HomeBestSaleCarousel = () => {
         },
     };
 
+    useEffect(() => {
+        console.log("Inside Trending sales");
+        API.getProductData(
+        ).then((response) => {
+            console.log(response, "respons of product data")
+            if (response.status_code === 200) {
+                setProductData(response.response.data);
+                // toast.success(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+
+            } else {
+                setProductData([]);
+                console.log(response.response.message, "failed");
+                // toast.error(response.response.message, {
+                //     position: toast.POSITION.TOP_RIGHT,
+                //     theme: "colored",
+                //     hideProgressBar: true,
+                //     draggable: false,
+                // });
+            }
+        });
+    }, []);
+
     return (
 
         <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
+            additionalTransfrom={0}
+            arrows
+            shouldResetAutoplay
+            slidesToSlide={1}
+            autoPlay
             customLeftArrow={<ChevronLeftIcon />}
             customRightArrow={<ChevronRightIcon />}
             autoPlaySpeed={3000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
+            infinite={true}
+            customTransition="transform 1000ms ease-in-out"
             pauseOnHover={false}
-            // transitionDuration={1000}
+            transitionDuration={1000}
             responsive={responsive}
         // className='slider_carousel'
         >
-            {newProducts.map((items) => (
+            {productData.map((items) => (
                 <div className="card-div-home-new-product" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card sx={{ maxWidth: 345 }} className="card">
-                            <CardActionArea>
+                    <Card sx={{ maxWidth: 345 }} className="card">
+                        <CardActionArea>
+                            <Link to="/user/products" style={{ textDecoration: "none" }}>
                                 <CardMedia
                                     component="img"
                                     className='card-img'
                                     height="260"
-                                    image={items.img}
+                                    image={items.image}
                                     alt={items.name}
                                 />
-                                <CardContent className="card_content">
+                            </Link>
+                            <CardContent className="card_content">
+                                <Link to="/user/products" style={{ textDecoration: "none" }}>
                                     <Box sx={{ width: "100%" }}>
                                         <span className="product_text">{items.name}</span>
                                     </Box>
@@ -500,326 +644,169 @@ export const HomeBestSaleCarousel = () => {
                                     >
                                         <span className="price_text">${items.price}</span>
                                         <span className="price_text">
-                                            {items.star}
+                                            4.0{items.star}
                                             <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
                                         </span>
                                     </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                </Link>
+                                <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                    <IconButton aria-label="cart">
+                                        <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
+
+                                    <IconButton aria-label="favourite">
+                                        <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                    </IconButton>
                                 </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
                 </div>
             ))}
         </Carousel>
     );
 };
 
+//using now
+export const ProductCarousel = ({ productData }) => {
+    const user_id = Cookies.get("userId");
 
-export const ShopFeaturedProductCarousel = () => {
+    const handleCartClick = (product_id) => {
+        console.log(product_id, "product_id");
+        API.getAddCartProductData(
+            product_id,
+            user_id
+        ).then((response) => {
+            console.log(response, "respons of adding to cart data")
+            if (response.statusCode === 200) {
+                toast.success(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
 
-    const featuredProducts = [
-        { id: 1, img: FOne, name: "Brilliance Bead", price: "130", star: "4.5" },
-        { id: 2, img: FTwo, name: "Bulova Jewelry", price: "150", star: "4" },
-        { id: 3, img: FThree, name: "Cultured Pearl", price: "190", star: "4.7" },
-        { id: 4, img: FFour, name: "Gemstone Ring", price: "70", star: "4.2" },
-        { id: 5, img: FFive, name: "Diamond Oval", price: "200", star: "4.6" },
-        { id: 6, img: FSeven, name: "Diamond Octagonal", price: "170", star: "3.9" },
-        // { id: 7, img: FEight, name: "Enchanted Disney", price: "110", star: "4" },
-        { id: 8, img: FNine, name: "Platinum Oval", price: "90", star: "4.8" }
-    ]
+            } else {
+                console.log(response.response.error, "failed");
+                toast.warn(response.response.error, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+            }
+        });
+    }
 
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
+    const handleWishlistClick = (product_id) => {
+        console.log(product_id, "product_id");
+        API.getAddWishlistProductData(
+            product_id,
+            user_id
+        ).then((response) => {
+            console.log(response, "respons of adding to wishlist data")
+            if (response.statusCode === 200) {
+                toast.success(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+
+            } else {
+                console.log(response.response.error, "failed");
+                toast.warn(response.response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    theme: "light",
+                    hideProgressBar: true,
+                    draggable: false,
+                    progress: undefined,
+                    autoClose: 2000
+                });
+            }
+        });
+    }
 
     return (
+        <>
+            <Grid container spacing={2}>
+                {productData?.map((items) => (
+                    <Grid item xs={3}>
+                        <div className="card-div-home-new-product-featured" key={items.id}>
+                            <Card className="card">
+                                <CardActionArea>
+                                    <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                        <CardMedia
+                                            component="img"
+                                            className='card-img-featured'
+                                            height="260"
+                                            image={items.image}
+                                            alt={items.name}
+                                        />
+                                    </Link>
+                                    <CardContent className="card_content">
+                                        <Link to={`/user/products/${items.id}`} style={{ textDecoration: "none" }}>
+                                            <Box sx={{ width: "100%" }}>
+                                                <span className="product_text">{items.name}</span>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    width: "100%",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    marginTop: "5px",
+                                                    alignItems: "center"
+                                                }}
+                                            >
+                                                <span className="price_text">${items.price}</span>
+                                                <span className="price_text">
+                                                    4.5 {items.star}
+                                                    <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
+                                                </span>
+                                            </Box>
+                                        </Link>
+                                        <div className="hover-icons" style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                                            <IconButton aria-label="cart" onClick={() => handleCartClick(items.id)}>
+                                                <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
+                                            </IconButton>
 
-        <Carousel
-            // additionalTransfrom={0}
-            // arrows
-            // shouldResetAutoplay
-            // slidesToSlide={1}
-            // autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={6000}
-            // infinite={true}
-            // customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            // transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {featuredProducts.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card className="card">
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.img}
-                                    alt={items.name}
-                                />
-                                <CardContent className="card_content">
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            {items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
-                </div>
-            ))}
-        </Carousel>
+                                            <IconButton aria-label="wishlist" onClick={() => handleWishlistClick(items.id)}>
+                                                <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
+                                            </IconButton>
+                                        </div>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </div>
+                    </Grid>
+                ))}
+            </Grid>
+        </>
     );
 };
 
-export const ShopNewProductCarousel = () => {
-
-    const newProducts = [
-        { id: 1, img: One, name: "Brilliance Bead", price: "130", star: "4.5" },
-        { id: 2, img: Two, name: "Bulova Jewelry", price: "150", star: "4" },
-        { id: 3, img: Three, name: "Cultured Pearl", price: "190", star: "4.7" },
-        { id: 4, img: Four, name: "Gemstone Ring", price: "70", star: "4.2" },
-        { id: 5, img: Five, name: "Diamond Oval", price: "200", star: "4.6" },
-        { id: 6, img: Six, name: "Platinum Oval", price: "90", star: "4.8" },
-        { id: 7, img: Seven, name: "Diamond Octagonal", price: "170", star: "3.9" },
-        { id: 8, img: Eight, name: "Enchanted Disney", price: "110", star: "4" },
-        { id: 9, img: Nine, name: "Platinum Oval", price: "90", star: "4.8" },
-        { id: 10, img: Ten, name: "Platinum Oval", price: "90", star: "4.8" }
-    ]
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
-
-    return (
-
-        <Carousel
-            additionalTransfrom={0}
-            arrows
-            shouldResetAutoplay
-            slidesToSlide={1}
-            autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={6000}
-            infinite={true}
-            customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {newProducts.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card className="card">
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.img}
-                                    alt={items.name}
-                                />
-                                <CardContent className="card_content">
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            {items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left " sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right" sx={{ color: "#9F73AB" }} />
-                                </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
-                </div>
-            ))}
-        </Carousel>
-    );
-};
-
-export const ShopTrendingProductCarousel = () => {
-
-    const newProducts = [
-        { id: 1, img: POne, name: "Brilliance Bead", price: "130", star: "4.5" },
-        { id: 2, img: PTwo, name: "Bulova Jewelry", price: "150", star: "4" },
-        { id: 3, img: PThree, name: "Cultured Pearl", price: "190", star: "4.7" },
-        { id: 4, img: PFour, name: "Gemstone Ring", price: "70", star: "4.2" },
-        { id: 5, img: PFive, name: "Diamond Oval", price: "200", star: "4.6" },
-        { id: 6, img: PSix, name: "Platinum Oval", price: "90", star: "4.8" },
-        { id: 7, img: PSeven, name: "Diamond Octagonal", price: "170", star: "3.9" },
-        { id: 8, img: PEight, name: "Enchanted Disney", price: "110", star: "4" },
-        { id: 9, img: FSix, name: "Platinum Oval", price: "90", star: "4.8" },
-    ]
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 1280 },
-            items: 4,
-        },
-        desktop: {
-            breakpoint: { max: 1280, min: 1024 },
-            items: 4,
-        },
-        laptop: {
-            breakpoint: { max: 1024, min: 768 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 768, min: 425 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 425, min: 0 },
-            items: 1,
-        },
-    };
-
-    return (
-
-        <Carousel
-            additionalTransfrom={0}
-            arrows
-            shouldResetAutoplay
-            slidesToSlide={1}
-            autoPlay
-            customLeftArrow={<ChevronLeftIcon />}
-            customRightArrow={<ChevronRightIcon />}
-            autoPlaySpeed={2000}
-            infinite={true}
-            customTransition="transform 1000ms ease-in-out"
-            pauseOnHover={false}
-            transitionDuration={1000}
-            responsive={responsive}
-        // className='slider_carousel'
-        >
-            {newProducts.map((items) => (
-                <div className="card-div-home-new-product-featured" key={items.id}>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Card className="card">
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    className='card-img-featured'
-                                    height="260"
-                                    image={items.img}
-                                    alt={items.name}
-                                />
-                                <CardContent className="card_content">
-                                    <Box sx={{ width: "100%" }}>
-                                        <span className="product_text">{items.name}</span>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            marginTop: "5px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <span className="price_text">${items.price}</span>
-                                        <span className="price_text">
-                                            {items.star}
-                                            <StarIcon style={{ color: "#9F73AB", fontSize: "1rem" }} />
-                                        </span>
-                                    </Box>
-                                </CardContent>
-                                <div className="hover-icons">
-                                    <ShoppingCartOutlinedIcon className="add-to-cart-icon left" sx={{ color: "#9F73AB" }} />
-                                    <FavoriteBorderIcon className="add-to-cart-icon right " sx={{ color: "#9F73AB" }} />
-                                </div>
-                            </CardActionArea>
-                        </Card>
-                    </Link>
-                </div>
-            ))}
-        </Carousel>
-    );
-};
 
 export const AboutUsCarousel = () => {
+
+    //About-carousel
+    const [refAbout, inViewAbout] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springAboutCarousel = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: 1, transform: 'translateX(0px)' },
+        config: { duration: 800 },
+    });
+
     return (
         <div>
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -831,10 +818,10 @@ export const AboutUsCarousel = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={Ready} class="d-block banner" alt="..." />
-                        <div class="carousel-caption d-md-block">
+                        <animated.div class="carousel-caption d-md-block" ref={refAbout} style={springAboutCarousel}>
                             <h1 className='contact-banner_text-three'>About Us</h1>
                             <p className='contact-banner__description-three'>Learn about our tales!</p>
-                        </div>
+                        </animated.div>
                     </div>
 
                     <div class="carousel-item">
@@ -859,6 +846,20 @@ export const AboutUsCarousel = () => {
 }
 
 export const ShopCarousel = () => {
+
+    //Home-Tab
+    const [refTab, inViewTab] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springShopCarousel = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewTab ? 1 : 0, transform: inViewTab ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
     return (
         <div>
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -870,21 +871,21 @@ export const ShopCarousel = () => {
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src={ShopOne} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <animated.div class="shop-carousel-edit d-md-flex" ref={refTab} style={springShopCarousel}>
                             <h1 className='contact-banner_text-three'>Shop With Us</h1>
                             <p className='contact-banner__description-three'>When you gift jewellery you achieve immortality in their heart.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={ShopTwo} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <animated.div class="shop-carousel-edit d-md-flex" >
                             <h1 className='contact-banner_text-three'>Explore</h1>
                             <p className='contact-banner__description-three'>When you gift jewellery you achieve immortality in their heart.</p>
-                        </div>
+                        </animated.div>
                     </div>
                     <div class="carousel-item">
                         <img src={ShopThree} class="d-block banner" alt="..." />
-                        <div class="carousel-caption-two d-md-flex">
+                        <div class="shop-carousel-edit d-md-flex">
                             <h1 className='contact-banner_text-three'>Our Mission</h1>
                             <p className='contact-banner__description-three'>When you gift jewellery you achieve immortality in their heart.</p>
                         </div>
@@ -894,3 +895,59 @@ export const ShopCarousel = () => {
         </div>
     )
 }
+
+// export const PeopleReviews = (props) => {
+//     const { ratingChanged } = props;
+//     const params = {
+//         pagination: {
+//             el: '.swiper-pagination',
+//             clickable: true,
+//             dynamicBullets: true
+//         }
+//     }
+//     return (
+//         <Swiper {...params}>
+//             {/* First Slide */}
+//             <div>
+//                 <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
+//                 <ReactStars
+//                     classNames="middle-content-stars"
+//                     count={4}
+//                     onChange={ratingChanged}
+//                     size={20}
+//                     value={3.5}
+//                     isHalf={true}
+//                 />
+//                 <p className="middle-text">
+//                     <span className="content-quotes">
+//                         <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+//                         ullamcorper dui turpis.Nulla pellentesque mi non laoreet
+//                         eleifend. Integer porttitor mollisar lorem, at molestie arcu
+//                         pulvinar ut  <FormatQuoteIcon />
+//                     </span>
+//                 </p>
+//             </div>
+
+//             {/* Second Slide */}
+//             <div>
+//                 <span className="my-md-2 my-3 quotes-header">JENIFER BURNS</span>
+//                 <ReactStars
+//                     classNames="middle-content-stars"
+//                     count={4}
+//                     onChange={ratingChanged}
+//                     size={20}
+//                     value={3.5}
+//                     isHalf={true}
+//                 />
+//                 <p className="middle-text">
+//                     <span className="content-quotes">
+//                         <FormatQuoteIcon /> Lorem Ipsum has been the industry's standard since the 1500s. Praesent
+//                         ullamcorper dui turpis.Nulla pellentesque mi non laoreet
+//                         eleifend. Integer porttitor mollisar lorem, at molestie arcu
+//                         pulvinar ut  <FormatQuoteIcon />
+//                     </span>
+//                 </p>
+//             </div>
+//         </Swiper>
+//     )
+// }

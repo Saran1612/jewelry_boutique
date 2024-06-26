@@ -7,8 +7,7 @@
 }
 
 .home_tabs .Mui-selected {
-    color: #9F73AB;
-    /* font-weight: 600; */
+    color: #9F73AB !important;
     font-family: inherit;
     font-size: 1rem;
 }
@@ -44,6 +43,7 @@
 
 .card-img {
     border-radius: 0px !important;
+    height: 250px;
 }
 
 .card {
@@ -95,17 +95,21 @@
 }
 
 .middle-content-wrapper {
-    display: grid;
-    justify-content: center;
-    padding: 10% 25%;
+    /* display: grid; */
+    /* justify-content: center; */
+    padding: 10% 0%;
     background: #9F73AB;
     margin-bottom: 50px;
     margin-top: 80px;
 }
 
+swiper-container .swiper-button-next {
+    color: #fff !important
+}
+
 .middle-content-wrapper div {
-    display: flex;
-    justify-content: center;
+    /* display: flex;
+    justify-content: center; */
 }
 
 .quotes-header {
@@ -124,5 +128,34 @@
 }
 
 .middle-content-stars span {
-    color:gold !important;
+    color: gold !important;
+}
+
+.middle-content-wrapper-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.home-blogs_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 25px;
+
+}
+
+.home_card-box {
+    margin: 40px;
+}
+
+.home_tabs .home_tabs-box .PrivateTabIndicator-colorSecondary-7 {
+    background: #9F73AB !important;
+}
+
+.home_tabs .MuiTabs-indicator {
+    background: #9F73AB !important;
 }

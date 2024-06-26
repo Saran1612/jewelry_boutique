@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -10,37 +9,104 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ReusableButton from '../../components/button/button';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import CallIcon from '@mui/icons-material/Call';
 import './header.css';
-import { Link, NavLink } from "react-router-dom";
-import Logo from '../../assests/logo/icons8-sparkling-diamond-100.png';
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import Tooltip from '@mui/material/Tooltip';
 import Logo1 from '../../assests/logo/icons8-jewel-64.png';
 import InfoIcon from '@mui/icons-material/Info';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LogoutIcon from '@mui/icons-material/Logout';
+import Logout from '@mui/icons-material/Logout';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
+import Avatar from '@mui/material/Avatar';
+import Person2TwoToneIcon from '@mui/icons-material/Person2TwoTone';
+import Cookies from 'js-cookie';
+import Cart from '../cart/cart';
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import { styled } from '@mui/material/styles';
+import '@szhsin/react-menu/dist/transitions/slide.css';
+import SearchIcon from '@mui/icons-material/Search';
+import HouseTwoToneIcon from '@mui/icons-material/HouseTwoTone';
+import ShoppingBagTwoToneIcon from '@mui/icons-material/ShoppingBagTwoTone';
+import InfoTwoToneIcon from '@mui/icons-material/InfoTwoTone';
+import PhoneTwoToneIcon from '@mui/icons-material/PhoneTwoTone';
+import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
+import InputBase from '@mui/material/InputBase';
+import debouce from "lodash.debounce";
+import { API } from '../../Networking/API';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearch } from '../../redux/slice';
+import { toast } from 'react-toastify';
 
 const drawerWidth = 240;
 
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: "none",
+    color: "#624F82",
+    cursor: "pointer",
+    '&:hover': {
+        backgroundColor: "none",
+        color: "#624F82",
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    width: '100%',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        [theme.breakpoints.up('sm')]: {
+            width: '0ch',
+            '&:focus': {
+                width: '20ch',
+            },
+        },
+    },
+}));
+
 const navItems = [
-    { id: 1, label: 'Home', route: "/", icon: <HomeIcon className='header_icon' /> },
-    { id: 2, label: 'Shop', route: "/shop", icon: <ShoppingBagIcon className='header_icon' /> },
-    { id: 3, label: 'About', route: "/about", icon: <InfoIcon className='header_icon' /> },
-    { id: 4, label: 'Contact', route: "/contact", icon: <CallIcon className='header_icon' /> }
+    { id: 1, label: 'Home', route: "/user/home", icon: <HomeIcon className='header_icon' /> },
+    { id: 2, label: 'Shop', route: "/user/shop", icon: <ShoppingBagIcon className='header_icon' /> },
+    { id: 3, label: 'About', route: "/user/about", icon: <InfoIcon className='header_icon' /> },
+    { id: 4, label: 'Contact', route: "/user/contact", icon: <CallIcon className='header_icon' /> }
 ];
 
 const navItemsDataOne = [
-    { id: 1, label: 'Home', route: "/", icon: <HomeIcon className='header_icon' /> },
-    { id: 2, label: 'Shop', route: "/shop", icon: <ShoppingBagIcon className='header_icon' /> },
+    { id: 1, label: 'Home', route: "/user/home", icon: <HouseTwoToneIcon className='header_icon' /> },
+    { id: 2, label: 'Shop', route: "/user/shop", icon: <ShoppingBagTwoToneIcon className='header_icon' /> },
 ];
 
 const navItemsDataTwo = [
-    { id: 1, label: 'About', route: "/about", icon: <InfoIcon className='header_icon' /> },
-    { id: 2, label: 'Contact', route: "/contact", icon: <CallIcon className='header_icon' /> }
+    { id: 1, label: 'About', route: "/user/about", icon: <InfoTwoToneIcon className='header_icon' /> },
+    { id: 2, label: 'Contact', route: "/user/contact", icon: <PhoneTwoToneIcon className='header_icon' /> }
 ];
+
+
 
 function HideOnScroll(props) {
     const { children, window } = props;
@@ -69,13 +135,102 @@ HideOnScroll.propTypes = {
 
 function DrawerAppBar(props) {
     const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const navigate = useNavigate();
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [username, setUsername] = useState("");
+    const [searchValue, setSearchValue] = useState("");
+
+
+    const handleSearchChange = (event) => {
+        setSearchValue(event.target.value);
+        fetchSearch(event.target.value);
+    };
+
+    useEffect(() => {
+        return () => {
+            debouncedResults.cancel();
+        };
+    });
+
+    const debouncedResults = useMemo(() => {
+        return debouce(handleSearchChange, 2000);
+    }, []);
+
+    const [state, setState] = useState({
+        right: false,
+    });
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
     };
 
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
+    const handleLogoutClick = () => {
+        Cookies.remove("jwt_token");
+        Cookies.remove("role");
+        navigate("/");
+        handleMenuClose();
+    }
+
+    useEffect(() => {
+        const name = Cookies.get("username");
+        setUsername(name);
+    }, [])
+
+    const fetchSearch = (keyword) => {
+        API.getSearchedProduct(keyword).then(({ response }) => {
+            console.log(response, "responseofsearchkeyword")
+            if (response.success) {
+                // dispatch(setSearch({ keyword: keyword, data: response.data }))
+
+                navigate('/user/shop', { state: { keyword: keyword, data: response.data } })
+            }
+            // else {
+            //     toast.error(response.message, {
+            //         position: toast.POSITION.TOP_RIGHT,
+            //         theme: "colored",
+            //         hideProgressBar: true,
+            //         draggable: false,
+            //     });
+            // }
+            setSearchValue("")
+        }).finally(() => {
+            setSearchValue("");
+        });
+    }
+
+
+    //Header-Tab
+    const [refTab, inViewTab] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsOne = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,-50px,0)' },
+        to: { opacity: 1, transform: 'translate3d(0,0,0)' },
+        config: { duration: 400 }, // Adjust the duration as needed
+        delay: 1000
+    });
+
+    //Header-Link
+    const [refLink, inViewLink] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+
+    const springPropsLink = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,-50px,0)' },
+        to: { opacity: 1, transform: 'translate3d(0,0,0)' },
+        config: { duration: 400 }, // Adjust the duration as needed
+    });
 
 
     const drawer = (
@@ -93,7 +248,7 @@ function DrawerAppBar(props) {
                     <li style={{ listStyle: "none", padding: "16px 20px", display: "flex", justifyContent: "start" }}>
                         {/* <ReusableButton key={item.id} className="header_menu-cart-mobile" sx={{ color: '#fff', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} /> */}
                         <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                            color: isActive ? 'greenyellow' : 'black'
+                            color: isActive ? '#74959A' : '#624F82'
                         })}>
                             {item.icon}
                             {item.label}
@@ -106,96 +261,206 @@ function DrawerAppBar(props) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
+    function stringToColor(string) {
+        return '#624F82';
+    }
+
+    function stringAvatar(name) {
+        const nameParts = name.split(' ');
+        const initials =
+            nameParts.length > 1
+                ? `${nameParts[0][0]}${nameParts[1][0]}`
+                : nameParts[0][0];
+
+        return {
+            sx: {
+                bgcolor: stringToColor(name),
+            },
+            children: initials,
+        };
+    }
+
+
+    const toggleDrawer = (anchor, open) => (event) => {
+        if (
+            event.type === 'keydown' &&
+            (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+            return;
+        }
+
+        setState({ ...state, [anchor]: open });
+    };
+
+
     return (
-        <Box sx={{ display: 'flex', height: "0px" }}>
-            <CssBaseline />
-            <HideOnScroll {...props}>
-                <AppBar component="nav" sx={{ background: "#fff", boxShadow: "none" }}>
-                    <Toolbar className='header_toolbar' >
-                        <IconButton
-                            color="#4D455D"
-                            aria-label="open drawer"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            sx={{ mr: 2, display: { sm: 'none' }, color: "#4D455D" }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+        <>
+            <Box className="main_header">
+                <HideOnScroll {...props}>
+                    <AppBar component="nav" position="fixed" sx={{ background: "#fff", boxShadow: "none", display: "flex", flexDirection: "row", padding: "6px", }}>
+                        <Toolbar className='header_toolbar tw-w-full tw-flex tw-justify-between tw-p-0'>
+                            <IconButton
+                                color="#4D455D"
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleDrawerToggle}
+                                sx={{ mr: 2, display: { sm: 'none' }, color: "#4D455D" }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
 
-                        <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                            {navItemsDataOne.map((item) => (
-                                // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
-                                <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                                    color: isActive ? 'greenyellow' : 'black'
-                                })}>
-                                    {item.icon}
-                                    {item.label}
-                                </NavLink>
-                            ))}
-                        </Box>
+                            <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: "center", alignItems: "center", width: { xs: '100%', sm: 'auto' }, marginRight: { xs: "8%", sm: "0%" }, margin: { sm: "0% 2%", md: "0% 2%", lg: "0% 2%" } }} className="logo_header">
+                                <Link to="/user/home" style={{ display: "flex", textDecoration: "none" }}>
+                                    <animated.div className='header-logo-wrapper' ref={refTab} style={springPropsOne}>
+                                        <img src={Logo1} alt='logo' className='header_logo' />
+                                        <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
+                                            <span className='header__text'>Jane's</span>
+                                            <span className='header__subtext'>Boutique</span>
+                                        </Box>
+                                    </animated.div>
+                                </Link>
+                            </Box>
 
-
-                        <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: "center", alignItems: "center", width: { xs: '100%', sm: 'auto' }, marginRight: { xs: "8%", sm: "0%" }, margin: { sm: "0% 2%", md: "0% 2%", lg: "0% 4%" } }}>
-                            <Link to="/" style={{ display: "flex", textDecoration: "none" }}>
-                                <img src={Logo1} alt='logo' className='header_logo' />
-                                <Box sx={{ display: "flex", flexDirection: "column", padding: "0px 12px" }}>
-                                    <span className='header__text'>Jane's</span>
-                                    <span className='header__subtext'>Boutique</span>
+                            <Box className="tw-flex">
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+                                    {navItemsDataOne.map((item) => (
+                                        <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                                            color: isActive ? '#74959A' : ''
+                                        })}>
+                                            <animated.div ref={refLink} style={springPropsLink}>
+                                                {item.icon}
+                                                {item.label}
+                                            </animated.div>
+                                        </NavLink>
+                                    ))}
                                 </Box>
-                            </Link>
-                        </Box>
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' } }} className="navlinks">
+                                    {navItemsDataTwo.map((item) => (
+                                        // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
+                                        <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
+                                            color: isActive ? '#74959A' : '#624F82'
+                                        })}>
+                                            <animated.div ref={refLink} style={springPropsLink}>
+                                                {item.icon}
+                                                {item.label}
+                                            </animated.div>
+                                        </NavLink>
 
+                                    ))}
+                                </Box>
 
-                        <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                            {navItemsDataTwo.map((item) => (
-                                // <ReusableButton key={item.id} className="header_menu-cart" sx={{ color: '#000', padding: "0px 25px" }} buttonName={item.label} href={item.route} startIcon={item.icon} />
-                                <NavLink to={item.route} className="header_menu-cart" style={({ isActive }) => ({
-                                    color: isActive ? 'greenyellow' : 'black'
-                                })}>
-                                    {item.icon}
-                                    {item.label}
-                                </NavLink>
-                            ))}
-                        </Box>
+                                <Box className="tw-flex tw-justify-center tw-items-center tw-pr-[16px]" sx={{ display: { xs: "none", md: "flex" } }}>
+                                    {/* <IconButton
+                                        title="search"
+                                        color="#4D455D"
+                                        edge="start"
+                                    >
+                                        <SearchTwoToneIcon fontSize="small" sx={{ color: "#624F82", fontSize: "1.5rem" }} />
+                                    </IconButton> */}
+                                    <animated.div ref={refLink} style={springPropsLink}>
+                                        <Search className='tw-cursor-pointer' sx={{ cursor: "pointer" }}>
+                                            <SearchIconWrapper>
+                                                <SearchIcon />
+                                            </SearchIconWrapper>
+                                            <StyledInputBase
+                                                placeholder="Search product here…"
+                                                inputProps={{ 'aria-label': 'search' }}
+                                                // value={searchValue}
+                                                // onChange={handleSearchChange}
+                                                onChange={debouncedResults}
+                                            />
+                                        </Search>
+                                    </animated.div>
+                                </Box>
 
-                        {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <ul style={{ display: "flex", alignItems: "center", margin: "0" }} >
-                                <li style={{ listStyle: "none", marginLeft: "8px" }}>
-                                    <ShoppingCartIcon className="header_button-cart my-2" titleAccess='Cart' />
-                                </li>
-                                <li style={{ listStyle: "none", marginLeft: "8px" }}>
-                                    <FavoriteIcon className="header_button-cart my-2" titleAccess='Favourite' />
-                                </li>
-                                <li style={{ listStyle: "none", marginLeft: "8px" }}>
-                                    <LogoutIcon className="header_button-cart my-2" titleAccess='LogOut' />
-                                </li>
-                            </ul>
-                        </Box> */}
+                                <Box className="tw-flex tw-justify-center tw-items-center tw-px-[16px]">
+                                    <animated.div ref={refLink} style={springPropsLink}>
+                                        <IconButton
+                                            title="cart"
+                                            color="#4D455D"
+                                            aria-label="open drawer"
+                                            edge="start"
+                                            onClick={toggleDrawer('right', true)}
+                                        >
+                                            <ShoppingCartTwoToneIcon fontSize="small" sx={{ color: "#624F82", fontSize: "1.4rem" }} />
+                                        </IconButton>
+                                    </animated.div>
+                                </Box>
 
-                    </Toolbar>
-                </AppBar>
-            </HideOnScroll>
-            <Box component="nav">
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                >
-                    {drawer}
-                </Drawer>
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: "end" }}>
+                                    {/* <animated.div ref={refLink} style={springPropsLink}> */}
+                                    <Tooltip title={username} placement="bottom">
+                                        <Menu
+                                            menuButton={<MenuButton style={{ border: "none", background: "none" }}
+                                            >
+                                                <IconButton
+                                                    // onClick={handleMenuClick}
+                                                    size="small"
+                                                    sx={{ fontSize: "1rem" }}
+                                                    aria-controls={open ? 'account-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                >
+                                                    <Avatar className='avatar_name' sx={{ background: "#624F82", width: 32, height: 32, fontSize: "1rem" }} {...stringAvatar(username)} />
+                                                </IconButton>
+                                            </MenuButton>} transition>
+
+                                            <MenuItem onClick={() => { navigate('/user/profile'); setAnchorEl(null) }}>
+                                                <Person2TwoToneIcon fontSize="small" sx={{ color: "#624F82", marginRight: "10px" }} />
+                                                Profile
+                                            </MenuItem>
+
+                                            <MenuItem onClick={() => navigate('/user/wishlist')}>
+                                                <FavoriteTwoToneIcon fontSize="small" sx={{ color: "#624F82", marginRight: "10px" }} />
+                                                Wishlist
+                                            </MenuItem>
+
+                                            <MenuItem onClick={handleLogoutClick}>
+                                                <Logout fontSize="small" sx={{ color: "#624F82", marginRight: "10px" }} />
+                                                Log Out
+                                            </MenuItem>
+                                        </Menu>
+                                    </Tooltip>
+                                    {/* </animated.div> */}
+                                </Box>
+                            </Box>
+                        </Toolbar>
+                    </AppBar>
+                </HideOnScroll>
+                <Box component="nav" sx={{ justifyContent: "center" }}>
+                    <Drawer
+                        container={container}
+                        variant="temporary"
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                        transitionDuration={900}
+                        sx={{
+                            display: { xs: 'block', sm: 'none' },
+                            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Box>
+            </Box >
+
+            <Drawer
+                anchor="right"
+                open={state['right']}
+                onClose={toggleDrawer('right', false)}
+                transitionDuration={900}
+                sx={{ width: "100%" }}
+            >
+                <Cart anchor="right" toggleDrawer={toggleDrawer} />
+            </Drawer>
+
+            <Box>
+                <Outlet />
             </Box>
-            <Box component="main" sx={{ p: 3 }}>
-                <Toolbar />
-            </Box>
-        </Box>
+        </>
     );
 }
 

@@ -1,25 +1,20 @@
 import './App.css';
-import About from './screens/about/about';
-import Contact from './screens/contact/contact';
-import Home from './screens/home/home';
-import Shop from './screens/shop/shop';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { Products } from './screens/product/product';
+import { ToastContainer, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Routers from './routers/routers';
+import { Provider } from 'react-redux';
+import store from './redux/store'
 
 function App() {
+
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/shop" element={<Shop />} />
-          <Route exact path="/contact" element={<Contact />} />
-          <Route exact path="/about" element={<About />} />
-          <Route path="/products" element={<Products />} />
-        </Routes>
-      </Router>
+      <Provider store={store}>
+        <Routers />
+        <ToastContainer transition={Flip} autoClose={2000} newestOnTop={true} theme="light" />
+      </Provider>
     </div>
   );
 }

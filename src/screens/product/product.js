@@ -26,7 +26,7 @@ import { CardActionArea, IconButton } from "@mui/material";
 import { ShopCarousel } from "../../components/carousel/carousel";
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -34,6 +34,9 @@ import StarIcon from '@mui/icons-material/Star';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NavigationIcon from '@mui/icons-material/Navigation';
+import { animated, useSpring } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer';
+import { API } from "../../Networking/API";
 
 
 
@@ -87,12 +90,15 @@ const StyledMenu = styled((props) => (
 }));
 
 export const Products = () => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [productData, setProductData] = useState([]);
     const open = Boolean(anchorEl);
+    const { productId } = useParams();
     // const location = useLocation();
     // const data = location.state;
     // console.log(data, "props-data");
     // const[prodData , setProdData] = useState([]);
+    console.log(productId, "productIdproductId")
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -130,11 +136,130 @@ export const Products = () => {
         { id: 3, img: Nine, name: "Cultured Freshwater Pearl", price: "190", star: "4.7" },
     ];
 
+    //Product-images
+    const [refProduct, inViewProduct] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsProduct = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewProduct ? 1 : 0, transform: inViewProduct ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+    });
+
+    //Product-description
+    const [refDescription, inViewDescription] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsDescription = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewDescription ? 1 : 0, transform: inViewDescription ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+        delay: 500
+    });
+
+    //Product-featured
+    const [refFeatured, inViewFeatured] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsFeatured = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewFeatured ? 1 : 0, transform: inViewFeatured ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+        delay: 500
+    });
+
+    //Product-featuredProd
+    const [refFeaturedProd, inViewFeaturedProd] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.2, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsFeaturedProd = useSpring({
+        from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+        to: { opacity: inViewFeaturedProd ? 1 : 0, transform: inViewFeaturedProd ? 'translate3d(0,0,0)' : 'translate3d(0,100px,0)' },
+        config: { duration: 900 },
+        delay: 500
+    });
+
+    //Home-FilterOne
+    const [refSearchOne, inViewSearchOne] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsSearchOne = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewSearchOne ? 1 : 0, transform: inViewSearchOne ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+        delay: 500,
+    });
+
+    //Home-FilterDiscount
+    const [refDiscount, inViewDiscount] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsDiscount = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewDiscount ? 1 : 0, transform: inViewDiscount ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+        delay: 600,
+    });
+
+    //Home-FilterCustomer
+    const [refCustomer, inViewCustomer] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsCustomer = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewCustomer ? 1 : 0, transform: inViewCustomer ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+    //Home-FilterRelated
+    const [refRelated, inViewRelated] = useInView({
+        triggerOnce: true, // Only trigger once when the element comes into view
+        threshold: 0.25, // Percentage of element visibility required to trigger the animation
+    });
+
+    const springPropsRelated = useSpring({
+        from: { opacity: 0, transform: 'translateX(-200px)' },
+        to: { opacity: inViewRelated ? 1 : 0, transform: inViewRelated ? 'translateX(0px)' : 'translateX(-200px)' },
+        config: { duration: 750 }, // Adjust the duration as needed
+    });
+
+    useEffect(() => {
+        if (productId) {
+            API.getOneProductData(
+                productId
+            ).then((response) => {
+                console.log(response, "respons of one product data")
+                if (response.status_code === 200) {
+                    setProductData(response.response.data);
+
+                } else {
+                    setProductData([]);
+                    console.log(response.response.message, "failed");
+                }
+            });
+        }
+    }, []);
+
+    console.log(productData, "productDatasfsdfsf");
+    const objectLength = Object.keys(productData).length;
+    console.log('Object length:', objectLength);
+
     return (
         <div>
-            <Box>
-                <Header />
-            </Box>
 
             <Box>
                 <ShopCarousel />
@@ -143,7 +268,6 @@ export const Products = () => {
 
             <div className="products-wrapper">
                 {/* ///mobile */}
-
                 <Box
                     className="Mobile_screen"
                     sx={{
@@ -344,6 +468,7 @@ export const Products = () => {
                     </StyledMenu>
                 </Box>
 
+                {/* // web */}
                 <div className="products-content-div">
                     <Grid container spacing={2}>
                         <Grid
@@ -351,8 +476,7 @@ export const Products = () => {
                             xs={3}
                             sx={{ display: { xs: "none", sm: "none", md: "block" } }} >
                             <div style={{ padding: "0px 50px 0px 0px" }}>
-                                <div className="product-search-bar" style={{ width: "100%" }}>
-
+                                {/* <animated.div className="product-search-bar" ref={refSearchOne} style={springPropsSearchOne}>
                                     <div style={{ display: "flex" }}>
                                         <input
                                             type="text"
@@ -364,11 +488,11 @@ export const Products = () => {
                                             <SearchIcon sx={{ fontSize: "1.3rem !important" }} />
                                         </IconButton>
                                     </div>
-                                </div>
+                                </animated.div> */}
 
                                 <div className="product-radio-box-content mt-4">
-                                    <div className="product-occasion-div">
-                                        <span className="special-deals-text mb-2">occasion</span>
+                                    {/* <animated.div className="product-occasion-div" ref={refDiscount} style={springPropsDiscount}>
+                                        <span className="special-deals-text mb-2">CATEGORIES</span>
                                         <FormGroup>
                                             <FormControlLabel
                                                 control={<Checkbox />}
@@ -388,35 +512,9 @@ export const Products = () => {
                                                 onClick={handleClose}
                                             />
                                         </FormGroup>
-                                    </div>
+                                    </animated.div> */}
 
-                                    <div className="product-occasion-div mt-4">
-                                        <span className="special-deals-text mb-2">DISCOUNT</span>
-                                        <FormGroup>
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="5% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="10% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="20% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="30% or More"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox />}
-                                                label="50% or More"
-                                            />
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="product-review-div mt-4">
+                                    {/* <animated.div className="product-review-div mt-4" ref={refCustomer} style={springPropsCustomer}>
                                         <span className="special-deals-text mb-2">
                                             CUSTOMER REVIEW
                                         </span>
@@ -507,10 +605,10 @@ export const Products = () => {
                                                 }}>1</span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </animated.div> */}
 
 
-                                    <div className='related_product mt-4'>
+                                    <animated.div className='related_product mt-4' ref={refRelated} style={springPropsRelated}>
                                         <span className="special-deals-text mb-4">
                                             SPECIAL DEALS
                                         </span>
@@ -545,143 +643,141 @@ export const Products = () => {
                                                 </Card>
                                             </Link>
                                         ))}
-                                    </div>
+                                    </animated.div>
+
                                 </div>
                             </div>
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={9}>
                             <div>
-                                <div
-                                    className="specific__products">
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={12} sm={6} md={6}>
-                                            <div style={{ border: "1px solid #ced4da" }}>
-                                                <img
-                                                    src={Six}
-                                                    alt="shoe"
-                                                    width="290"
-                                                    height="300"
-                                                    style={{ padding: "18px" }}
-                                                />
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} md={6}>
-                                            <div>
-                                                <span className="product-check-text">
-                                                    Patia Platinum And Rose Gold Chain
-                                                </span>
-                                                <div
-                                                    style={{
+                                {objectLength > 0 ?
+                                    <animated.div className="specific__products" ref={refProduct} style={springPropsProduct}>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12} sm={6} md={6}>
+                                                <div style={{ border: "1px solid #ced4da" }}>
+                                                    <img
+                                                        src={productData.image}
+                                                        alt="shoe"
+                                                        width="290"
+                                                        height="300"
+                                                        style={{ padding: "18px", margin: "auto" }}
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} md={6}>
+                                                <div>
+                                                    <span className="product-check-text">
+                                                        {productData.name}
+                                                    </span>
+                                                    <div
+                                                        style={{
+                                                            width: "100%",
+                                                            display: "flex",
+                                                            justifyContent: "start",
+                                                            alignItems: "baseline",
+                                                        }}
+                                                    >
+                                                        <span className="product-description-price-text">
+                                                            ${productData.price}
+                                                        </span>
+                                                        <span style={{ textDecoration: "line-through" }} className="product-description-price-text-strike">
+                                                            $ 599
+                                                        </span>
+                                                        <span className="product-description-price-text-a">
+                                                            Click For Offer
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div style={{
                                                         width: "100%",
                                                         display: "flex",
                                                         justifyContent: "start",
                                                         alignItems: "baseline",
-                                                    }}
-                                                >
-                                                    <span className="product-description-price-text">
-                                                        $ 299
-                                                    </span>
-                                                    <span style={{ textDecoration: "line-through" }} className="product-description-price-text-strike">
-                                                        $ 599
-                                                    </span>
-                                                    <span className="product-description-price-text-a">
-                                                        Click For Offer
-                                                    </span>
-
-                                                </div>
-
-                                                <div style={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "start",
-                                                    alignItems: "baseline",
-                                                }}>
-                                                    <span className="product-description-avai-text">Availability:{" "} <span className="product-description-avai-text purple">In Stock</span></span>
-                                                </div>
-
-
-                                                <div className="product-search-bar" style={{ width: "100%", margin: "16px 0px " }}>
-
-                                                    <div style={{ display: "flex", width: "70%" }}>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Enter Your Email"
-                                                            name="search"
-                                                            className="product-input-field"
-                                                        />
-                                                        <IconButton className="edit-icon-search">
-                                                            <TelegramIcon sx={{ fontSize: "1.3rem !important" }} />
-                                                        </IconButton>
+                                                    }}>
+                                                        <span className="product-description-avai-text">Availability:{" "} <span className="product-description-avai-text purple">{" "}{productData.stock ? "In Stock" : "Out of Stock"}</span></span>
                                                     </div>
-                                                </div>
 
-                                                <span className="product-description-text mt-2 mt-2">
-                                                    Lorem Ipsum has been the industry's standard since the
-                                                    1500s. Praesent ullamcorper dui turpis..
-                                                </span>
-                                                <Box className="social-media-content-wrapper mt-3">
-                                                    <span className="social-media-text">
-                                                        Share Product
+
+                                                    <div className="product-search-bar" style={{ width: "100%", margin: "16px 0px " }}>
+
+                                                        <div style={{ display: "flex", width: "70%" }}>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Enter Your Email"
+                                                                name="search"
+                                                                className="product-input-field"
+                                                            />
+                                                            <IconButton className="edit-icon-search">
+                                                                <TelegramIcon sx={{ fontSize: "1.3rem !important" }} />
+                                                            </IconButton>
+                                                        </div>
+                                                    </div>
+
+                                                    <span className="product-description-text mt-2 mt-2">
+                                                        {productData.description}
                                                     </span>
-                                                    <Box className="social-media-icons-wrapper">
-                                                        <ul
-                                                            style={{
-                                                                listStyle: "none",
-                                                                display: "flex",
-                                                                padding: "0px",
-                                                            }}
-                                                        >
-                                                            <li className='explore_list'><FacebookIcon className='product_icon' /></li>
-                                                            <li className='explore_list'><InstagramIcon className='product_icon' /></li>
-                                                            <li className='explore_list'> <TwitterIcon className='product_icon' /></li>
-                                                            <li className='explore_list'><WhatsAppIcon className='product_icon' /></li>
-                                                            <li className='explore_list'><YouTubeIcon className='product_icon' /></li>
-                                                        </ul>
+                                                    <Box className="social-media-content-wrapper mt-3">
+                                                        <span className="social-media-text">
+                                                            Share Product
+                                                        </span>
+                                                        <Box className="social-media-icons-wrapper">
+                                                            <ul
+                                                                style={{
+                                                                    listStyle: "none",
+                                                                    display: "flex",
+                                                                    padding: "0px",
+                                                                }}
+                                                            >
+                                                                <li className='explore_list'><FacebookIcon className='product_icon' /></li>
+                                                                <li className='explore_list'><InstagramIcon className='product_icon' /></li>
+                                                                <li className='explore_list'> <TwitterIcon className='product_icon' /></li>
+                                                                <li className='explore_list'><WhatsAppIcon className='product_icon' /></li>
+                                                                <li className='explore_list'><YouTubeIcon className='product_icon' /></li>
+                                                            </ul>
+                                                        </Box>
                                                     </Box>
-                                                </Box>
-                                            </div>
+                                                </div>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </div>
+                                    </animated.div>
+                                    : <Box><span>No Data Found :(</span></Box>}
+                                <div className="product-description-below-div">
 
-                                <div
-                                    initial={{ opacity: 0, y: "100vh" }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ type: "spring", duration: 1 }}
-                                    className="product-description-below-div"
-                                >
-                                    <span className="lorem-ipsum-header-text mb-4">
-                                        Description
-                                    </span>
+                                    <animated.div className="description-box" ref={refDescription} style={springPropsDescription}>
+                                        <span className="lorem-ipsum-header-text mb-4">
+                                            Description
+                                        </span>
 
-                                    <span className="lorem-text-one">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elPellentesque vehicula augue eget nisl ullamcorper,
-                                        molestie blandit ipsum auctor. Mauris volutpat augue
-                                        dolor.Consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut lab ore et dolore magna aliqua. Ut enim ad
-                                        minim veniam, quis nostrud exercitation ullamco. labore et
-                                        dolore magna aliqua.
-                                    </span>
+                                        <span className="lorem-text-one">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elPellentesque vehicula augue eget nisl ullamcorper,
+                                            molestie blandit ipsum auctor. Mauris volutpat augue
+                                            dolor.Consectetur adipisicing elit, sed do eiusmod tempor
+                                            incididunt ut lab ore et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud exercitation ullamco. labore et
+                                            dolore magna aliqua.
+                                        </span>
 
-                                    <span className="lorem-text-one mt-2 mb-4">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elPellentesque vehicula augue eget nisl ullamcorper,
-                                        molestie blandit ipsum auctor. Mauris volutpat augue dolor.
-                                        Consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut lab ore et dolore magna aliqua. Ut enim ad
-                                        minim veniam, quis nostrud exercitation ullamco. labore et
-                                        dolore magna aliqua.
-                                    </span>
+                                        <span className="lorem-text-one mt-2 mb-4">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elPellentesque vehicula augue eget nisl ullamcorper,
+                                            molestie blandit ipsum auctor. Mauris volutpat augue dolor.
+                                            Consectetur adipisicing elit, sed do eiusmod tempor
+                                            incididunt ut lab ore et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud exercitation ullamco. labore et
+                                            dolore magna aliqua.
+                                        </span>
+                                    </animated.div>
 
-                                    <div style={{ width: "100%", margin: "42px 0px" }}>
+                                    <animated.div className="feature-text-box" ref={refFeatured} style={springPropsFeatured}>
                                         <span className="featured-products-text mt-2">
                                             FEATURED PRODUCTS
                                         </span>
-                                    </div>
+                                    </animated.div>
 
-                                    <div className="product-wrapper-div" style={{ width: "100%" }}>
+                                    <animated.div className="product-wrapper-div" ref={refFeaturedProd} style={springPropsFeaturedProd}>
                                         <Grid container spacing={2}>
                                             {featuredData.map((items) => (
                                                 <Grid item xs={12} sm={12} md={4} lg={4} className="product_game">
@@ -727,17 +823,17 @@ export const Products = () => {
                                                 </Grid>
                                             ))}
                                         </Grid>
-                                    </div>
+                                    </animated.div>
+
                                 </div>
                             </div>
+
+
                         </Grid>
                     </Grid>
                 </div>
             </div>
 
-            <Box>
-                <Footer />
-            </Box>
 
             <Box className="top-to-btm">
 
