@@ -661,7 +661,7 @@ export const Products = () => {
                                                         alt="shoe"
                                                         width="290"
                                                         height="300"
-                                                        style={{ padding: "18px" }}
+                                                        style={{ padding: "18px", margin: "auto" }}
                                                     />
                                                 </div>
                                             </Grid>

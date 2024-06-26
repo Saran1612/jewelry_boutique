@@ -149,13 +149,13 @@ function Index(props) {
     return (
         <Box className="login_wrapper">
             <Grid container spacing={2} sx={{ minHeight: "100vh", display: "flex", justifyContent: "center" }}>
-                <Grid item xs={4}></Grid>
+                <Grid item xs={0} sm={4}></Grid>
 
 
 
-                <Grid item xs={4}></Grid>
+                <Grid item xs={0} sm={4}></Grid>
 
-                <Grid item xs={3} sx={{ width: "100%", display: "grid", alignItems: "center" }}>
+                <Grid item xs={12} sm={5} md={3} sx={{ width: "100%", display: "grid", alignItems: "center" }}>
                     <Box className="content_wrapper">
                         <Box className="content">
                             <Box className="login_logo-box">
